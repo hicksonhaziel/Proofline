@@ -1,0 +1,15 @@
+{
+  "runId": "run_27d40b23-3dcd-4e20-9356-367508212e59",
+  "phase": 1,
+  "mode": "safe_startup",
+  "startedAt": "2026-05-18T17:35:30.914Z",
+  "targetCount": 0,
+  "flags": {
+    "enableSapDiscovery": false,
+    "enableSapEscrow": false,
+    "enableAceImage": true,
+    "enableAceTranslation": false,
+    "enableAceAudio": false
+  },
+  "note": "Phase 1 only validates local setup. No SAP, Ace, Sentinel, x402, escrow, or payment calls are executed."
+}
