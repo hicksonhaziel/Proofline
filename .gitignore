@@ -1,13 +1,46 @@
+# Environment and secrets
 .env
 .env.local
 .env.*.local
+*.pem
+*.key
+*.p12
+*.keystore
+id_rsa
+id_ed25519
+
+# Dependencies
 node_modules/
+
+# Build output
 dist/
 build/
 .next/
+out/
 coverage/
-*.log
 *.tsbuildinfo
+
+# Logs and local runtime noise
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Proofline generated runtime data
+data/runs/*.json
+data/proof-packets/*.json
+data/artifacts/*
+!data/runs/.gitkeep
+!data/proof-packets/.gitkeep
+!data/artifacts/.gitkeep
+
+# Local strategy docs
 plan.md
 project.md
 
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -11,6 +11,8 @@ export interface ProoflineConfig {
   aceX402WalletKey: string;
   aceX402FacilitatorUrl: string | undefined;
   publicBaseUrl: string;
+  prooflineAgentUri: string | undefined;
+  prooflineX402Endpoint: string | undefined;
   auditIntervalMinutes: number;
   targetAgentList: string;
   limits: {
@@ -47,6 +49,8 @@ export function loadConfig(): ProoflineConfig {
     aceX402WalletKey: env("ACE_X402_WALLET_KEY"),
     aceX402FacilitatorUrl: optionalEnv("ACE_X402_FACILITATOR_URL"),
     publicBaseUrl: env("PROOFLINE_PUBLIC_BASE_URL"),
+    prooflineAgentUri: optionalEnv("PROOFLINE_AGENT_URI"),
+    prooflineX402Endpoint: optionalEnv("PROOFLINE_X402_ENDPOINT"),
     auditIntervalMinutes: numberEnv("AUDIT_INTERVAL_MINUTES", 30),
     targetAgentList: env("TARGET_AGENT_LIST"),
     limits: {
@@ -75,6 +79,8 @@ export function safeConfigSummary(config: ProoflineConfig): Record<string, unkno
     aceX402WalletKey: maskSecret(config.aceX402WalletKey),
     aceX402FacilitatorUrl: config.aceX402FacilitatorUrl ? maskUrl(config.aceX402FacilitatorUrl) : undefined,
     publicBaseUrl: config.publicBaseUrl,
+    prooflineAgentUri: config.prooflineAgentUri,
+    prooflineX402Endpoint: config.prooflineX402Endpoint ? maskUrl(config.prooflineX402Endpoint) : undefined,
     auditIntervalMinutes: config.auditIntervalMinutes,
     targetAgentList: config.targetAgentList,
     limits: config.limits,

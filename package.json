@@ -6,6 +6,8 @@
   "description": "Autonomous paid execution auditor for SAP agents.",
   "scripts": {
     "agent": "tsx apps/agent/src/index.ts",
+    "rpc:check": "tsx apps/agent/src/rpc-check.ts",
+    "sap:register": "tsx apps/agent/src/sap-register.ts",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
   },
@@ -13,6 +15,8 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@oobe-protocol-labs/synapse-sap-sdk": "^0.17.0",
+    "@solana/web3.js": "^1.98.4",
     "dotenv": "^16.4.7"
   },
   "devDependencies": {
@@ -21,4 +25,3 @@
     "typescript": "^5.7.2"
   }
 }
-
