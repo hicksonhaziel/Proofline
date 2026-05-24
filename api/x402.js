@@ -30,11 +30,16 @@ const metadata = {
 
 export default function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-PAYMENT, X-Payment");
 
   if (req.method === "OPTIONS") {
     res.status(204).end();
+    return;
+  }
+
+  if (req.method === "HEAD") {
+    res.status(200).end();
     return;
   }
 
