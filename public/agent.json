@@ -3,6 +3,8 @@
   "agentId": "proofline",
   "version": "0.1.0",
   "description": "Autonomous paid execution auditor for SAP agents. Proofline pays to test tools, checks Sentinel, analyzes outputs with Ace Data Cloud, and publishes Execution Proof Packets.",
+  "image": "https://proofline-hq.vercel.app/proofline.png",
+  "logo": "https://proofline-hq.vercel.app/proofline.png",
   "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
   "sap": {
     "programId": "SAPpUhsWLJG1FfkGRcXagEDMrMsWGjbky7AyhGpFETZ",
@@ -59,6 +61,11 @@
   "endpoints": {
     "metadata": "https://proofline-hq.vercel.app/agent.json",
     "x402": "https://proofline-hq.vercel.app/x402"
+  },
+  "links": {
+    "website": "https://proofline-hq.vercel.app",
+    "github": "",
+    "x": ""
   },
   "budgetPolicy": {
     "defaultMaxSpendPerAuditUsdc": 0.03,
