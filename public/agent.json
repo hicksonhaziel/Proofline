@@ -1,0 +1,68 @@
+{
+  "name": "Proofline",
+  "agentId": "proofline",
+  "version": "0.1.0",
+  "description": "Autonomous paid execution auditor for SAP agents. Proofline pays to test tools, checks Sentinel, analyzes outputs with Ace Data Cloud, and publishes Execution Proof Packets.",
+  "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+  "sap": {
+    "programId": "SAPpUhsWLJG1FfkGRcXagEDMrMsWGjbky7AyhGpFETZ",
+    "agentPda": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL",
+    "agentStatsPda": "7To9wCEQJuckKy3ibGcZ1k1p1oGtVX66Wtsxma2Z2V59"
+  },
+  "protocols": ["sap", "x402", "proofline", "execution-audit"],
+  "capabilities": [
+    {
+      "id": "proofline:audit_agent",
+      "version": "0.1.0",
+      "protocolId": "proofline",
+      "description": "Run a paid execution audit against an SAP agent tool."
+    },
+    {
+      "id": "proofline:execution_proof",
+      "version": "0.1.0",
+      "protocolId": "proofline",
+      "description": "Return replayable evidence for a previous paid execution audit."
+    },
+    {
+      "id": "proofline:execution_verdict",
+      "version": "0.1.0",
+      "protocolId": "proofline",
+      "description": "Return a compact delivered, failed, warning, or re-audit-needed verdict."
+    }
+  ],
+  "tools": [
+    {
+      "name": "audit_agent",
+      "method": "POST",
+      "path": "/x402/audit_agent",
+      "description": "Request a paid execution audit for an SAP agent tool."
+    },
+    {
+      "name": "get_execution_proof",
+      "method": "GET",
+      "path": "/x402/get_execution_proof",
+      "description": "Fetch an Execution Proof Packet by proof packet id or target agent id."
+    },
+    {
+      "name": "get_execution_verdict",
+      "method": "GET",
+      "path": "/x402/get_execution_verdict",
+      "description": "Fetch the latest execution verdict for a target SAP agent tool."
+    },
+    {
+      "name": "list_recent_proofs",
+      "method": "GET",
+      "path": "/x402/list_recent_proofs",
+      "description": "List recent paid execution proof packets produced by Proofline."
+    }
+  ],
+  "endpoints": {
+    "metadata": "https://proofline-hq.vercel.app/agent.json",
+    "x402": "https://proofline-hq.vercel.app/x402"
+  },
+  "budgetPolicy": {
+    "defaultMaxSpendPerAuditUsdc": 0.03,
+    "expensiveTargets": "skip unless explicitly approved",
+    "antiWashPolicy": "Proofline avoids artificial loops and records unsupported or skipped targets."
+  }
+}

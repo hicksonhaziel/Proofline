@@ -1,0 +1,27 @@
+{
+  "rewrites": [
+    {
+      "source": "/x402",
+      "destination": "/api/x402"
+    },
+    {
+      "source": "/x402/:path*",
+      "destination": "/api/x402"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/agent.json",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

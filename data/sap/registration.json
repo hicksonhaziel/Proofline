@@ -1,0 +1,89 @@
+{
+  "mode": "dry-run",
+  "status": "simulated",
+  "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+  "agentPda": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL",
+  "agentStatsPda": "7To9wCEQJuckKy3ibGcZ1k1p1oGtVX66Wtsxma2Z2V59",
+  "globalPda": "9odFrYBBZq6UQC6aGyzMPNXWJQn55kMtfigzhLg6S6L5",
+  "programId": "SAPpUhsWLJG1FfkGRcXagEDMrMsWGjbky7AyhGpFETZ",
+  "simulatedAt": "2026-05-24T10:02:09.863Z",
+  "metadata": {
+    "name": "Proofline",
+    "agentId": "proofline",
+    "description": "Autonomous paid execution auditor for SAP agents. Proofline pays to test tools, checks Sentinel, analyzes outputs with Ace Data Cloud, and publishes Execution Proof Packets.",
+    "protocols": [
+      "sap",
+      "x402",
+      "proofline",
+      "execution-audit"
+    ],
+    "capabilities": [
+      {
+        "id": "proofline:audit_agent",
+        "description": "Run a paid execution audit against an SAP agent tool.",
+        "protocolId": "proofline",
+        "version": "0.1.0"
+      },
+      {
+        "id": "proofline:execution_proof",
+        "description": "Return replayable evidence for a previous paid execution audit.",
+        "protocolId": "proofline",
+        "version": "0.1.0"
+      },
+      {
+        "id": "proofline:execution_verdict",
+        "description": "Return a compact delivered, failed, warning, or re-audit-needed verdict.",
+        "protocolId": "proofline",
+        "version": "0.1.0"
+      }
+    ],
+    "tools": [
+      {
+        "name": "audit_agent",
+        "protocolId": "proofline",
+        "description": "Request a paid execution audit for an SAP agent tool.",
+        "category": "audit",
+        "httpMethod": "post",
+        "paramsCount": 4,
+        "requiredParams": 2
+      },
+      {
+        "name": "get_execution_proof",
+        "protocolId": "proofline",
+        "description": "Fetch an Execution Proof Packet by proof packet id or target agent id.",
+        "category": "proof",
+        "httpMethod": "get",
+        "paramsCount": 2,
+        "requiredParams": 1
+      },
+      {
+        "name": "get_execution_verdict",
+        "protocolId": "proofline",
+        "description": "Fetch the latest execution verdict for a target SAP agent tool.",
+        "category": "proof",
+        "httpMethod": "get",
+        "paramsCount": 2,
+        "requiredParams": 1
+      },
+      {
+        "name": "list_recent_proofs",
+        "protocolId": "proofline",
+        "description": "List recent paid execution proof packets produced by Proofline.",
+        "category": "proof",
+        "httpMethod": "get",
+        "paramsCount": 2,
+        "requiredParams": 0
+      }
+    ]
+  },
+  "toolPdas": {
+    "audit_agent": "HvSuP2WHQ3MqfYqwMon6vRWabXm6hqLvCwgPQez17iK7",
+    "get_execution_proof": "7gYaBqxQ7zryS1SMp8CTnFvFLhw3sMypAd7kAxN6KD8N",
+    "get_execution_verdict": "uExRZwmztZZPh3viDY38ACi9bnhDBvfrTs5p47aqkRR",
+    "list_recent_proofs": "CLfE56hzRKs4RoFHcjkazLVYiq6WNJ9tySujuiPuvnX7"
+  },
+  "notes": [
+    "The SAP SDK package has a broken ESM export on Node 22, so Proofline loads its CommonJS export via createRequire.",
+    "Phase 2 registers the agent identity. Tool publishing is kept as explicit follow-up because the current SDK exposes low-level hash-based publishTool calls."
+  ]
+}
