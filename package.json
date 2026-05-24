@@ -10,6 +10,7 @@
     "sap:register": "tsx apps/agent/src/sap-register.ts",
     "sap:publish-tools": "tsx apps/agent/src/sap-publish-tools.ts",
     "sap:discover": "tsx apps/agent/src/sap-discover.ts",
+    "audit:once": "tsx apps/agent/src/audit-once.ts",
     "build": "tsc --noEmit",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
