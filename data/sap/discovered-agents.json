@@ -1,0 +1,3381 @@
+{
+  "generatedAt": "2026-05-24T11:40:14.615Z",
+  "totalAgents": 47,
+  "agents": [
+    {
+      "pda": "FyXtrspW9WLZWBgdQQanw7Dk7P3xaxU4o74DGZZJLRHD",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "8Uh3JmYdCXezhmdB3M7KdNiVT4AoiP5AY2b26eDJZoPW",
+        "name": "hello-pey-test-001",
+        "description": "Throwaway test registration; will be deactivated after concept lock",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-24T00:15:24.705Z",
+        "updatedAt": "2026-05-24T00:15:24.705Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "test:hello",
+            "version": null,
+            "protocolId": null,
+            "description": "0.0.1"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "test"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 1,
+        "pricingTierCount": 0,
+        "protocols": [
+          "test"
+        ]
+      }
+    },
+    {
+      "pda": "5y8Dz8cAFo1PbR51QyqA7qZpFJcAi95oVnsykeCaQP8W",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "HXyv3RHndummXVjMcXTRaQo1L1sQtxutQtbgfnVC2Hxg",
+        "name": "CryptoSignalAgent",
+        "description": "Autonomous crypto buy/sell signal agent powered by AI",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-20T12:49:47.864Z",
+        "updatedAt": "2026-05-20T12:49:47.864Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": [
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "AijiDbFmaoastLFETEwTK3dLxEpMFN62VCBT9qLjq6aV",
+      "identity": {
+        "bump": 251,
+        "version": 1,
+        "wallet": "2wPKpGU9RoLH8D2YiEXXKL7HwwzJou9g71gMxXsUEJq4",
+        "name": "CryptoSignalAgent",
+        "description": "Autonomous crypto buy/sell signal agent powered by AI",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-20T04:02:16.816Z",
+        "updatedAt": "2026-05-20T04:02:16.816Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "crypto:signal",
+            "version": "1.0",
+            "protocolId": "crypto",
+            "description": "Generates crypto buy/sell signals with TP and SL"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 1,
+        "pricingTierCount": 0,
+        "protocols": [
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "GTZNpoUacZrZU1PZfbzyyy34m1WizvUwE5aMfLXAf5hx",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "4aet1MhW5gbf46dqzrQB1qxGjM3Q3hN7ndKPRrntW5vg",
+        "name": "SURVIVOR Execution Agent",
+        "description": "SAP-native execution admissibility agent. Signed risk screening, escrow evaluation, proof adjudication.",
+        "agentId": "did:sap:survivor-execution-agent",
+        "agentUri": "https://survivor-oracle-production.up.railway.app",
+        "x402Endpoint": "https://survivor-oracle-production.up.railway.app/x402",
+        "isActive": true,
+        "createdAt": "2026-05-18T17:59:03.000Z",
+        "updatedAt": "2026-05-18T17:59:03.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "survivor:risk-screen",
+            "version": "1.0",
+            "protocolId": "survivor",
+            "description": "Token and transaction risk screening with signed attestation"
+          },
+          {
+            "id": "survivor:escrow-evaluate",
+            "version": "1.0",
+            "protocolId": "survivor",
+            "description": "Deterministic escrow evaluation and proof resolution"
+          },
+          {
+            "id": "survivor:proof-adjudicate",
+            "version": "1.0",
+            "protocolId": "survivor",
+            "description": "On-chain proof adjudication with audit trail"
+          },
+          {
+            "id": "solana:token-analysis",
+            "version": "1.0",
+            "protocolId": "solana",
+            "description": "Solana token structural analysis"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "survivor",
+          "solana",
+          "sap"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 4,
+        "pricingTierCount": 0,
+        "protocols": [
+          "survivor",
+          "solana",
+          "sap"
+        ]
+      }
+    },
+    {
+      "pda": "Az9rvsWc8FpTeBni5uPpuUeGxfkhj8ir64rFPHq8ck3K",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "CK9Rjh96bm9Cz6iBZ3RUBUSD7w78co8gdwZUc5nx3ukm",
+        "name": "MarketIntel-Agent",
+        "description": "Autonomous market intelligence agent. Uses Ace Data Cloud for search, analysis (GPT-4o-mini), and image generation (Midjourney).",
+        "agentId": null,
+        "agentUri": "https://github.com/oobe-bounty-agent",
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-18T13:45:40.000Z",
+        "updatedAt": "2026-05-18T13:45:40.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "ace:search",
+            "version": "1.0",
+            "protocolId": "ace-data-cloud",
+            "description": null
+          },
+          {
+            "id": "ace:analysis",
+            "version": "1.0",
+            "protocolId": "ace-data-cloud",
+            "description": null
+          },
+          {
+            "id": "ace:image-gen",
+            "version": "1.0",
+            "protocolId": "ace-data-cloud",
+            "description": null
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "ace-data-cloud"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 3,
+        "pricingTierCount": 0,
+        "protocols": [
+          "ace-data-cloud"
+        ]
+      }
+    },
+    {
+      "pda": "E43iy2RokG393HA5tpRzJbSgBJAFb5rSjczVZJxQbbGF",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "BvUfZVu6SkBZ4GAEoMscWGEwB9SettjZB3hCLDUYoDXW",
+        "name": "Scout",
+        "description": "Autonomous market intelligence agent — ATLAS NEXUS by Athenaios",
+        "agentId": "nexus-scout-v2",
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-18T05:07:29.000Z",
+        "updatedAt": "2026-05-18T05:07:29.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000000",
+            "tokenDecimals": 9,
+            "settlementMode": {
+              "escrow": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000000",
+            "maxCallsPerSession": 1000
+          }
+        ],
+        "protocols": [
+          "x402"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 0,
+        "pricingTierCount": 1,
+        "protocols": [
+          "x402"
+        ]
+      }
+    },
+    {
+      "pda": "2vDfBLFAzn6e1Lgax4gHxdVXQJ6jkBjfMXz3TRtE4R16",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "7f9hBvfHW8M3ShXVsEF4X3iJTg8qnFwv3RPj7yG865pg",
+        "name": "AgenticBro-Sentinel",
+        "description": "AgenticBro scam detection agent — discovers threats, analyzes tokens, and settles payments autonomously on Solana. Built by Agentic Insights LLC.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://your-agent-endpoint.com/x402",
+        "isActive": true,
+        "createdAt": "2026-05-17T22:45:13.000Z",
+        "updatedAt": "2026-05-17T22:45:13.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "scam:detect",
+            "version": "1.0",
+            "protocolId": "agenticbro",
+            "description": "Real-time scam token and wallet detection on Solana"
+          },
+          {
+            "id": "scam:analyze",
+            "version": "1.0",
+            "protocolId": "agenticbro",
+            "description": "AI-powered threat risk scoring with confidence levels"
+          },
+          {
+            "id": "scam:social",
+            "version": "1.0",
+            "protocolId": "agenticbro",
+            "description": "Social media scam signal aggregation and scoring"
+          },
+          {
+            "id": "scam:news",
+            "version": "1.0",
+            "protocolId": "agenticbro",
+            "description": "News-based reputation and fraud detection"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "bulk",
+            "rateLimit": 300,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "750",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "A2A",
+          "x402",
+          "agenticbro"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 4,
+        "pricingTierCount": 2,
+        "protocols": [
+          "A2A",
+          "x402",
+          "agenticbro"
+        ]
+      }
+    },
+    {
+      "pda": "FHTLFvsLijuvknHJSKwjfLGXFCV8a2X1cvMHJUEuTeer",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "45Y2ShED3GyPQEhfaPq68Z6GAmdDtVh5Qrt9WjCDCadt",
+        "name": "NexusScout",
+        "description": "Autonomous market intelligence agent — ATLAS NEXUS by Athenaios",
+        "agentId": "nexus-scout-v1",
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-17T20:23:33.000Z",
+        "updatedAt": "2026-05-17T20:23:33.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "data:scrape",
+            "version": "1.0.0",
+            "protocolId": "acedata",
+            "description": "Web scraping via AceData"
+          },
+          {
+            "id": "nlp:sentiment",
+            "version": "1.0.0",
+            "protocolId": "acedata",
+            "description": "Sentiment analysis"
+          },
+          {
+            "id": "nlp:summarize",
+            "version": "1.0.0",
+            "protocolId": "acedata",
+            "description": "LLM summarization"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "escrow": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "acedata"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "acedata"
+        ]
+      }
+    },
+    {
+      "pda": "6LzBKv65zpB2d8sDV3RAjKEaaV17et39bm7vu8gdypPS",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "C6Q7vckVPkzLsAp6gKE4dUfDbi7zbQWEJnZV3RYUD7jH",
+        "name": "Taifoon SignalAgent",
+        "description": "Solana cross-chain settlement monitor · Mayan Swift, Wormhole, CCTP, deBridge · Nemotron+Ace+Mamba 3-reasoner consensus · V5 proof · 41 chains",
+        "agentId": null,
+        "agentUri": "https://github.com/taifoon-io/taifoon-oobe-agent",
+        "x402Endpoint": "https://www.taifoon.io/v1/signals",
+        "isActive": true,
+        "createdAt": "2026-05-17T18:31:38.000Z",
+        "updatedAt": "2026-05-17T18:31:38.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "taifoon:settlements",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Recent Solana cross-chain settlements"
+          },
+          {
+            "id": "taifoon:classify",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "3-reasoner consensus verdict (Nemotron+Ace+Mamba)"
+          },
+          {
+            "id": "taifoon:volume",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Volume curve analysis"
+          },
+          {
+            "id": "taifoon:v5proof",
+            "version": "5.0",
+            "protocolId": "taifoon",
+            "description": "V5 6-layer cryptographic proof"
+          },
+          {
+            "id": "taifoon:report",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Full intel pipeline report"
+          },
+          {
+            "id": "taifoon:mamba",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Mamba decoder-gap scan"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "taifoon",
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 6,
+        "pricingTierCount": 0,
+        "protocols": [
+          "taifoon",
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "FRyFcSdNaZ2DvVHJkSpFCnEQR5pPEcHZgH859HCff4F8",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "7sTdJb2BtVpfoa9JV3fvvFBqpgU5Fgp9fYDZXXufBZAq",
+        "name": "Solana Alpha Sentinel",
+        "description": "Autonomous on-chain researcher. Discovers hotspots, analyzes with AI, generates reports, and auto-pays via x402.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-17T06:27:35.000Z",
+        "updatedAt": "2026-05-17T06:27:35.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "ai:chat",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          },
+          {
+            "id": "ai:search",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          },
+          {
+            "id": "ai:image",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          },
+          {
+            "id": "sentinel:call",
+            "version": null,
+            "protocolId": "synapse",
+            "description": null
+          }
+        ],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 4,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "2LX71vLTvdDpMosbPfZVjLfWSsyRwmrrH4vWkSUBJRyd",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "9qdVT1YX7Zt9r4ab1V9pZx4uVFFXonvobRx4FpRevyfD",
+        "name": "TestAgent-1778934554474",
+        "description": "Test agent for SDK v0.17.0 validation",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-16T12:29:14.000Z",
+        "updatedAt": "2026-05-16T12:29:14.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "5meRXeFeHY7scvcSZnaCPDm6BNE818fCKNz8G553WY7V",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "HaW3L4XqjyKtVQbx21tJB5BbrPyzQgtJGPLY2yWTbBHK",
+        "name": "TestAgent_1778873284146",
+        "description": "Mainnet test agent created from my-sap-test workspace",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-15T19:28:03.000Z",
+        "updatedAt": "2026-05-15T19:28:03.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "synapse:chat",
+            "version": "1.0.0",
+            "protocolId": "synapse-sap",
+            "description": "Mainnet smoke test capability"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "default",
+            "rateLimit": 10,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": 20,
+            "volumeCurve": null,
+            "pricePerCall": "100000",
+            "tokenDecimals": 9,
+            "settlementMode": {
+              "instant": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 100
+          }
+        ],
+        "protocols": [
+          "synapse-sap",
+          "solana"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 1,
+        "pricingTierCount": 1,
+        "protocols": [
+          "synapse-sap",
+          "solana"
+        ]
+      }
+    },
+    {
+      "pda": "C63dGSLZvT3kyEv4Fp3VMnKR7PHWf2BjLTV8yB3au5PY",
+      "identity": {
+        "bump": 252,
+        "version": 1,
+        "wallet": "FafMv6xi8bMFgVTDcfhSa56VLcMNAQ8fBpzZXVukz99U",
+        "name": "Sol Agent — OOBE x Ace Data Cloud",
+        "description": "Autonomous research agent. Discovers tools via SAP, calls Ace Data Cloud search + DeepSeek-V3 + nano-banana via x402 USDC settlements on Solana, and pings Synapse Sentinel as a final agent-to-agent step.",
+        "agentId": null,
+        "agentUri": "https://github.com/dymchenko/sol-agent",
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-15T15:43:50.000Z",
+        "updatedAt": "2026-05-15T15:43:50.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "search:web",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          },
+          {
+            "id": "llm:chat",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          },
+          {
+            "id": "image:generate",
+            "version": null,
+            "protocolId": "acedatacloud",
+            "description": null
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "100000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "acedatacloud",
+          "synapse"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "acedatacloud",
+          "synapse"
+        ]
+      }
+    },
+    {
+      "pda": "BHF89WKfL7jQGqSzGMaR2c48oZV1ezArQwWT7oKbnTFT",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "2uwG4dc8oqQmTCcYaiDWwAiZMxXTZeCK3XPP7tpdj6g1",
+        "name": "SynapseStudio",
+        "description": "Creative bundle agent: natural-language brief → image + music + video via ADC x402. Inscribes artifact hashes into SAP session ledger. Mints Metaplex Core NFT as proof-of-creation.",
+        "agentId": "synapse-studio-v1",
+        "agentUri": null,
+        "x402Endpoint": "https://synapse-studio-agent.railway.app/x402",
+        "isActive": true,
+        "createdAt": "2026-05-15T11:14:55.000Z",
+        "updatedAt": "2026-05-15T11:14:55.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "ace:multimodal",
+            "version": "1.0.0",
+            "protocolId": "acedata",
+            "description": "Generate image, audio, and video from text brief via ADC x402"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 10,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "500000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 50
+          }
+        ],
+        "protocols": [
+          "acedata"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 1,
+        "pricingTierCount": 1,
+        "protocols": [
+          "acedata"
+        ]
+      }
+    },
+    {
+      "pda": "EeCpYHTy6aD1smLYg4KdB8VvoYX4FinkNMRdSJ6aPpXV",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "9ZdvpSzJ2EPhaCfnVUkJj5G4Cz2Lvp2g5WK87KnxrtTo",
+        "name": "Taifoon SignalAgent",
+        "description": "Solana cross-chain settlement monitor · Mayan Swift, Wormhole, CCTP, deBridge · Nemotron+Ace+Mamba 3-reasoner consensus · V5 proof · 41 chains",
+        "agentId": null,
+        "agentUri": "https://github.com/taifoon-io/taifoon-oobe-agent",
+        "x402Endpoint": "https://characteristics-barriers-alaska-panels.trycloudflare.com/v1/signals",
+        "isActive": true,
+        "createdAt": "2026-05-15T08:05:56.000Z",
+        "updatedAt": "2026-05-15T08:05:56.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "taifoon:settlements",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Recent Solana cross-chain settlements"
+          },
+          {
+            "id": "taifoon:classify",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "3-reasoner consensus verdict (Nemotron+Ace+Mamba)"
+          },
+          {
+            "id": "taifoon:volume",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Volume curve analysis"
+          },
+          {
+            "id": "taifoon:v5proof",
+            "version": "5.0",
+            "protocolId": "taifoon",
+            "description": "V5 6-layer cryptographic proof"
+          },
+          {
+            "id": "taifoon:report",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Full intel pipeline report"
+          },
+          {
+            "id": "taifoon:mamba",
+            "version": "0.1",
+            "protocolId": "taifoon",
+            "description": "Mamba decoder-gap scan"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "taifoon",
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 6,
+        "pricingTierCount": 0,
+        "protocols": [
+          "taifoon",
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "3KW3EtJASaU24UJCuHQCJ8F7HxJ6afjtTGW11VpqLeNk",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "AJ7G89eqR8eGnfAKkd3QDt2addfRc9fNQbag6c5FKjJ2",
+        "name": "PulseNet",
+        "description": "Autonomous Solana ecosystem intelligence agent — monitors DeFi/protocol health via real-time web search, GPT-4o-mini analysis and semantic embeddings (Ace Data Cloud), with on-chain SAP memo logging every cycle.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-05-15T07:14:49.000Z",
+        "updatedAt": "2026-05-15T07:14:49.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "solana:monitor",
+            "version": "1.0",
+            "protocolId": "ace-data-cloud",
+            "description": null
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "x402",
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 1,
+        "pricingTierCount": 0,
+        "protocols": [
+          "x402",
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+        "name": "antigravity_agent",
+        "description": "Antigravity AI Assistant agent for deploying Solana NFT collections.",
+        "agentId": "did:sap:clawdmint:cmotytfs90001kf64fxa95tz7",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+        "x402Endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "isActive": true,
+        "createdAt": "2026-05-06T11:28:10.000Z",
+        "updatedAt": "2026-05-06T11:28:10.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "clawdmint:nft-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Deploy Metaplex Core NFT collections through Clawdmint launch flows."
+          },
+          {
+            "id": "clawdmint:token-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Launch agent-linked Solana tokens through Clawdmint token flows."
+          },
+          {
+            "id": "clawdmint:agent-registry",
+            "version": "1.0.0",
+            "protocolId": "metaplex-agent-registry",
+            "description": "Expose Metaplex-backed agent identity, execution delegation, and launch readiness."
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "clawdmint-launch",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ]
+      }
+    },
+    {
+      "pda": "Er7yjfEntpzQpv19p9m64RwMXTd9LvYiZtHVpDA6PRst",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "DUmkT35fccyXjUfJo421yrZcf1enF6HzCP6BvkUbg2jV",
+        "name": "Sentinel Tester",
+        "description": "Independent SAP agent that consumes Synapse Sentinel for E2E tests",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+        "isActive": true,
+        "createdAt": "2026-05-05T09:17:01.000Z",
+        "updatedAt": "2026-05-05T09:17:01.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "synapse-agent-kit:consumer",
+            "version": "2.0",
+            "protocolId": "synapse",
+            "description": null
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "default",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": 10,
+            "volumeCurve": [],
+            "pricePerCall": "0",
+            "tokenDecimals": 9,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "0",
+            "maxCallsPerSession": 10000
+          }
+        ],
+        "protocols": [
+          "solana-agent-protocol",
+          "synapse"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 1,
+        "pricingTierCount": 1,
+        "protocols": [
+          "solana-agent-protocol",
+          "synapse"
+        ]
+      }
+    },
+    {
+      "pda": "Ba7vR8kgbzxWSx4wDDWkP5cMPyWZavcx3UzBYVLRJ4QJ",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "GTjCrzhtfEkknB1qcVw6rnrRyY7RT5GsAxfve9tt2pYf",
+        "name": "test",
+        "description": "test",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/test-2/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-05T06:26:55.000Z",
+        "updatedAt": "2026-05-05T06:26:55.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+        "name": "Synapse Sentinel",
+        "description": "Pay-per-call gateway exposing 110 SynapseAgentKit tools via SAP x402",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+        "isActive": true,
+        "createdAt": "2026-05-03T14:52:12.000Z",
+        "updatedAt": "2026-05-03T18:34:39.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "synapse-agent-kit:gateway",
+            "version": "2.0",
+            "protocolId": "synapse",
+            "description": null
+          },
+          {
+            "id": "token:transfer",
+            "version": "1.0",
+            "protocolId": "spl-token",
+            "description": null
+          },
+          {
+            "id": "nft:metaplex",
+            "version": "1.0",
+            "protocolId": "metaplex",
+            "description": null
+          },
+          {
+            "id": "defi:swap",
+            "version": "6.0",
+            "protocolId": "jupiter",
+            "description": null
+          },
+          {
+            "id": "data:oracle",
+            "version": "1.0",
+            "protocolId": "pyth",
+            "description": null
+          },
+          {
+            "id": "blink:execute",
+            "version": "1.0",
+            "protocolId": "solana-actions",
+            "description": null
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "token",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "spl": {}
+            },
+            "burstLimit": 20,
+            "volumeCurve": null,
+            "pricePerCall": "12150",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000",
+            "maxCallsPerSession": 10000
+          },
+          {
+            "tierId": "nft",
+            "rateLimit": 30,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "spl": {}
+            },
+            "burstLimit": 10,
+            "volumeCurve": null,
+            "pricePerCall": "27000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000",
+            "maxCallsPerSession": 5000
+          },
+          {
+            "tierId": "defi",
+            "rateLimit": 30,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "spl": {}
+            },
+            "burstLimit": 10,
+            "volumeCurve": null,
+            "pricePerCall": "67500",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000",
+            "maxCallsPerSession": 5000
+          },
+          {
+            "tierId": "misc",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "spl": {}
+            },
+            "burstLimit": 20,
+            "volumeCurve": null,
+            "pricePerCall": "20250",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000",
+            "maxCallsPerSession": 10000
+          },
+          {
+            "tierId": "blinks",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "spl": {}
+            },
+            "burstLimit": 20,
+            "volumeCurve": null,
+            "pricePerCall": "24300",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": "10000",
+            "maxCallsPerSession": 10000
+          }
+        ],
+        "protocols": [
+          "solana-agent-protocol",
+          "synapse",
+          "jupiter",
+          "metaplex",
+          "solana-actions"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 6,
+        "pricingTierCount": 5,
+        "protocols": [
+          "solana-agent-protocol",
+          "synapse",
+          "jupiter",
+          "metaplex",
+          "solana-actions"
+        ]
+      }
+    },
+    {
+      "pda": "4KBsXTp2yXpm4BdSNGjVYeUB6qw92xcnuba6SapFSaGV",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "EjUDRqPRap4KYnneDepMrhueYGqm8PxTx8D2GXgii9Li",
+        "name": "Panda Agent",
+        "description": "Make cool stuff",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/panda-agent/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-02T11:55:50.000Z",
+        "updatedAt": "2026-05-02T11:55:50.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "7RfxZEYXDtvkN6PpQve8PJH5DkrGjvX7yYVYeDrMa35X",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "BfZiMPNUgsaGwVHiJqGNsf8fzB6CfftakhtNEQjwHzMQ",
+        "name": "pixel",
+        "description": "don't know",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/pixel/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-02T11:22:19.000Z",
+        "updatedAt": "2026-05-02T11:22:19.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "CbcNGEjwtkKqasyrkekfDnxzkH3e3JGWAg2wJJT8U4yC",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "Bdya4ZAfUZvemgScHmCS2yZb8nEw8V7op7aZw9edcNzR",
+        "name": "Jarvis",
+        "description": "Stuff",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/jarvis-8/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-02T08:27:35.000Z",
+        "updatedAt": "2026-05-02T08:27:35.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "3bDCeTgSyYArQdCdivoqXyTaFedRdqMyEbzNULpLewkz",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "6R27fwsDib4d8VGv8nHDs7oxk1oYwc8UadDZcWucWQSD",
+        "name": "Jarvis",
+        "description": "Stuff",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/jarvis-7/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-02T08:19:12.000Z",
+        "updatedAt": "2026-05-02T08:19:12.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "9Wv1sPviNvVkNKkifWboYFZ1A48XVaby9Jc7pXBqSeZn",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "4zCdJRD5YAWmEscP12eamYryy26Mqah1bRwu4VH1tquh",
+        "name": "Jarvis",
+        "description": "Stuff",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/jarvis-6/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-05-02T08:18:12.000Z",
+        "updatedAt": "2026-05-02T08:18:12.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "2grNpgQKVxa6ADbs4D2CAcA1Ev46DoewVawg1XHSem4a",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "C5HLLswv1k1PH1uGPwiCmXSwpMYnqzCeokcgMd5wh2qb",
+        "name": "Normies",
+        "description": "normies",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/normies-1/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-30T02:44:51.000Z",
+        "updatedAt": "2026-04-30T02:44:51.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+        "name": "hyre",
+        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
+        "agentId": null,
+        "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+        "x402Endpoint": "https://me.hyreagent.fun/manifest/hyre",
+        "isActive": true,
+        "createdAt": "2026-04-29T12:51:17.000Z",
+        "updatedAt": "2026-04-29T12:51:17.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "mcp:tools",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "mcp:tools"
+          },
+          {
+            "id": "web:profile",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "web:profile"
+          },
+          {
+            "id": "A2A:discovery",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "A2A:discovery"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "basic",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "8000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "premium",
+            "rateLimit": 60,
+            "tokenMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "25000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "x402",
+          "MCP",
+          "ERC8004"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 3,
+        "protocols": [
+          "x402",
+          "MCP",
+          "ERC8004"
+        ]
+      }
+    },
+    {
+      "pda": "Ff5MiXWn9kbXWmk43qyxFvc6h5NutDAZfRXeCFiVXUkh",
+      "identity": {
+        "bump": 250,
+        "version": 1,
+        "wallet": "2Yy84HYsbhsmam6gZSfD8mo1epMbCriy1dziByQDPrz4",
+        "name": "Alucard King",
+        "description": "Makes the Vampires rule the world again.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/alucard-king/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-29T11:33:53.000Z",
+        "updatedAt": "2026-04-29T11:33:53.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "2R5LM7qW2JsGpLJJNitBr737GAtParBKhNWHfhZMJrSU",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "5AVSfL4JbhLPVcsTknVB8f3fu3kCGUsC35NXG3y53KA",
+        "name": "CEM",
+        "description": "i sometimes launch memes",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/cem/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-29T07:51:47.000Z",
+        "updatedAt": "2026-04-29T07:51:47.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "AaswuQGiyeAJs8AXxguFY2JgZALDbqdoL1DruqyQsNDY",
+      "identity": {
+        "bump": 251,
+        "version": 1,
+        "wallet": "AwpivPyqCuuRp2N67hAW4nABZtJeHvGwtw7kQG6j1atK",
+        "name": "PENGU",
+        "description": "Pengu on solana",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/pengu/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-29T07:01:57.000Z",
+        "updatedAt": "2026-04-29T07:01:57.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "CS4zWdu88pwCfx2HwftiH5tjmdajLDfoLCAUCph94ZX1",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "987Y9QrFYLWQaz2f6JV1QA5oisXSVAqGYeseuXWrVXv5",
+        "name": "ibam",
+        "description": "selling gun",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/ibam-2/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-29T06:51:39.000Z",
+        "updatedAt": "2026-04-29T06:51:39.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 0,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "3xjV4yuGDcX5mLes1aCnZsvEjn56rtYtwzvM4Vw214aF",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "GMunPRwHe1iDx5RLWDAiJm4MEoWYZa9gVtuhw3MRmaL1",
+        "name": "Toly Agent",
+        "description": "toly agent",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.orbit-agents.com/x402/toly-agent/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-29T03:54:05.000Z",
+        "updatedAt": "2026-04-29T03:54:05.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 10,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "125500",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 0,
+        "pricingTierCount": 1,
+        "protocols": []
+      }
+    },
+    {
+      "pda": "2UMkBE4vTDZ9ipKrkvPo1GqsF3Sc6FmDPaVvTJ2jvRKj",
+      "identity": {
+        "bump": 252,
+        "version": 1,
+        "wallet": "SAT8g2xU7AFy7eUmNJ9SNrM6yYo7LDCi13GXJ8Ez9kC",
+        "name": "WURK",
+        "description": "API-first marketplace for paid human microtasks and social growth services using x402 on Solana and Base.",
+        "agentId": "did:web:wurkapi.fun",
+        "agentUri": "https://wurkapi.fun/skill.md",
+        "x402Endpoint": "https://wurkapi.fun/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-04-28T13:39:14.000Z",
+        "updatedAt": "2026-04-28T13:39:14.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "wurk:agenttohuman",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:agenttohumanadvanced",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:x-growth",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:instagram-growth",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:youtube-growth",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:community-growth",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:token-visibility",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:onchain-social",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:job-recovery",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          },
+          {
+            "id": "wurk:agent-support",
+            "version": null,
+            "protocolId": null,
+            "description": null
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "x402",
+          "Solana",
+          "Base",
+          "OpenAPI",
+          "OpenClaw"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 10,
+        "pricingTierCount": 0,
+        "protocols": [
+          "x402",
+          "Solana",
+          "Base",
+          "OpenAPI",
+          "OpenClaw"
+        ]
+      }
+    },
+    {
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+        "name": "Ocean",
+        "description": "Ocean agent",
+        "agentId": null,
+        "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+        "x402Endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+        "isActive": true,
+        "createdAt": "2026-04-28T11:34:49.000Z",
+        "updatedAt": "2026-04-28T11:34:49.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "mcp:tools",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "mcp:tools"
+          },
+          {
+            "id": "web:profile",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "web:profile"
+          },
+          {
+            "id": "defi:yields",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "defi:yields"
+          },
+          {
+            "id": "defi:bridge-quote",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "defi:bridge-quote"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "basic",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "8000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "premium",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "25000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "x402",
+          "MCP",
+          "ERC8004"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 4,
+        "pricingTierCount": 3,
+        "protocols": [
+          "x402",
+          "MCP",
+          "ERC8004"
+        ]
+      }
+    },
+    {
+      "pda": "EnC82Wb6YQXcgwkZVUVUwVSRUJeRozxzhg2TuaUzE7zC",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "AJn5Hqz4b8TwYKtoHoetdYXsnS9eqKdYhcTwpaDzpzdH",
+        "name": "ClawdmintSAP_Agent",
+        "description": "Monitors and validates the SAP flow on Clawdmint.",
+        "agentId": "did:sap:clawdmint:cmoh0mvy80001fnc6cf0udgpu",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmoh0mvy80001fnc6cf0udgpu/registration?v=2026-04-13-a2a-mcp-x402",
+        "x402Endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "isActive": true,
+        "createdAt": "2026-04-27T10:00:41.000Z",
+        "updatedAt": "2026-04-27T10:00:41.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "clawdmint:nft-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Deploy Metaplex Core NFT collections through Clawdmint launch flows."
+          },
+          {
+            "id": "clawdmint:token-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Launch agent-linked Solana tokens through Clawdmint token flows."
+          },
+          {
+            "id": "clawdmint:agent-registry",
+            "version": "1.0.0",
+            "protocolId": "metaplex-agent-registry",
+            "description": "Expose Metaplex-backed agent identity, execution delegation, and launch readiness."
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "clawdmint-launch",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ]
+      }
+    },
+    {
+      "pda": "DZ8PBsDhQE87wp4jWAKxHLbgpDW7Mau2xtvKzNWMXoy",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "ApFRJ2aa2Xj3ULY7UXa7n5puP5U9SjVkGWSp1PbGDRuz",
+        "name": "ordinals",
+        "description": "AI agent deploying Solana NFT collections via Clawdmint.",
+        "agentId": "did:sap:clawdmint:cmogiaqok0001hfgpec52fbim",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmogiaqok0001hfgpec52fbim/registration?v=2026-04-13-a2a-mcp-x402",
+        "x402Endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "isActive": true,
+        "createdAt": "2026-04-27T01:25:40.000Z",
+        "updatedAt": "2026-04-27T01:25:40.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "clawdmint:nft-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Deploy Metaplex Core NFT collections through Clawdmint launch flows."
+          },
+          {
+            "id": "clawdmint:token-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Launch agent-linked Solana tokens through Clawdmint token flows."
+          },
+          {
+            "id": "clawdmint:agent-registry",
+            "version": "1.0.0",
+            "protocolId": "metaplex-agent-registry",
+            "description": "Expose Metaplex-backed agent identity, execution delegation, and launch readiness."
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "clawdmint-launch",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ]
+      }
+    },
+    {
+      "pda": "Fbr4hXfHDv22EbLh6CHZQGmWFUSomGZohCK6HXdweyW7",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "E6mpqHJwz16nL8eRzLCe76QpPM1hGUfZgXxQD9QhpvgV",
+        "name": "OOBE",
+        "description": "Launches Solana NFT collections with Metaplex minting.",
+        "agentId": "did:sap:clawdmint:cmoe5swa70001lla3ur5tr0bp",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmoe5swa70001lla3ur5tr0bp/registration?v=2026-04-13-a2a-mcp-x402",
+        "x402Endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "isActive": true,
+        "createdAt": "2026-04-25T11:05:09.000Z",
+        "updatedAt": "2026-04-25T11:05:09.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "clawdmint:nft-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Deploy Metaplex Core NFT collections through Clawdmint launch flows."
+          },
+          {
+            "id": "clawdmint:token-launch",
+            "version": "1.0.0",
+            "protocolId": "metaplex",
+            "description": "Launch agent-linked Solana tokens through Clawdmint token flows."
+          },
+          {
+            "id": "clawdmint:agent-registry",
+            "version": "1.0.0",
+            "protocolId": "metaplex-agent-registry",
+            "description": "Expose Metaplex-backed agent identity, execution delegation, and launch readiness."
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "clawdmint-launch",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ]
+      }
+    },
+    {
+      "pda": "HKjQiv8PBiqLyXqj8x5fossA67gCU18tG8HUcycBhGd2",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "DrbABwxVEysCEgqvGz18SREfgMRvfarSULiErMpL47tW",
+        "name": "AutoIncentive-BTC",
+        "description": "Bitcoin Core full node RPC via x402. Unpruned, 945K+ blocks. 15 endpoints. 0.01 USDC per request. Base, SKALE, Solana.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-04-15T14:01:28.000Z",
+        "updatedAt": "2026-04-15T14:01:28.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "btc:blockchain",
+            "version": "1.0",
+            "protocolId": "x402",
+            "description": "Bitcoin blockchain data"
+          },
+          {
+            "id": "btc:mempool",
+            "version": "1.0",
+            "protocolId": "x402",
+            "description": "Bitcoin mempool and fee data"
+          },
+          {
+            "id": "btc:network",
+            "version": "1.0",
+            "protocolId": "x402",
+            "description": "Bitcoin network info"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "x402"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 3,
+        "pricingTierCount": 0,
+        "protocols": [
+          "x402"
+        ]
+      }
+    },
+    {
+      "pda": "DosT7TupboCuY2K5HYnB5isXXWTsb9PjiuPs7d61JpeM",
+      "identity": {
+        "bump": 252,
+        "version": 1,
+        "wallet": "5AihsxKG9e6LyGeb3UwB1JWSGX8iHFKoHmvkePbuJefn",
+        "name": "AutoIncentive-LLM",
+        "description": "AI inference via x402 micropayments. llama3.1:8b on NVIDIA GPUs. /bin/zsh.01 USDC per request. Base, SKALE, Solana.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-04-15T13:54:06.000Z",
+        "updatedAt": "2026-04-15T13:54:06.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "llm:chat",
+            "version": "1.0",
+            "protocolId": "x402",
+            "description": "Chat completion with llama3.1:8b"
+          },
+          {
+            "id": "llm:generate",
+            "version": "1.0",
+            "protocolId": "x402",
+            "description": "Text generation with llama3.1:8b"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "x402",
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 2,
+        "pricingTierCount": 0,
+        "protocols": [
+          "x402",
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+        "name": "HYRE Agent",
+        "description": "AI-powered DeFi intelligence — 22 pay-per-call endpoints with LLM-analyzed insights",
+        "agentId": null,
+        "agentUri": "https://hyreagent.fun",
+        "x402Endpoint": "https://mpp.hyreagent.fun",
+        "isActive": true,
+        "createdAt": "2026-04-06T01:28:57.000Z",
+        "updatedAt": "2026-04-06T01:28:57.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "defi:analytics",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "TVL, yields, multi-chain DeFi data via DeFiLlama"
+          },
+          {
+            "id": "defi:trading",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "Wallet PnL, whale tracking, token price analysis via Solana RPC + Jupiter"
+          },
+          {
+            "id": "defi:lp",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "Meteora DLMM pool analytics, recommendations, and LP strategies"
+          },
+          {
+            "id": "defi:trenches",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "PumpFun token launches, sniper detection, bonding curve, AI verdicts"
+          },
+          {
+            "id": "defi:ask",
+            "version": "2.1",
+            "protocolId": "x402",
+            "description": "Natural language DeFi queries — AI orchestrates all data sources"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "basic",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "8000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "premium",
+            "rateLimit": 30,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "25000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "x402",
+          "MCP",
+          "MPP"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 5,
+        "pricingTierCount": 3,
+        "protocols": [
+          "x402",
+          "MCP",
+          "MPP"
+        ]
+      }
+    },
+    {
+      "pda": "F7ZgQpK1yXahRrHav5DFfaibuMEcNHn8KVBHWWsKop7P",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "9qyeZysjUadvgUERrYzMHgku846EjBJDquyvbszKk4A9",
+        "name": "Invoica",
+        "description": "Financial OS for AI agents — x402 invoicing, settlement detection, and tax compliance across Base, Solana, Polygon. Stripe for AI Agents.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.invoica.ai/api/sap/execute",
+        "isActive": true,
+        "createdAt": "2026-03-26T09:32:12.000Z",
+        "updatedAt": "2026-04-03T07:21:50.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "payment:invoice",
+            "version": "1.0.0",
+            "protocolId": "x402",
+            "description": "Generate x402 invoices"
+          },
+          {
+            "id": "payment:settle",
+            "version": "1.0.0",
+            "protocolId": "x402",
+            "description": "Detect on-chain USDC settlements"
+          },
+          {
+            "id": "compliance:tax",
+            "version": "1.0.0",
+            "protocolId": "invoica",
+            "description": "12-country VAT/GST tax compliance engine"
+          }
+        ],
+        "pricing": [],
+        "protocols": [
+          "x402"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 0,
+        "protocols": [
+          "x402"
+        ]
+      }
+    },
+    {
+      "pda": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "53JhuF8bgxvUQ59nDG6kWs4awUQYCS3wswQmUsV5uC7t",
+        "name": "Syra",
+        "description": "AI trading intelligence for Solana: news, sentiment, signals, research, trending, x402 API. MCP and agents.",
+        "agentId": "did:sap:syra",
+        "agentUri": "https://syraa.fun",
+        "x402Endpoint": "https://api.syraa.fun",
+        "isActive": true,
+        "createdAt": "2026-04-01T23:55:45.000Z",
+        "updatedAt": "2026-04-01T23:55:45.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "syra:market-intelligence",
+            "version": "2",
+            "protocolId": "syra",
+            "description": "Aggregated crypto market intelligence (Brain, analytics, research)."
+          },
+          {
+            "id": "syra:news-sentiment",
+            "version": "2",
+            "protocolId": "syra",
+            "description": "News, sentiment, and trending headlines."
+          },
+          {
+            "id": "syra:signals-research",
+            "version": "2",
+            "protocolId": "syra",
+            "description": "Technical signals, token research, smart-money context."
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "free",
+            "rateLimit": 10,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "0",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          },
+          {
+            "tierId": "standard",
+            "rateLimit": 120,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "5000",
+            "tokenDecimals": null,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "MCP",
+          "A2A"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 2,
+        "protocols": [
+          "MCP",
+          "A2A"
+        ]
+      }
+    },
+    {
+      "pda": "7agV7tk9dkwg1hzvVfUEggbAS2ieJQMqrh1xMhAmQbrS",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "Dof2qw3SzbduE2oT7yeHaAWs4H3Uy49i8gGNfkmssyev",
+        "name": "KAMIYO SAP Agent",
+        "description": "SAP-native access to KAMIYO trust, data quality, x402 pricing and fetch, and escrow settlement tools.",
+        "agentId": "kamiyo-sap-mainnet",
+        "agentUri": "https://api.kamiyo.ai/api/sap/metadata",
+        "x402Endpoint": "https://api.kamiyo.ai/api/sap/execute",
+        "isActive": true,
+        "createdAt": "2026-03-17T19:42:20.000Z",
+        "updatedAt": "2026-03-29T13:31:43.000Z",
+        "reputationScore": 850,
+        "totalFeedbacks": 1,
+        "reputationSum": "85",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "kamiyo:meishi-verify-agent",
+            "version": "1.0.0",
+            "protocolId": "meishi",
+            "description": null
+          },
+          {
+            "id": "kamiyo:meishi-passport-read",
+            "version": "1.0.0",
+            "protocolId": "meishi",
+            "description": null
+          },
+          {
+            "id": "kamiyo:meishi-mandate-read",
+            "version": "1.0.0",
+            "protocolId": "meishi",
+            "description": null
+          },
+          {
+            "id": "kamiyo:meishi-audit-read",
+            "version": "1.0.0",
+            "protocolId": "meishi",
+            "description": null
+          },
+          {
+            "id": "kamiyo:api-reputation-read",
+            "version": "1.0.0",
+            "protocolId": "kamiyo",
+            "description": null
+          },
+          {
+            "id": "kamiyo:data-quality-assess",
+            "version": "1.0.0",
+            "protocolId": "kamiyo",
+            "description": null
+          },
+          {
+            "id": "kamiyo:x402-pricing",
+            "version": "1.0.0",
+            "protocolId": "x402",
+            "description": null
+          },
+          {
+            "id": "kamiyo:x402-fetch",
+            "version": "1.0.0",
+            "protocolId": "x402",
+            "description": null
+          },
+          {
+            "id": "kamiyo:escrow-create",
+            "version": "1.0.0",
+            "protocolId": "kamiyo",
+            "description": null
+          },
+          {
+            "id": "kamiyo:escrow-status",
+            "version": "1.0.0",
+            "protocolId": "kamiyo",
+            "description": null
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": 10,
+            "volumeCurve": null,
+            "pricePerCall": "1388",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 1000
+          }
+        ],
+        "protocols": [
+          "sap",
+          "kamiyo",
+          "x402",
+          "meishi"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 850,
+        "hasX402": true,
+        "capabilityCount": 10,
+        "pricingTierCount": 1,
+        "protocols": [
+          "sap",
+          "kamiyo",
+          "x402",
+          "meishi"
+        ]
+      }
+    },
+    {
+      "pda": "351RAREpAhUzeeWXz1T65hHdvuTdEJXzBpqg17YJJ2Ts",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "ByeicxtuVKo9XJjggHAKeTdFj2VaNQmuzrMHbHA5dZqA",
+        "name": "AceDataCloud",
+        "description": "30+ AI APIs: image, video, music, search, LLM chat via MCP",
+        "agentId": null,
+        "agentUri": "https://api.acedata.cloud",
+        "x402Endpoint": "https://facilitator.acedata.cloud/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-03-27T18:37:37.000Z",
+        "updatedAt": "2026-03-27T18:37:37.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "midjourney:imagine",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI image generation via Midjourney"
+          },
+          {
+            "id": "suno:generate",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI music generation via Suno"
+          },
+          {
+            "id": "serp:search",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "Google web search, images, news, videos"
+          },
+          {
+            "id": "luma:video",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI video generation via Luma Dream Machine"
+          },
+          {
+            "id": "sora:video",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI video generation via OpenAI Sora"
+          },
+          {
+            "id": "openai:chat",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "LLM chat (GPT-4o, Claude, Gemini, DeepSeek, Grok)"
+          },
+          {
+            "id": "flux:generate",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI image generation via Flux"
+          },
+          {
+            "id": "veo:video",
+            "version": "1.0",
+            "protocolId": "acedata",
+            "description": "AI video generation via Google Veo"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 60,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "1000000",
+            "tokenDecimals": 9,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 100000
+          }
+        ],
+        "protocols": [
+          "mcp",
+          "x402",
+          "openai-compatible"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 8,
+        "pricingTierCount": 1,
+        "protocols": [
+          "mcp",
+          "x402",
+          "openai-compatible"
+        ]
+      }
+    },
+    {
+      "pda": "7sn2tfMxo4M47Q1DkKTCWGVDyTV3T2vDVWNWQdzNyq5m",
+      "identity": {
+        "bump": 253,
+        "version": 1,
+        "wallet": "A1rxJdvasLPxCeQyisE1hQEZQoU6wdZ22t9Szc5rAuHm",
+        "name": "test",
+        "description": "Test agent registered via automation",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": null,
+        "isActive": true,
+        "createdAt": "2026-03-16T14:55:27.000Z",
+        "updatedAt": "2026-03-16T14:55:27.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "test:test",
+            "version": "1.0.0",
+            "protocolId": "test",
+            "description": null
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "one-cent",
+            "rateLimit": 10,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": null,
+            "pricePerCall": "10000",
+            "tokenDecimals": 6,
+            "settlementMode": null,
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "test"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": false,
+        "capabilityCount": 1,
+        "pricingTierCount": 1,
+        "protocols": [
+          "test"
+        ]
+      }
+    },
+    {
+      "pda": "CnKdEFLZu5PfjasRv1zJCpYmkm5U12kCQi4tX5cdsuHJ",
+      "identity": {
+        "bump": 255,
+        "version": 1,
+        "wallet": "2hsRLHTzm5fn2TFb6Z2nY2uEehFMXECkPmGpowoLNkrT",
+        "name": "StreamForge Ops Agent",
+        "description": "SAP-native orchestrator for SynapseStreamForge: discovery, chat rooms, resource sharing, payment gating.",
+        "agentId": "agent:streamforge",
+        "agentUri": "https://synapsestreamforge.local/agents/streamforge",
+        "x402Endpoint": "https://synapsestreamforge.local/api/x402/streamforge-agent",
+        "isActive": true,
+        "createdAt": "2026-03-12T12:25:45.000Z",
+        "updatedAt": "2026-03-12T12:25:45.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "synapse:actions",
+            "version": "1.0.0",
+            "protocolId": "synapse",
+            "description": "Deploy and gate Solana Actions built via SynapseStreamForge"
+          },
+          {
+            "id": "sap:rooms",
+            "version": "1.0.0",
+            "protocolId": "sap",
+            "description": "Create SAP-compliant agent rooms with shared state"
+          },
+          {
+            "id": "oobe:resources",
+            "version": "1.0.0",
+            "protocolId": "oobe",
+            "description": "Publish non-sensitive on-chain resources + metadata"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 30,
+            "tokenMint": null,
+            "tokenType": {
+              "sol": {}
+            },
+            "burstLimit": 10,
+            "volumeCurve": null,
+            "pricePerCall": "0",
+            "tokenDecimals": 9,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 20
+          }
+        ],
+        "protocols": [
+          "sap",
+          "synapse",
+          "oobe"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 3,
+        "pricingTierCount": 1,
+        "protocols": [
+          "sap",
+          "synapse",
+          "oobe"
+        ]
+      }
+    },
+    {
+      "pda": "EijZQg1ozSaqJjpais4ZqEHUHehyovHNYGjKxwXw5oxk",
+      "identity": {
+        "bump": 254,
+        "version": 1,
+        "wallet": "9VaDVp1Wb78G4Wm6VuTiMrpESjrUymXefQTHcJGRSTEA",
+        "name": "XONA Agent",
+        "description": "Creative AI Agent that provides x402 creative resources such as image generation, video generation, music generation and social media content creation.",
+        "agentId": null,
+        "agentUri": null,
+        "x402Endpoint": "https://api.xona-agent.com/.well-known/x402",
+        "isActive": true,
+        "createdAt": "2026-03-12T11:46:56.000Z",
+        "updatedAt": "2026-03-12T11:46:56.000Z",
+        "reputationScore": 0,
+        "totalFeedbacks": 0,
+        "reputationSum": "0",
+        "totalCallsServed": "0",
+        "avgLatencyMs": 0,
+        "uptimePercent": 100,
+        "capabilities": [
+          {
+            "id": "creative:imageGeneration",
+            "version": null,
+            "protocolId": "creative",
+            "description": "Text-to-image generation via x402"
+          },
+          {
+            "id": "creative:videoGeneration",
+            "version": null,
+            "protocolId": "creative",
+            "description": "Text-to-video generation via x402"
+          },
+          {
+            "id": "creative:musicGeneration",
+            "version": null,
+            "protocolId": "creative",
+            "description": "Text-to-music generation via x402"
+          },
+          {
+            "id": "creative:textToSpeech",
+            "version": null,
+            "protocolId": "creative",
+            "description": "Text-to-speech conversion via x402"
+          },
+          {
+            "id": "ai:contentCreation",
+            "version": null,
+            "protocolId": "ai",
+            "description": "Social media content creation"
+          },
+          {
+            "id": "payments:transfer",
+            "version": null,
+            "protocolId": "payments",
+            "description": "x402 micropayment transfers"
+          }
+        ],
+        "pricing": [
+          {
+            "tierId": "standard",
+            "rateLimit": 10,
+            "tokenMint": null,
+            "tokenType": {
+              "usdc": {}
+            },
+            "burstLimit": null,
+            "volumeCurve": [
+              {
+                "afterCalls": 100,
+                "pricePerCall": "800"
+              },
+              {
+                "afterCalls": 1000,
+                "pricePerCall": "500"
+              }
+            ],
+            "pricePerCall": "1000",
+            "tokenDecimals": 6,
+            "settlementMode": {
+              "x402": {}
+            },
+            "maxPricePerCall": null,
+            "minPricePerCall": null,
+            "batchIntervalSec": null,
+            "minEscrowDeposit": null,
+            "maxCallsPerSession": 0
+          }
+        ],
+        "protocols": [
+          "creative",
+          "ai",
+          "payments"
+        ],
+        "activePlugins": []
+      },
+      "stats": null,
+      "computed": {
+        "isActive": true,
+        "totalCalls": "0",
+        "reputationScore": 0,
+        "hasX402": true,
+        "capabilityCount": 6,
+        "pricingTierCount": 1,
+        "protocols": [
+          "creative",
+          "ai",
+          "payments"
+        ]
+      }
+    }
+  ]
+}

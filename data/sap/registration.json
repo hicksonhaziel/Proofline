@@ -1,12 +1,12 @@
 {
-  "mode": "dry-run",
-  "status": "simulated",
+  "mode": "send",
+  "status": "submitted",
   "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
   "agentPda": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL",
   "agentStatsPda": "7To9wCEQJuckKy3ibGcZ1k1p1oGtVX66Wtsxma2Z2V59",
   "globalPda": "9odFrYBBZq6UQC6aGyzMPNXWJQn55kMtfigzhLg6S6L5",
   "programId": "SAPpUhsWLJG1FfkGRcXagEDMrMsWGjbky7AyhGpFETZ",
-  "simulatedAt": "2026-05-24T10:02:09.863Z",
+  "simulatedAt": "2026-05-24T11:01:38.031Z",
   "metadata": {
     "name": "Proofline",
     "agentId": "proofline",
@@ -85,5 +85,7 @@
   "notes": [
     "The SAP SDK package has a broken ESM export on Node 22, so Proofline loads its CommonJS export via createRequire.",
     "Phase 2 registers the agent identity. Tool publishing is kept as explicit follow-up because the current SDK exposes low-level hash-based publishTool calls."
-  ]
+  ],
+  "signature": "4CBhbcK276G4GQ95xSe9VHZoG71perpXWxp9g5kxyZVrLF3YNLsAHgvNXdq9Wgqewt3n6nSDJteKMHau5PxP3vzN",
+  "submittedAt": "2026-05-24T11:01:38.251Z"
 }

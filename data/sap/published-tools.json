@@ -1,0 +1,42 @@
+{
+  "mode": "send",
+  "status": "submitted",
+  "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+  "agentPda": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL",
+  "globalPda": "9odFrYBBZq6UQC6aGyzMPNXWJQn55kMtfigzhLg6S6L5",
+  "programId": "SAPpUhsWLJG1FfkGRcXagEDMrMsWGjbky7AyhGpFETZ",
+  "selectedTools": [
+    {
+      "name": "audit_agent",
+      "toolPda": "98fj3USTNRdSxc1cgsXKQfVSVBsMeBi7oZJgpiTuc1yz",
+      "protocolHash": "1c9ac85f52e75c65a6997c465bfee9967b88e16bd0544ea5f1e997be0617a647",
+      "descriptionHash": "63f98fea09471c237d7c6a892b218731c40d16151ab184064830a839b667d13c",
+      "inputSchemaHash": "9e0443179ef9c986efc43f1197b52282e23556de4b6550ae4c3e35cb454c85f9",
+      "outputSchemaHash": "acaa7418a7483bc6e405c71cac9471095b6f34b3f2554ac4e84b082a8ab51bc8",
+      "httpMethod": 1,
+      "category": 8,
+      "paramsCount": 4,
+      "requiredParams": 2
+    },
+    {
+      "name": "get_execution_proof",
+      "toolPda": "GmKrea9QFZV9aXush9fbXAXVKUBssQ1bzYdE41D2Kuyc",
+      "protocolHash": "1c9ac85f52e75c65a6997c465bfee9967b88e16bd0544ea5f1e997be0617a647",
+      "descriptionHash": "e8784589929afc16922e7f3197876b1d0a61182f80b511968c190ee92905f683",
+      "inputSchemaHash": "6c9d37a5c248e42d999666d948e8a2cf9781a06a7c0b0791ad66ffb1642964a0",
+      "outputSchemaHash": "1fdf94aafb34262928ffe1d9821857ba2298c82f67a425b0669aaaf84a60d2fc",
+      "httpMethod": 0,
+      "category": 5,
+      "paramsCount": 2,
+      "requiredParams": 1
+    }
+  ],
+  "skippedTools": [],
+  "simulatedAt": "2026-05-24T11:38:54.648Z",
+  "notes": [
+    "Tool PDAs are derived from sha256(toolName), matching the SDK AgentBuilder implementation.",
+    "Default Phase 3 publish set is limited to audit_agent and get_execution_proof to preserve SOL."
+  ],
+  "signature": "279QGo4unhe4ZRQLH4dwCZbJesCcscNf38pqcBJxcr6HPr3SF9q4Z4RJmiimkPqTFjp4DbMdKVaDKdkr7BWRdXvN",
+  "submittedAt": "2026-05-24T11:38:55.808Z"
+}

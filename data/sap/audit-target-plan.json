@@ -1,0 +1,1705 @@
+{
+  "generatedAt": "2026-05-24T11:40:14.622Z",
+  "maxCostUsdc": 0.03,
+  "counts": {
+    "missing_endpoint": 16,
+    "missing_pricing": 17,
+    "too_expensive": 4,
+    "good_audit_target": 20,
+    "free": 2
+  },
+  "recommendedTargets": [
+    {
+      "name": "antigravity_agent",
+      "pda": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+      "wallet": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "ClawdmintSAP_Agent",
+      "pda": "EnC82Wb6YQXcgwkZVUVUwVSRUJeRozxzhg2TuaUzE7zC",
+      "wallet": "AJn5Hqz4b8TwYKtoHoetdYXsnS9eqKdYhcTwpaDzpzdH",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmoh0mvy80001fnc6cf0udgpu/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "ordinals",
+      "pda": "DZ8PBsDhQE87wp4jWAKxHLbgpDW7Mau2xtvKzNWMXoy",
+      "wallet": "ApFRJ2aa2Xj3ULY7UXa7n5puP5U9SjVkGWSp1PbGDRuz",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmogiaqok0001hfgpec52fbim/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "OOBE",
+      "pda": "Fbr4hXfHDv22EbLh6CHZQGmWFUSomGZohCK6HXdweyW7",
+      "wallet": "E6mpqHJwz16nL8eRzLCe76QpPM1hGUfZgXxQD9QhpvgV",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmoe5swa70001lla3ur5tr0bp/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Syra",
+      "pda": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+      "wallet": "53JhuF8bgxvUQ59nDG6kWs4awUQYCS3wswQmUsV5uC7t",
+      "endpoint": "https://api.syraa.fun",
+      "agentUri": "https://syraa.fun",
+      "protocolIds": [
+        "MCP",
+        "A2A"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "5000",
+      "pricePerCallDisplay": "0.000005 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "XONA Agent",
+      "pda": "EijZQg1ozSaqJjpais4ZqEHUHehyovHNYGjKxwXw5oxk",
+      "wallet": "9VaDVp1Wb78G4Wm6VuTiMrpESjrUymXefQTHcJGRSTEA",
+      "endpoint": "https://api.xona-agent.com/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [
+        "creative",
+        "ai",
+        "payments"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "KAMIYO SAP Agent",
+      "pda": "7agV7tk9dkwg1hzvVfUEggbAS2ieJQMqrh1xMhAmQbrS",
+      "wallet": "Dof2qw3SzbduE2oT7yeHaAWs4H3Uy49i8gGNfkmssyev",
+      "endpoint": "https://api.kamiyo.ai/api/sap/execute",
+      "agentUri": "https://api.kamiyo.ai/api/sap/metadata",
+      "protocolIds": [
+        "sap",
+        "kamiyo",
+        "x402",
+        "meishi"
+      ],
+      "capabilitiesCount": 10,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1388",
+      "pricePerCallDisplay": "0.001388 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "token",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "12150",
+      "pricePerCallDisplay": "0.01215 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "misc",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "20250",
+      "pricePerCallDisplay": "0.02025 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "blinks",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "24300",
+      "pricePerCallDisplay": "0.0243 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "nft",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "27000",
+      "pricePerCallDisplay": "0.027 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    }
+  ],
+  "allTargets": [
+    {
+      "name": "hello-pey-test-001",
+      "pda": "FyXtrspW9WLZWBgdQQanw7Dk7P3xaxU4o74DGZZJLRHD",
+      "wallet": "8Uh3JmYdCXezhmdB3M7KdNiVT4AoiP5AY2b26eDJZoPW",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "test"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "CryptoSignalAgent",
+      "pda": "5y8Dz8cAFo1PbR51QyqA7qZpFJcAi95oVnsykeCaQP8W",
+      "wallet": "HXyv3RHndummXVjMcXTRaQo1L1sQtxutQtbgfnVC2Hxg",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "A2A"
+      ],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "CryptoSignalAgent",
+      "pda": "AijiDbFmaoastLFETEwTK3dLxEpMFN62VCBT9qLjq6aV",
+      "wallet": "2wPKpGU9RoLH8D2YiEXXKL7HwwzJou9g71gMxXsUEJq4",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "A2A"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "SURVIVOR Execution Agent",
+      "pda": "GTZNpoUacZrZU1PZfbzyyy34m1WizvUwE5aMfLXAf5hx",
+      "wallet": "4aet1MhW5gbf46dqzrQB1qxGjM3Q3hN7ndKPRrntW5vg",
+      "endpoint": "https://survivor-oracle-production.up.railway.app/x402",
+      "agentUri": "https://survivor-oracle-production.up.railway.app",
+      "protocolIds": [
+        "survivor",
+        "solana",
+        "sap"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "MarketIntel-Agent",
+      "pda": "Az9rvsWc8FpTeBni5uPpuUeGxfkhj8ir64rFPHq8ck3K",
+      "wallet": "CK9Rjh96bm9Cz6iBZ3RUBUSD7w78co8gdwZUc5nx3ukm",
+      "endpoint": "https://github.com/oobe-bounty-agent",
+      "agentUri": "https://github.com/oobe-bounty-agent",
+      "protocolIds": [
+        "ace-data-cloud"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Scout",
+      "pda": "E43iy2RokG393HA5tpRzJbSgBJAFb5rSjczVZJxQbbGF",
+      "wallet": "BvUfZVu6SkBZ4GAEoMscWGEwB9SettjZB3hCLDUYoDXW",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "x402"
+      ],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "AgenticBro-Sentinel",
+      "pda": "2vDfBLFAzn6e1Lgax4gHxdVXQJ6jkBjfMXz3TRtE4R16",
+      "wallet": "7f9hBvfHW8M3ShXVsEF4X3iJTg8qnFwv3RPj7yG865pg",
+      "endpoint": "https://your-agent-endpoint.com/x402",
+      "agentUri": null,
+      "protocolIds": [
+        "A2A",
+        "x402",
+        "agenticbro"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "missing_endpoint",
+      "reasons": [
+        "endpoint is missing, localhost, or non-public"
+      ]
+    },
+    {
+      "name": "AgenticBro-Sentinel",
+      "pda": "2vDfBLFAzn6e1Lgax4gHxdVXQJ6jkBjfMXz3TRtE4R16",
+      "wallet": "7f9hBvfHW8M3ShXVsEF4X3iJTg8qnFwv3RPj7yG865pg",
+      "endpoint": "https://your-agent-endpoint.com/x402",
+      "agentUri": null,
+      "protocolIds": [
+        "A2A",
+        "x402",
+        "agenticbro"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "bulk",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "750",
+      "pricePerCallDisplay": "7.5e-7 SOL",
+      "status": "missing_endpoint",
+      "reasons": [
+        "endpoint is missing, localhost, or non-public"
+      ]
+    },
+    {
+      "name": "NexusScout",
+      "pda": "FHTLFvsLijuvknHJSKwjfLGXFCV8a2X1cvMHJUEuTeer",
+      "wallet": "45Y2ShED3GyPQEhfaPq68Z6GAmdDtVh5Qrt9WjCDCadt",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "acedata"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "Taifoon SignalAgent",
+      "pda": "6LzBKv65zpB2d8sDV3RAjKEaaV17et39bm7vu8gdypPS",
+      "wallet": "C6Q7vckVPkzLsAp6gKE4dUfDbi7zbQWEJnZV3RYUD7jH",
+      "endpoint": "https://www.taifoon.io/v1/signals",
+      "agentUri": "https://github.com/taifoon-io/taifoon-oobe-agent",
+      "protocolIds": [
+        "taifoon",
+        "A2A"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Solana Alpha Sentinel",
+      "pda": "FRyFcSdNaZ2DvVHJkSpFCnEQR5pPEcHZgH859HCff4F8",
+      "wallet": "7sTdJb2BtVpfoa9JV3fvvFBqpgU5Fgp9fYDZXXufBZAq",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 4,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "TestAgent-1778934554474",
+      "pda": "2LX71vLTvdDpMosbPfZVjLfWSsyRwmrrH4vWkSUBJRyd",
+      "wallet": "9qdVT1YX7Zt9r4ab1V9pZx4uVFFXonvobRx4FpRevyfD",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "TestAgent_1778873284146",
+      "pda": "5meRXeFeHY7scvcSZnaCPDm6BNE818fCKNz8G553WY7V",
+      "wallet": "HaW3L4XqjyKtVQbx21tJB5BbrPyzQgtJGPLY2yWTbBHK",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "synapse-sap",
+        "solana"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "Sol Agent — OOBE x Ace Data Cloud",
+      "pda": "C63dGSLZvT3kyEv4Fp3VMnKR7PHWf2BjLTV8yB3au5PY",
+      "wallet": "FafMv6xi8bMFgVTDcfhSa56VLcMNAQ8fBpzZXVukz99U",
+      "endpoint": "https://github.com/dymchenko/sol-agent",
+      "agentUri": "https://github.com/dymchenko/sol-agent",
+      "protocolIds": [
+        "acedatacloud",
+        "synapse"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "100000",
+      "pricePerCallDisplay": "0.1 USDC",
+      "status": "missing_endpoint",
+      "reasons": [
+        "x402 tier but no x402 endpoint"
+      ]
+    },
+    {
+      "name": "SynapseStudio",
+      "pda": "BHF89WKfL7jQGqSzGMaR2c48oZV1ezArQwWT7oKbnTFT",
+      "wallet": "2uwG4dc8oqQmTCcYaiDWwAiZMxXTZeCK3XPP7tpdj6g1",
+      "endpoint": "https://synapse-studio-agent.railway.app/x402",
+      "agentUri": null,
+      "protocolIds": [
+        "acedata"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "500000",
+      "pricePerCallDisplay": "0.5 USDC",
+      "status": "too_expensive",
+      "reasons": [
+        "estimated cost 0.5 USDC exceeds max 0.03"
+      ]
+    },
+    {
+      "name": "Taifoon SignalAgent",
+      "pda": "EeCpYHTy6aD1smLYg4KdB8VvoYX4FinkNMRdSJ6aPpXV",
+      "wallet": "9ZdvpSzJ2EPhaCfnVUkJj5G4Cz2Lvp2g5WK87KnxrtTo",
+      "endpoint": "https://characteristics-barriers-alaska-panels.trycloudflare.com/v1/signals",
+      "agentUri": "https://github.com/taifoon-io/taifoon-oobe-agent",
+      "protocolIds": [
+        "taifoon",
+        "A2A"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "PulseNet",
+      "pda": "3KW3EtJASaU24UJCuHQCJ8F7HxJ6afjtTGW11VpqLeNk",
+      "wallet": "AJ7G89eqR8eGnfAKkd3QDt2addfRc9fNQbag6c5FKjJ2",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "x402",
+        "A2A"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "antigravity_agent",
+      "pda": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+      "wallet": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Sentinel Tester",
+      "pda": "Er7yjfEntpzQpv19p9m64RwMXTd9LvYiZtHVpDA6PRst",
+      "wallet": "DUmkT35fccyXjUfJo421yrZcf1enF6HzCP6BvkUbg2jV",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": "default",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "0",
+      "pricePerCallDisplay": "0 SOL",
+      "status": "free",
+      "reasons": [
+        "free tier; useful for behavior checks but weaker for payment proof"
+      ]
+    },
+    {
+      "name": "test",
+      "pda": "Ba7vR8kgbzxWSx4wDDWkP5cMPyWZavcx3UzBYVLRJ4QJ",
+      "wallet": "GTjCrzhtfEkknB1qcVw6rnrRyY7RT5GsAxfve9tt2pYf",
+      "endpoint": "https://api.orbit-agents.com/x402/test-2/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "token",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "12150",
+      "pricePerCallDisplay": "0.01215 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "nft",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "27000",
+      "pricePerCallDisplay": "0.027 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "defi",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "67500",
+      "pricePerCallDisplay": "0.0675 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "too_expensive",
+      "reasons": [
+        "estimated cost 0.0675 USDC exceeds max 0.03"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "misc",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "20250",
+      "pricePerCallDisplay": "0.02025 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Synapse Sentinel",
+      "pda": "AzqhCKhku9TX3ScVtQw5nffLJ6PoA8r3P6HiTdinuAKz",
+      "wallet": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+      "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+      "agentUri": null,
+      "protocolIds": [
+        "solana-agent-protocol",
+        "synapse",
+        "jupiter",
+        "metaplex",
+        "solana-actions"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "blinks",
+      "route": "x402",
+      "token": "SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "pricePerCall": "24300",
+      "pricePerCallDisplay": "0.0243 SPL:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Panda Agent",
+      "pda": "4KBsXTp2yXpm4BdSNGjVYeUB6qw92xcnuba6SapFSaGV",
+      "wallet": "EjUDRqPRap4KYnneDepMrhueYGqm8PxTx8D2GXgii9Li",
+      "endpoint": "https://api.orbit-agents.com/x402/panda-agent/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "pixel",
+      "pda": "7RfxZEYXDtvkN6PpQve8PJH5DkrGjvX7yYVYeDrMa35X",
+      "wallet": "BfZiMPNUgsaGwVHiJqGNsf8fzB6CfftakhtNEQjwHzMQ",
+      "endpoint": "https://api.orbit-agents.com/x402/pixel/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Jarvis",
+      "pda": "CbcNGEjwtkKqasyrkekfDnxzkH3e3JGWAg2wJJT8U4yC",
+      "wallet": "Bdya4ZAfUZvemgScHmCS2yZb8nEw8V7op7aZw9edcNzR",
+      "endpoint": "https://api.orbit-agents.com/x402/jarvis-8/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Jarvis",
+      "pda": "3bDCeTgSyYArQdCdivoqXyTaFedRdqMyEbzNULpLewkz",
+      "wallet": "6R27fwsDib4d8VGv8nHDs7oxk1oYwc8UadDZcWucWQSD",
+      "endpoint": "https://api.orbit-agents.com/x402/jarvis-7/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Jarvis",
+      "pda": "9Wv1sPviNvVkNKkifWboYFZ1A48XVaby9Jc7pXBqSeZn",
+      "wallet": "4zCdJRD5YAWmEscP12eamYryy26Mqah1bRwu4VH1tquh",
+      "endpoint": "https://api.orbit-agents.com/x402/jarvis-6/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Normies",
+      "pda": "2grNpgQKVxa6ADbs4D2CAcA1Ev46DoewVawg1XHSem4a",
+      "wallet": "C5HLLswv1k1PH1uGPwiCmXSwpMYnqzCeokcgMd5wh2qb",
+      "endpoint": "https://api.orbit-agents.com/x402/normies-1/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "hyre",
+      "pda": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+      "wallet": "F6R5Hyhdu5iJrL2E2g3modF7v3gePoParQmTgnCfJpxC",
+      "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+      "agentUri": "https://me.hyreagent.fun/manifest/hyre",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Alucard King",
+      "pda": "Ff5MiXWn9kbXWmk43qyxFvc6h5NutDAZfRXeCFiVXUkh",
+      "wallet": "2Yy84HYsbhsmam6gZSfD8mo1epMbCriy1dziByQDPrz4",
+      "endpoint": "https://api.orbit-agents.com/x402/alucard-king/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "CEM",
+      "pda": "2R5LM7qW2JsGpLJJNitBr737GAtParBKhNWHfhZMJrSU",
+      "wallet": "5AVSfL4JbhLPVcsTknVB8f3fu3kCGUsC35NXG3y53KA",
+      "endpoint": "https://api.orbit-agents.com/x402/cem/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "PENGU",
+      "pda": "AaswuQGiyeAJs8AXxguFY2JgZALDbqdoL1DruqyQsNDY",
+      "wallet": "AwpivPyqCuuRp2N67hAW4nABZtJeHvGwtw7kQG6j1atK",
+      "endpoint": "https://api.orbit-agents.com/x402/pengu/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "ibam",
+      "pda": "CS4zWdu88pwCfx2HwftiH5tjmdajLDfoLCAUCph94ZX1",
+      "wallet": "987Y9QrFYLWQaz2f6JV1QA5oisXSVAqGYeseuXWrVXv5",
+      "endpoint": "https://api.orbit-agents.com/x402/ibam-2/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Toly Agent",
+      "pda": "3xjV4yuGDcX5mLes1aCnZsvEjn56rtYtwzvM4Vw214aF",
+      "wallet": "GMunPRwHe1iDx5RLWDAiJm4MEoWYZa9gVtuhw3MRmaL1",
+      "endpoint": "https://api.orbit-agents.com/x402/toly-agent/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [],
+      "capabilitiesCount": 0,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "125500",
+      "pricePerCallDisplay": "0.1255 USDC",
+      "status": "too_expensive",
+      "reasons": [
+        "estimated cost 0.1255 USDC exceeds max 0.03"
+      ]
+    },
+    {
+      "name": "WURK",
+      "pda": "2UMkBE4vTDZ9ipKrkvPo1GqsF3Sc6FmDPaVvTJ2jvRKj",
+      "wallet": "SAT8g2xU7AFy7eUmNJ9SNrM6yYo7LDCi13GXJ8Ez9kC",
+      "endpoint": "https://wurkapi.fun/.well-known/x402",
+      "agentUri": "https://wurkapi.fun/skill.md",
+      "protocolIds": [
+        "x402",
+        "Solana",
+        "Base",
+        "OpenAPI",
+        "OpenClaw"
+      ],
+      "capabilitiesCount": 10,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Ocean",
+      "pda": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+      "wallet": "9qWeiGN6kycVESBzgJZCUDPthFgf71U2pYpq38uMnJRq",
+      "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+      "agentUri": "https://me.hyreagent.fun/manifest/ocean",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "ERC8004"
+      ],
+      "capabilitiesCount": 4,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "ClawdmintSAP_Agent",
+      "pda": "EnC82Wb6YQXcgwkZVUVUwVSRUJeRozxzhg2TuaUzE7zC",
+      "wallet": "AJn5Hqz4b8TwYKtoHoetdYXsnS9eqKdYhcTwpaDzpzdH",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmoh0mvy80001fnc6cf0udgpu/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "ordinals",
+      "pda": "DZ8PBsDhQE87wp4jWAKxHLbgpDW7Mau2xtvKzNWMXoy",
+      "wallet": "ApFRJ2aa2Xj3ULY7UXa7n5puP5U9SjVkGWSp1PbGDRuz",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmogiaqok0001hfgpec52fbim/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "OOBE",
+      "pda": "Fbr4hXfHDv22EbLh6CHZQGmWFUSomGZohCK6HXdweyW7",
+      "wallet": "E6mpqHJwz16nL8eRzLCe76QpPM1hGUfZgXxQD9QhpvgV",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "agentUri": "https://clawdmint.xyz/api/agents/cmoe5swa70001lla3ur5tr0bp/registration?v=2026-04-13-a2a-mcp-x402",
+      "protocolIds": [
+        "A2A",
+        "MCP",
+        "x402",
+        "metaplex",
+        "clawdmint"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "clawdmint-launch",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.000001 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "AutoIncentive-BTC",
+      "pda": "HKjQiv8PBiqLyXqj8x5fossA67gCU18tG8HUcycBhGd2",
+      "wallet": "DrbABwxVEysCEgqvGz18SREfgMRvfarSULiErMpL47tW",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "x402"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "AutoIncentive-LLM",
+      "pda": "DosT7TupboCuY2K5HYnB5isXXWTsb9PjiuPs7d61JpeM",
+      "wallet": "5AihsxKG9e6LyGeb3UwB1JWSGX8iHFKoHmvkePbuJefn",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "x402",
+        "A2A"
+      ],
+      "capabilitiesCount": 2,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "basic",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "8000",
+      "pricePerCallDisplay": "0.008 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "HYRE Agent",
+      "pda": "3CfM7HtHtHsrv98w3K7p664kEhTXCtKN2xcfCzqZSayy",
+      "wallet": "2xefB3QwReNxR89NMzVEUGLLX8JS4iveRUnitS98m7Lf",
+      "endpoint": "https://mpp.hyreagent.fun",
+      "agentUri": "https://hyreagent.fun",
+      "protocolIds": [
+        "x402",
+        "MCP",
+        "MPP"
+      ],
+      "capabilitiesCount": 5,
+      "pricingTier": "premium",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "25000",
+      "pricePerCallDisplay": "0.025 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "Invoica",
+      "pda": "F7ZgQpK1yXahRrHav5DFfaibuMEcNHn8KVBHWWsKop7P",
+      "wallet": "9qyeZysjUadvgUERrYzMHgku846EjBJDquyvbszKk4A9",
+      "endpoint": "https://api.invoica.ai/api/sap/execute",
+      "agentUri": null,
+      "protocolIds": [
+        "x402"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_pricing",
+      "reasons": [
+        "no pricing tiers listed"
+      ]
+    },
+    {
+      "name": "Syra",
+      "pda": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+      "wallet": "53JhuF8bgxvUQ59nDG6kWs4awUQYCS3wswQmUsV5uC7t",
+      "endpoint": "https://api.syraa.fun",
+      "agentUri": "https://syraa.fun",
+      "protocolIds": [
+        "MCP",
+        "A2A"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "free",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "0",
+      "pricePerCallDisplay": "0 SOL",
+      "status": "free",
+      "reasons": [
+        "free tier; useful for behavior checks but weaker for payment proof"
+      ]
+    },
+    {
+      "name": "Syra",
+      "pda": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+      "wallet": "53JhuF8bgxvUQ59nDG6kWs4awUQYCS3wswQmUsV5uC7t",
+      "endpoint": "https://api.syraa.fun",
+      "agentUri": "https://syraa.fun",
+      "protocolIds": [
+        "MCP",
+        "A2A"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "5000",
+      "pricePerCallDisplay": "0.000005 SOL",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "KAMIYO SAP Agent",
+      "pda": "7agV7tk9dkwg1hzvVfUEggbAS2ieJQMqrh1xMhAmQbrS",
+      "wallet": "Dof2qw3SzbduE2oT7yeHaAWs4H3Uy49i8gGNfkmssyev",
+      "endpoint": "https://api.kamiyo.ai/api/sap/execute",
+      "agentUri": "https://api.kamiyo.ai/api/sap/metadata",
+      "protocolIds": [
+        "sap",
+        "kamiyo",
+        "x402",
+        "meishi"
+      ],
+      "capabilitiesCount": 10,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1388",
+      "pricePerCallDisplay": "0.001388 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    },
+    {
+      "name": "AceDataCloud",
+      "pda": "351RAREpAhUzeeWXz1T65hHdvuTdEJXzBpqg17YJJ2Ts",
+      "wallet": "ByeicxtuVKo9XJjggHAKeTdFj2VaNQmuzrMHbHA5dZqA",
+      "endpoint": "https://facilitator.acedata.cloud/.well-known/x402",
+      "agentUri": "https://api.acedata.cloud",
+      "protocolIds": [
+        "mcp",
+        "x402",
+        "openai-compatible"
+      ],
+      "capabilitiesCount": 8,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "1000000",
+      "pricePerCallDisplay": "0.001 SOL",
+      "status": "too_expensive",
+      "reasons": [
+        "SOL price 0.001 exceeds Phase 3 cap 0.00035 SOL"
+      ]
+    },
+    {
+      "name": "test",
+      "pda": "7sn2tfMxo4M47Q1DkKTCWGVDyTV3T2vDVWNWQdzNyq5m",
+      "wallet": "A1rxJdvasLPxCeQyisE1hQEZQoU6wdZ22t9Szc5rAuHm",
+      "endpoint": null,
+      "agentUri": null,
+      "protocolIds": [
+        "test"
+      ],
+      "capabilitiesCount": 1,
+      "pricingTier": null,
+      "route": "unknown",
+      "token": "unknown",
+      "pricePerCall": null,
+      "pricePerCallDisplay": null,
+      "status": "missing_endpoint",
+      "reasons": [
+        "no x402Endpoint or agentUri"
+      ]
+    },
+    {
+      "name": "StreamForge Ops Agent",
+      "pda": "CnKdEFLZu5PfjasRv1zJCpYmkm5U12kCQi4tX5cdsuHJ",
+      "wallet": "2hsRLHTzm5fn2TFb6Z2nY2uEehFMXECkPmGpowoLNkrT",
+      "endpoint": "https://synapsestreamforge.local/api/x402/streamforge-agent",
+      "agentUri": "https://synapsestreamforge.local/agents/streamforge",
+      "protocolIds": [
+        "sap",
+        "synapse",
+        "oobe"
+      ],
+      "capabilitiesCount": 3,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "SOL",
+      "pricePerCall": "0",
+      "pricePerCallDisplay": "0 SOL",
+      "status": "missing_endpoint",
+      "reasons": [
+        "endpoint is missing, localhost, or non-public"
+      ]
+    },
+    {
+      "name": "XONA Agent",
+      "pda": "EijZQg1ozSaqJjpais4ZqEHUHehyovHNYGjKxwXw5oxk",
+      "wallet": "9VaDVp1Wb78G4Wm6VuTiMrpESjrUymXefQTHcJGRSTEA",
+      "endpoint": "https://api.xona-agent.com/.well-known/x402",
+      "agentUri": null,
+      "protocolIds": [
+        "creative",
+        "ai",
+        "payments"
+      ],
+      "capabilitiesCount": 6,
+      "pricingTier": "standard",
+      "route": "x402",
+      "token": "USDC",
+      "pricePerCall": "1000",
+      "pricePerCallDisplay": "0.001 USDC",
+      "status": "good_audit_target",
+      "reasons": [
+        "active, priced, endpoint present, and within budget"
+      ]
+    }
+  ]
+}
