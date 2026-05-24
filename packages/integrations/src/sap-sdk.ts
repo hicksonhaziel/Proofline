@@ -20,8 +20,12 @@ export interface SapSdk {
 export interface SapClientLike {
   connection: {
     getBalance(publicKey: unknown): Promise<number>;
-    simulateTransaction(transaction: unknown): Promise<{
-      value: { err: unknown; logs?: string[] | null };
+    simulateTransaction(transaction: unknown, config?: unknown): Promise<{
+      value: {
+        err: unknown;
+        logs?: string[] | null;
+        accounts?: Array<{ lamports?: number } | null> | null;
+      };
     }>;
     sendTransaction(transaction: unknown, opts?: unknown): Promise<string>;
     getAccountInfo(publicKey: unknown): Promise<unknown | null>;
@@ -31,6 +35,9 @@ export interface SapClientLike {
   };
   tools: {
     publishTool(ctx: Record<string, unknown>): Promise<unknown>;
+  };
+  escrow: {
+    createEscrowV2(ctx: Record<string, unknown>): Promise<unknown>;
   };
   buildTransaction(instructions: unknown[], payer: unknown): Promise<{
     sign(signers: unknown[]): void;

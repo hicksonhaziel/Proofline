@@ -31,6 +31,8 @@ pnpm-debug.log*
 data/runs/*.json
 data/proof-packets/*.json
 data/artifacts/*
+data/sentinel/*.json
+data/sap/payment-plan.json
 !data/runs/.gitkeep
 !data/proof-packets/.gitkeep
 !data/artifacts/.gitkeep
@@ -38,6 +40,8 @@ data/artifacts/*
 # Local strategy docs
 plan.md
 project.md
+session-context.md
+deferred-work.md
 
 # OS/editor noise
 .DS_Store

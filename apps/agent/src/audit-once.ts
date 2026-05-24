@@ -15,6 +15,11 @@ import {
   type SentinelCheck,
 } from "../../../packages/core/src/index.js";
 import { LocalStore } from "../../../packages/db/src/index.js";
+import {
+  AceDataCloudClient,
+  extractAceChatContent,
+  type AceServiceResult,
+} from "../../../packages/integrations/src/index.js";
 import { loadConfig, safeConfigSummary } from "./config.js";
 import { createLogger } from "./logger.js";
 
@@ -66,9 +71,17 @@ interface AceVerdict {
   riskFlags: RiskFlag[];
 }
 
+interface AceArtifacts {
+  directory: string;
+  searchPath?: string;
+  translationPath?: string;
+  imagePath?: string;
+  imageResponsePath?: string;
+  summaryPath?: string;
+}
+
 const PLAN_PATH = "data/sap/audit-target-plan.json";
 const MAX_PREVIEW_CHARS = 6000;
-const ACE_CHAT_MODEL = process.env.ACE_CHAT_MODEL ?? "gpt-4o-mini";
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv);
@@ -108,7 +121,7 @@ async function main(): Promise<void> {
   const payment = buildPaymentReceipt(auditJobId, plannedTarget, args.allowPaid);
   const probeResult = await runProbe(auditJobId, target, plannedTarget, payment);
   const aceAnalysis = args.useAce
-    ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config.aceApiKey)
+    ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
     : buildSkippedAceAnalysis(auditJobId);
 
   const riskFlags = mergeRiskFlags(sentinelCheck, payment, probeResult, aceAnalysis);
@@ -140,7 +153,7 @@ async function main(): Promise<void> {
     aceAnalysis,
     scores,
     riskFlags,
-    artifacts: {},
+    artifacts: buildPacketArtifacts(aceAnalysis),
     createdAt: completedAt,
     auditorAgent: {
       name: "Proofline" as const,
@@ -413,14 +426,155 @@ async function runAceAnalysis(
   sentinelCheck: SentinelCheck,
   payment: PaymentReceipt,
   probeResult: ProbeResult,
-  aceApiKey: string,
+  config: ReturnType<typeof loadConfig>,
 ): Promise<AceAnalysisResult> {
   const createdAt = new Date().toISOString();
-  const prompt = [
-    "You are Proofline, an execution auditor for SAP agents.",
-    "Analyze this SAP agent probe and return strict JSON only with keys:",
-    "outputQualityScore number 0-100, capabilityMatchScore number 0-100, summary string, riskFlags string[].",
-    "Allowed riskFlags: TOOL_ENDPOINT_UNREACHABLE, CAPABILITY_MISMATCH, GENERIC_RESPONSE, SENTINEL_WARNING, PRICE_TOO_HIGH.",
+  const client = new AceDataCloudClient({
+    apiKey: config.aceApiKey,
+    ...(process.env.ACE_CHAT_MODEL ? { chatModel: process.env.ACE_CHAT_MODEL } : {}),
+    ...(process.env.ACE_IMAGE_MODEL ? { imageModel: process.env.ACE_IMAGE_MODEL } : {}),
+    timeoutMs: Number(process.env.ACE_TIMEOUT_MS ?? 180000),
+  });
+  const artifacts: AceArtifacts = {
+    directory: resolve("data/artifacts", auditJobId),
+  };
+  const calls: AceServiceResult[] = [];
+
+  try {
+    const search = await client.search({
+      query: buildPublicFootprintQuery(target, plannedTarget),
+      number: 5,
+      country: "US",
+      language: "en",
+    });
+    calls.push(search);
+    artifacts.searchPath = await writeJson(`data/artifacts/${auditJobId}/ace-serp-search.json`, trimAcePayload(search));
+
+    const chat = await client.chatJson(
+      [
+        {
+          role: "system",
+          content:
+            "You are Proofline, an execution auditor for SAP agents. Your job is to judge whether a paid agent endpoint is real, reachable, priced clearly, and aligned with its advertised SAP metadata.",
+        },
+        {
+          role: "user",
+          content: buildAceAuditPrompt(target, plannedTarget, sentinelCheck, payment, probeResult, search),
+        },
+      ],
+      "Return strict JSON only with keys: outputQualityScore number 0-100, capabilityMatchScore number 0-100, summary string, riskFlags string[]. Allowed riskFlags: TOOL_ENDPOINT_UNREACHABLE, CAPABILITY_MISMATCH, GENERIC_RESPONSE, SENTINEL_WARNING, PRICE_TOO_HIGH, MISSING_PUBLIC_FOOTPRINT.",
+    );
+    calls.push(chat);
+    const content = extractAceChatContent(chat.data);
+    const verdict = parseAceVerdict(content);
+    artifacts.summaryPath = await writeJson(`data/artifacts/${auditJobId}/ace-analysis.json`, {
+      verdict,
+      raw: trimAcePayload(chat),
+    });
+
+    if (config.flags.enableAceTranslation) {
+      const translationInput = buildTranslationInput(target, plannedTarget, verdict, search);
+      const translation = await client.translate({
+        input: translationInput,
+        locale: "zh-CN",
+        extension: "md",
+      });
+      calls.push(translation);
+      artifacts.translationPath = await writeTextOrJsonArtifact(
+        `data/artifacts/${auditJobId}/ace-translation-zh-CN.md`,
+        translation,
+      );
+    }
+
+    if (config.flags.enableAceImage) {
+      const image = await client.generateImage({
+        prompt: buildProofCardPrompt(target, plannedTarget, verdict),
+        size: "1024x1024",
+      });
+      calls.push(image);
+      const imageArtifacts = await writeImageArtifacts(auditJobId, image);
+      if (imageArtifacts.imagePath) {
+        artifacts.imagePath = imageArtifacts.imagePath;
+      }
+      artifacts.imageResponsePath = imageArtifacts.imageResponsePath;
+    }
+
+    const servicesUsed = calls.filter((call) => call.ok).map((call) => call.service);
+    const failedCalls = calls.filter((call) => !call.ok);
+    const riskFlags = new Set<RiskFlag>(verdict.riskFlags);
+    if (!chat.ok) riskFlags.add("GENERIC_RESPONSE");
+    if (!search.ok) riskFlags.add("MISSING_PUBLIC_FOOTPRINT");
+
+    return {
+      analysisId: `ace_${randomUUID()}`,
+      auditJobId,
+      servicesUsed,
+      ...(chat.ok
+        ? {
+            outputQualityScore: verdict.outputQualityScore,
+            capabilityMatchScore: verdict.capabilityMatchScore,
+          }
+        : {}),
+      summary: buildAceSummary(verdict, servicesUsed, failedCalls),
+      riskFlags: [...riskFlags],
+      raw: {
+        mode: "ace_full_pipeline",
+        servicesAttempted: calls.map((call) => ({
+          service: call.service,
+          endpoint: call.endpoint,
+          ok: call.ok,
+          status: call.status,
+          latencyMs: call.latencyMs,
+          error: call.error,
+        })),
+        artifacts,
+        note: "servicesUsed contains only successful Ace Data Cloud service calls.",
+      },
+      createdAt,
+    };
+  } catch (error) {
+    if (calls.length > 0) {
+      await writeJson(`data/artifacts/${auditJobId}/ace-partial-failure.json`, {
+        error: error instanceof Error ? error.message : String(error),
+        calls: calls.map(trimAcePayload),
+        artifacts,
+      });
+    }
+
+    return {
+      analysisId: `ace_${randomUUID()}`,
+      auditJobId,
+      servicesUsed: calls.filter((call) => call.ok).map((call) => call.service),
+      riskFlags: ["GENERIC_RESPONSE"],
+      summary: `Ace full pipeline failed: ${error instanceof Error ? error.message : String(error)}. Heuristic scoring was used.`,
+      raw: {
+        mode: "ace_full_pipeline",
+        servicesAttempted: calls.map((call) => ({
+          service: call.service,
+          endpoint: call.endpoint,
+          ok: call.ok,
+          status: call.status,
+          latencyMs: call.latencyMs,
+          error: call.error,
+        })),
+        artifacts,
+      },
+      createdAt,
+    };
+  }
+}
+
+function buildAceAuditPrompt(
+  target: AgentTarget,
+  plannedTarget: PlannedTarget,
+  sentinelCheck: SentinelCheck,
+  payment: PaymentReceipt,
+  probeResult: ProbeResult,
+  search: AceServiceResult,
+): string {
+  return [
+    "Analyze this SAP agent audit evidence. Be strict and practical.",
+    "If the endpoint is only metadata or returns a payment-required response, score reliability fairly but do not pretend the tool output was fully delivered.",
     "",
     JSON.stringify(
       {
@@ -445,71 +599,203 @@ async function runAceAnalysis(
           receipt: payment.receipt,
         },
         probeResult,
+        publicFootprintSearch: trimAcePayload(search),
       },
       null,
       2,
-    ).slice(0, 12000),
+    ).slice(0, 14000),
   ].join("\n");
+}
 
-  try {
-    const response = await fetch("https://api.acedata.cloud/openai/chat/completions", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        authorization: `Bearer ${aceApiKey}`,
-        "content-type": "application/json",
+function buildPublicFootprintQuery(target: AgentTarget, plannedTarget: PlannedTarget): string {
+  const host = target.endpoint ? safeHostname(target.endpoint) : "";
+  const agentUriHost = plannedTarget.agentUri ? safeHostname(plannedTarget.agentUri) : "";
+  return [`"${target.name}"`, host ? `"${host}"` : "", agentUriHost ? `"${agentUriHost}"` : "", "x402", "SAP agent"].filter(Boolean).join(" ");
+}
+
+function buildTranslationInput(
+  target: AgentTarget,
+  plannedTarget: PlannedTarget,
+  verdict: AceVerdict,
+  search: AceServiceResult,
+): string {
+  return [
+    `# Proofline audit summary for ${target.name}`,
+    "",
+    `Agent PDA: ${plannedTarget.pda}`,
+    `Endpoint: ${plannedTarget.endpoint ?? "unknown"}`,
+    `Payment route: ${plannedTarget.route}`,
+    `Advertised price: ${plannedTarget.pricePerCallDisplay ?? "unknown"}`,
+    "",
+    `Verdict summary: ${verdict.summary}`,
+    `Output quality score: ${verdict.outputQualityScore}`,
+    `Capability match score: ${verdict.capabilityMatchScore}`,
+    `Risk flags: ${verdict.riskFlags.length > 0 ? verdict.riskFlags.join(", ") : "none"}`,
+    "",
+    "Public footprint search status:",
+    JSON.stringify(
+      {
+        ok: search.ok,
+        status: search.status,
+        service: search.service,
+        preview: extractSearchPreview(search.data),
       },
-      body: JSON.stringify({
-        model: ACE_CHAT_MODEL,
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0,
-        max_tokens: 500,
-        response_format: {
-          type: "json_object",
-        },
-      }),
+      null,
+      2,
+    ),
+  ].join("\n");
+}
+
+function buildProofCardPrompt(target: AgentTarget, plannedTarget: PlannedTarget, verdict: AceVerdict): string {
+  return [
+    "Create a clean professional square visual proof card for a Solana SAP agent audit.",
+    "Brand: Proofline. Style: dark charcoal background, electric green and white accents, premium security dashboard aesthetic, no clutter.",
+    "Do not include any calendar date, year, timestamp, paragraph, legal footer, or extra invented claims.",
+    "Use only short readable labels. If text is hard, prefer abstract panels instead of adding random words.",
+    `Required text labels only: Proofline, Audit Proof, ${target.name}, ${plannedTarget.route}, ${plannedTarget.pricePerCallDisplay ?? "unknown"}, Output ${verdict.outputQualityScore}/100, Capability ${verdict.capabilityMatchScore}/100.`,
+    "Show verification marks, score rings, small data panels, and blockchain-inspired interface elements.",
+  ].join(" ");
+}
+
+function buildAceSummary(verdict: AceVerdict, servicesUsed: string[], failedCalls: AceServiceResult[]): string {
+  const failures =
+    failedCalls.length > 0
+      ? ` Failed Ace services: ${failedCalls.map((call) => `${call.service}${call.status ? ` HTTP ${call.status}` : ""}`).join(", ")}.`
+      : "";
+  return `${verdict.summary} Ace services used successfully: ${servicesUsed.length > 0 ? servicesUsed.join(", ") : "none"}.${failures}`;
+}
+
+function buildPacketArtifacts(aceAnalysis: AceAnalysisResult): ExecutionProofPacket["artifacts"] {
+  const raw = isRecord(aceAnalysis.raw) ? aceAnalysis.raw : {};
+  const artifacts = isRecord(raw.artifacts) ? raw.artifacts : {};
+  const packetArtifacts: ExecutionProofPacket["artifacts"] = {};
+
+  if (typeof artifacts.imagePath === "string") {
+    packetArtifacts.proofCardPath = artifacts.imagePath;
+  } else if (typeof artifacts.imageResponsePath === "string") {
+    packetArtifacts.proofCardPath = artifacts.imageResponsePath;
+  }
+
+  return packetArtifacts;
+}
+
+async function writeTextOrJsonArtifact(path: string, result: AceServiceResult): Promise<string> {
+  const outputPath = resolve(path);
+  await mkdir(dirname(outputPath), { recursive: true });
+
+  if (result.ok && isRecord(result.data) && typeof result.data.data === "string") {
+    await writeFile(outputPath, result.data.data, "utf8");
+    return outputPath;
+  }
+
+  await writeFile(outputPath.replace(/\.md$/, ".json"), `${JSON.stringify(trimAcePayload(result), null, 2)}\n`, "utf8");
+  return outputPath.replace(/\.md$/, ".json");
+}
+
+async function writeImageArtifacts(
+  auditJobId: string,
+  result: AceServiceResult,
+): Promise<{ imagePath?: string; imageResponsePath: string }> {
+  const imageResponsePath = await writeJson(`data/artifacts/${auditJobId}/ace-proof-card-response.json`, trimAcePayload(result));
+  const b64 = extractImageBase64(result.data);
+
+  if (!result.ok) {
+    return { imageResponsePath };
+  }
+
+  const imageUrl = extractImageUrl(result.data);
+  const imagePath = resolve(`data/artifacts/${auditJobId}/proof-card.png`);
+  await mkdir(dirname(imagePath), { recursive: true });
+
+  if (b64) {
+    await writeFile(imagePath, Buffer.from(b64, "base64"));
+    return { imagePath, imageResponsePath };
+  }
+
+  if (imageUrl) {
+    const response = await fetch(imageUrl, {
+      headers: {
+        accept: "image/png,image/*;q=0.9,*/*;q=0.8",
+        "user-agent": "Proofline/0.1 execution-auditor",
+      },
+      signal: AbortSignal.timeout(30000),
     });
-    const raw = await response.json();
-    const content = extractAceContent(raw);
-    const verdict = parseAceVerdict(content);
 
-    if (!response.ok) {
-      return {
-        analysisId: `ace_${randomUUID()}`,
-        auditJobId,
-        servicesUsed: ["ace_openai_chat_completions"],
-        riskFlags: ["GENERIC_RESPONSE"],
-        summary: `Ace analysis returned HTTP ${response.status}. Heuristic scoring was used.`,
-        raw,
-        createdAt,
-      };
+    if (response.ok) {
+      const bytes = Buffer.from(await response.arrayBuffer());
+      await writeFile(imagePath, bytes);
+      return { imagePath, imageResponsePath };
     }
+  }
 
-    return {
-      analysisId: `ace_${randomUUID()}`,
-      auditJobId,
-      servicesUsed: ["ace_openai_chat_completions"],
-      outputQualityScore: verdict.outputQualityScore,
-      capabilityMatchScore: verdict.capabilityMatchScore,
-      summary: verdict.summary,
-      riskFlags: verdict.riskFlags,
-      raw,
-      createdAt,
-    };
-  } catch (error) {
-    return {
-      analysisId: `ace_${randomUUID()}`,
-      auditJobId,
-      servicesUsed: ["ace_openai_chat_completions"],
-      riskFlags: ["GENERIC_RESPONSE"],
-      summary: `Ace analysis failed: ${error instanceof Error ? error.message : String(error)}. Heuristic scoring was used.`,
-      createdAt,
-    };
+  return { imageResponsePath };
+}
+
+function trimAcePayload(result: AceServiceResult): Record<string, unknown> {
+  return {
+    service: result.service,
+    endpoint: result.endpoint,
+    ok: result.ok,
+    status: result.status,
+    latencyMs: result.latencyMs,
+    error: result.error,
+    data: trimLargePayload(result.data),
+  };
+}
+
+function trimLargePayload(value: unknown): unknown {
+  if (typeof value === "string") {
+    return value.length > 2000 ? `${value.slice(0, 2000)}...[trimmed ${value.length - 2000} chars]` : value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.slice(0, 10).map(trimLargePayload);
+  }
+
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  const output: Record<string, unknown> = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "b64_json" && typeof item === "string") {
+      output[key] = `[base64 image omitted, ${item.length} chars]`;
+    } else {
+      output[key] = trimLargePayload(item);
+    }
+  }
+  return output;
+}
+
+function extractImageBase64(data: unknown): string | undefined {
+  if (!isRecord(data) || !Array.isArray(data.data)) return undefined;
+  const first = data.data[0];
+  if (!isRecord(first)) return undefined;
+  return typeof first.b64_json === "string" ? first.b64_json : undefined;
+}
+
+function extractImageUrl(data: unknown): string | undefined {
+  if (!isRecord(data) || !Array.isArray(data.data)) return undefined;
+  const first = data.data[0];
+  if (!isRecord(first)) return undefined;
+  return typeof first.url === "string" ? first.url : undefined;
+}
+
+function extractSearchPreview(data: unknown): unknown {
+  if (!isRecord(data)) return data;
+  const nestedData = data.data;
+  if (!isRecord(nestedData)) return trimLargePayload(data);
+  return {
+    organic: Array.isArray(nestedData.organic) ? nestedData.organic.slice(0, 3).map(trimLargePayload) : undefined,
+    knowledgeGraph: isRecord(nestedData.knowledge_graph) ? trimLargePayload(nestedData.knowledge_graph) : undefined,
+  };
+}
+
+function safeHostname(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "";
   }
 }
 

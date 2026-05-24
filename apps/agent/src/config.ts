@@ -63,7 +63,7 @@ export function loadConfig(): ProoflineConfig {
       enableSapDiscovery: booleanEnv("ENABLE_SAP_DISCOVERY", false),
       enableSapEscrow: booleanEnv("ENABLE_SAP_ESCROW", false),
       enableAceImage: booleanEnv("ENABLE_ACE_IMAGE", true),
-      enableAceTranslation: booleanEnv("ENABLE_ACE_TRANSLATION", false),
+      enableAceTranslation: booleanEnv("ENABLE_ACE_TRANSLATION", true),
       enableAceAudio: booleanEnv("ENABLE_ACE_AUDIO", false),
     },
   };

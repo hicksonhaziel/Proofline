@@ -3,4 +3,5 @@ export interface IntegrationPlaceholder {
   phase: number;
 }
 
+export * from "./ace-client.js";
 export * from "./sap-sdk.js";
