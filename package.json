@@ -8,6 +8,7 @@
     "agent": "tsx apps/agent/src/index.ts",
     "rpc:check": "tsx apps/agent/src/rpc-check.ts",
     "sap:register": "tsx apps/agent/src/sap-register.ts",
+    "build": "tsc --noEmit",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
   },
