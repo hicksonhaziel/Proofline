@@ -129,6 +129,12 @@ export interface ExecutionProofPacket {
     name: "Proofline";
     sapAgentId?: string;
   };
-  signature?: string;
+  signature?: {
+    algorithm: "ed25519";
+    publicKey: string;
+    packetHash: string;
+    signedPayload: string;
+    signatureBase64: string;
+    signedAt: string;
+  };
 }
-

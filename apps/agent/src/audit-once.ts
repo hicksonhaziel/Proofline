@@ -1,5 +1,5 @@
-import { randomUUID } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash, createPrivateKey, randomUUID, sign as cryptoSign } from "node:crypto";
+import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import {
   assertProofPacket,
@@ -21,6 +21,7 @@ import {
   type AceServiceResult,
 } from "../../../packages/integrations/src/index.js";
 import { loadConfig, safeConfigSummary } from "./config.js";
+import { loadKeypairFromFile } from "./keypair.js";
 import { createLogger } from "./logger.js";
 
 interface AuditTargetPlan {
@@ -76,12 +77,14 @@ interface AceArtifacts {
   searchPath?: string;
   translationPath?: string;
   imagePath?: string;
+  imageUrl?: string;
   imageResponsePath?: string;
   summaryPath?: string;
 }
 
 const PLAN_PATH = "data/sap/audit-target-plan.json";
 const MAX_PREVIEW_CHARS = 6000;
+const CARD_TEMPLATE_PATH = "public/card-temp1.png";
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv);
@@ -161,13 +164,15 @@ async function main(): Promise<void> {
     },
   };
 
-  const packet: ExecutionProofPacket = {
+  let packet: ExecutionProofPacket = {
     proofPacketId: createProofPacketId(packetWithoutId),
     ...packetWithoutId,
   };
   assertProofPacket(packet);
+  packet = await finalizeProofPacket(packet, config.sapKeypairPath);
 
   const proofPacketPath = await store.writeProofPacket(packet);
+  const publicProof = await publishPublicProofPacket(packet);
   const runStatePath = await store.writeRunState(auditJobId, {
     auditJobId,
     proofPacketId: packet.proofPacketId,
@@ -186,6 +191,7 @@ async function main(): Promise<void> {
     verdict: packet.scores.verdict,
     overallScore: packet.scores.overall,
     proofPacketPath,
+    publicProof,
     completedAt,
   });
 
@@ -196,6 +202,7 @@ async function main(): Promise<void> {
     riskFlags,
     paymentStatus: payment.status,
     proofPacketPath,
+    publicProof,
     runStatePath,
   });
 }
@@ -487,14 +494,20 @@ async function runAceAnalysis(
     }
 
     if (config.flags.enableAceImage) {
-      const image = await client.generateImage({
-        prompt: buildProofCardPrompt(target, plannedTarget, verdict),
+      const template = await readFile(resolve(CARD_TEMPLATE_PATH));
+      const image = await client.editImage({
+        image: new Blob([template], { type: "image/png" }),
+        fileName: "card-temp1.png",
+        prompt: buildProofCardPrompt(target, plannedTarget, verdict, payment, probeResult),
         size: "1024x1024",
       });
       calls.push(image);
       const imageArtifacts = await writeImageArtifacts(auditJobId, image);
       if (imageArtifacts.imagePath) {
         artifacts.imagePath = imageArtifacts.imagePath;
+      }
+      if (imageArtifacts.imageUrl) {
+        artifacts.imageUrl = imageArtifacts.imageUrl;
       }
       artifacts.imageResponsePath = imageArtifacts.imageResponsePath;
     }
@@ -646,14 +659,38 @@ function buildTranslationInput(
   ].join("\n");
 }
 
-function buildProofCardPrompt(target: AgentTarget, plannedTarget: PlannedTarget, verdict: AceVerdict): string {
+function buildProofCardPrompt(
+  target: AgentTarget,
+  plannedTarget: PlannedTarget,
+  verdict: AceVerdict,
+  payment: PaymentReceipt,
+  probeResult: ProbeResult,
+): string {
+  const auditDate = new Date().toISOString().slice(0, 10);
+  const doneItems = [
+    `ENDPOINT ${probeResult.status === "success" ? "REACHABLE" : "UNREACHABLE"}`,
+    `${probeResult.status === "success" ? "HTTP RESPONSE VERIFIED" : "HTTP RESPONSE FAILED"}`,
+    `${payment.status === "settled" ? "X402 PAYMENT FLOW TESTED" : "PAYMENT NOT EXECUTED"}`,
+    `${payment.status === "settled" && probeResult.status === "success" ? "AGENT FUNCTIONAL EXECUTION" : "FUNCTIONAL EXECUTION UNPAID"}`,
+  ];
+
   return [
-    "Create a clean professional square visual proof card for a Solana SAP agent audit.",
-    "Brand: Proofline. Style: dark charcoal background, electric green and white accents, premium security dashboard aesthetic, no clutter.",
-    "Do not include any calendar date, year, timestamp, paragraph, legal footer, or extra invented claims.",
-    "Use only short readable labels. If text is hard, prefer abstract panels instead of adding random words.",
-    `Required text labels only: Proofline, Audit Proof, ${target.name}, ${plannedTarget.route}, ${plannedTarget.pricePerCallDisplay ?? "unknown"}, Output ${verdict.outputQualityScore}/100, Capability ${verdict.capabilityMatchScore}/100.`,
-    "Show verification marks, score rings, small data panels, and blockchain-inspired interface elements.",
+    "EDIT THE PROVIDED TEMPLATE IMAGE ONLY. Do not create a new design.",
+    "Preserve the exact Proofline branding, black/gold color palette, logo, borders, panels, icons, spacing, typography style, badge, score rings, and layout.",
+    "Do not add characters, avatars, backgrounds, new logos, new panels, dates that are not provided, decorative scenes, paragraphs, or extra claims.",
+    "Only replace the visible placeholder/data text in the existing template.",
+    "Keep every replacement short enough to fit inside its existing box. If text is too long, abbreviate it instead of changing the design.",
+    "Use these exact data replacements:",
+    `AGENT_NAME -> ${shortCardText(target.name, 18)}`,
+    `ROUTE_ID xXXX -> ${shortCardText(plannedTarget.route.toUpperCase(), 12)}`,
+    `PRICE -> ${shortCardText(plannedTarget.pricePerCallDisplay ?? target.price, 22)}`,
+    `BLOCKCHAIN NETWORK_NAME -> ${shortCardText(tokenNetworkLabel(plannedTarget.token), 16)}`,
+    `OUTPUT SCORE -> ${verdict.outputQualityScore}/100`,
+    `CAPABILITY SCORE -> ${verdict.capabilityMatchScore}/100`,
+    `AUDIT DATE [CURRENT DATE] -> ${auditDate}`,
+    `VERIFICATION ROWS -> ${doneItems.join(" | ")}`,
+    "Green check marks should remain only for completed true items. Red cross marks should remain for not executed or failed items.",
+    "Return a PNG that looks like the same template with updated audit data.",
   ].join(" ");
 }
 
@@ -665,6 +702,17 @@ function buildAceSummary(verdict: AceVerdict, servicesUsed: string[], failedCall
   return `${verdict.summary} Ace services used successfully: ${servicesUsed.length > 0 ? servicesUsed.join(", ") : "none"}.${failures}`;
 }
 
+function shortCardText(value: string, maxLength: number): string {
+  const clean = value.replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLength) return clean;
+  return `${clean.slice(0, Math.max(0, maxLength - 1))}.`;
+}
+
+function tokenNetworkLabel(token: string): string {
+  if (token === "SOL" || token === "USDC" || token.startsWith("SPL")) return "SOLANA";
+  return "SOLANA";
+}
+
 function buildPacketArtifacts(aceAnalysis: AceAnalysisResult): ExecutionProofPacket["artifacts"] {
   const raw = isRecord(aceAnalysis.raw) ? aceAnalysis.raw : {};
   const artifacts = isRecord(raw.artifacts) ? raw.artifacts : {};
@@ -672,6 +720,8 @@ function buildPacketArtifacts(aceAnalysis: AceAnalysisResult): ExecutionProofPac
 
   if (typeof artifacts.imagePath === "string") {
     packetArtifacts.proofCardPath = artifacts.imagePath;
+  } else if (typeof artifacts.imageUrl === "string") {
+    packetArtifacts.proofCardPath = artifacts.imageUrl;
   } else if (typeof artifacts.imageResponsePath === "string") {
     packetArtifacts.proofCardPath = artifacts.imageResponsePath;
   }
@@ -695,7 +745,7 @@ async function writeTextOrJsonArtifact(path: string, result: AceServiceResult): 
 async function writeImageArtifacts(
   auditJobId: string,
   result: AceServiceResult,
-): Promise<{ imagePath?: string; imageResponsePath: string }> {
+): Promise<{ imagePath?: string; imageUrl?: string; imageResponsePath: string }> {
   const imageResponsePath = await writeJson(`data/artifacts/${auditJobId}/ace-proof-card-response.json`, trimAcePayload(result));
   const b64 = extractImageBase64(result.data);
 
@@ -713,18 +763,22 @@ async function writeImageArtifacts(
   }
 
   if (imageUrl) {
-    const response = await fetch(imageUrl, {
-      headers: {
-        accept: "image/png,image/*;q=0.9,*/*;q=0.8",
-        "user-agent": "Proofline/0.1 execution-auditor",
-      },
-      signal: AbortSignal.timeout(30000),
-    });
+    try {
+      const response = await fetch(imageUrl, {
+        headers: {
+          accept: "image/png,image/*;q=0.9,*/*;q=0.8",
+          "user-agent": "Proofline/0.1 execution-auditor",
+        },
+        signal: AbortSignal.timeout(45000),
+      });
 
-    if (response.ok) {
-      const bytes = Buffer.from(await response.arrayBuffer());
-      await writeFile(imagePath, bytes);
-      return { imagePath, imageResponsePath };
+      if (response.ok) {
+        const bytes = Buffer.from(await response.arrayBuffer());
+        await writeFile(imagePath, bytes);
+        return { imagePath, imageUrl, imageResponsePath };
+      }
+    } catch {
+      return { imageUrl, imageResponsePath };
     }
   }
 
@@ -1000,6 +1054,308 @@ function isRiskFlag(value: unknown): value is RiskFlag {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+async function finalizeProofPacket(packet: ExecutionProofPacket, keypairPath: string): Promise<ExecutionProofPacket> {
+  const unsignedPacket: ExecutionProofPacket = { ...packet };
+  delete unsignedPacket.signature;
+  const signedPayload = stableJson(unsignedPacket);
+  const packetHash = createHash("sha256").update(signedPayload).digest("hex");
+  const keypair = await loadKeypairFromFile(keypairPath);
+  const signatureBytes = signEd25519(Buffer.from(signedPayload, "utf8"), keypair.secretKey);
+
+  return {
+    ...packet,
+    signature: {
+      algorithm: "ed25519",
+      publicKey: keypair.publicKey.toBase58(),
+      packetHash,
+      signedPayload: `sha256:${packetHash}`,
+      signatureBase64: Buffer.from(signatureBytes).toString("base64"),
+      signedAt: new Date().toISOString(),
+    },
+  };
+}
+
+function signEd25519(message: Buffer, solanaSecretKey: Uint8Array): Buffer {
+  const seed = Buffer.from(solanaSecretKey.slice(0, 32));
+  const pkcs8Prefix = Buffer.from("302e020100300506032b657004220420", "hex");
+  const privateKey = createPrivateKey({
+    key: Buffer.concat([pkcs8Prefix, seed]),
+    format: "der",
+    type: "pkcs8",
+  });
+  return cryptoSign(null, message, privateKey);
+}
+
+async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<Record<string, string | null>> {
+  const publicDir = resolve("public/proofs");
+  await mkdir(publicDir, { recursive: true });
+
+  const latestJsonPath = resolve(publicDir, "latest.json");
+  const proofJsonPath = resolve(publicDir, `${packet.proofPacketId}.json`);
+  const latestHtmlPath = resolve(publicDir, "latest.html");
+  const proofHtmlPath = resolve(publicDir, `${packet.proofPacketId}.html`);
+  const ledgerJsonPath = resolve(publicDir, "ledger.json");
+  const ledgerHtmlPath = resolve(publicDir, "index.html");
+  const latestCardPath = resolve(publicDir, "latest-card.png");
+  const proofCardPath = resolve(publicDir, `${packet.proofPacketId}-card.png`);
+  const cardSourcePath = packet.artifacts.proofCardPath ? resolve(packet.artifacts.proofCardPath) : null;
+
+  await writeFile(latestJsonPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
+  await writeFile(proofJsonPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
+
+  let publicCardUrl: string | null = null;
+  if (packet.artifacts.proofCardPath?.startsWith("https://")) {
+    publicCardUrl = packet.artifacts.proofCardPath;
+  } else if (cardSourcePath?.endsWith(".png")) {
+    try {
+      await copyFile(cardSourcePath, latestCardPath);
+      await copyFile(cardSourcePath, proofCardPath);
+      publicCardUrl = `/proofs/${packet.proofPacketId}-card.png`;
+    } catch {
+      publicCardUrl = null;
+    }
+  }
+
+  const html = buildProofPageHtml(packet, publicCardUrl);
+  await writeFile(latestHtmlPath, html, "utf8");
+  await writeFile(proofHtmlPath, html, "utf8");
+  const ledger = await updateProofLedger(ledgerJsonPath, packet, publicCardUrl);
+  await writeFile(ledgerHtmlPath, buildLedgerPageHtml(ledger), "utf8");
+
+  return {
+    ledger: "/proofs/",
+    ledgerJson: "/proofs/ledger.json",
+    latestJson: "/proofs/latest.json",
+    proofJson: `/proofs/${packet.proofPacketId}.json`,
+    latestHtml: "/proofs/latest.html",
+    proofHtml: `/proofs/${packet.proofPacketId}.html`,
+    latestCard: publicCardUrl ? "/proofs/latest-card.png" : null,
+    proofCard: publicCardUrl,
+  };
+}
+
+interface ProofLedgerEntry {
+  proofPacketId: string;
+  targetName: string;
+  targetAgentId: string;
+  verdict: string;
+  overallScore: number;
+  riskFlags: string[];
+  aceServicesUsed: string[];
+  paymentStatus: string;
+  paymentMethod: string;
+  createdAt: string;
+  packetHash: string | null;
+  proofHtml: string;
+  proofJson: string;
+  proofCard: string | null;
+}
+
+async function updateProofLedger(
+  ledgerPath: string,
+  packet: ExecutionProofPacket,
+  cardUrl: string | null,
+): Promise<ProofLedgerEntry[]> {
+  const current = await readProofLedger(ledgerPath);
+  const payment = packet.payments[0];
+  const entry: ProofLedgerEntry = {
+    proofPacketId: packet.proofPacketId,
+    targetName: packet.targetAgent.name,
+    targetAgentId: packet.targetAgent.agentId,
+    verdict: packet.scores.verdict,
+    overallScore: packet.scores.overall,
+    riskFlags: packet.riskFlags,
+    aceServicesUsed: packet.aceAnalysis.servicesUsed,
+    paymentStatus: payment?.status ?? "unknown",
+    paymentMethod: payment?.method ?? "unknown",
+    createdAt: packet.createdAt,
+    packetHash: packet.signature?.packetHash ?? null,
+    proofHtml: `/proofs/${packet.proofPacketId}.html`,
+    proofJson: `/proofs/${packet.proofPacketId}.json`,
+    proofCard: cardUrl,
+  };
+  const ledger = [entry, ...current.filter((item) => item.proofPacketId !== packet.proofPacketId)].slice(0, 100);
+  await writeFile(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`, "utf8");
+  return ledger;
+}
+
+async function readProofLedger(ledgerPath: string): Promise<ProofLedgerEntry[]> {
+  try {
+    const raw = await readFile(ledgerPath, "utf8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(isProofLedgerEntry);
+  } catch {
+    return [];
+  }
+}
+
+function isProofLedgerEntry(value: unknown): value is ProofLedgerEntry {
+  return isRecord(value) && typeof value.proofPacketId === "string";
+}
+
+function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
+  const rows = entries
+    .map(
+      (entry) => `<tr>
+        <td><a href="${escapeHtml(entry.proofHtml)}">${escapeHtml(entry.proofPacketId)}</a></td>
+        <td>${escapeHtml(entry.targetName)}</td>
+        <td>${escapeHtml(entry.verdict)}</td>
+        <td>${entry.overallScore}</td>
+        <td>${escapeHtml(entry.paymentStatus)} / ${escapeHtml(entry.paymentMethod)}</td>
+        <td>${escapeHtml(entry.aceServicesUsed.length.toString())}</td>
+        <td>${escapeHtml(entry.createdAt)}</td>
+      </tr>`,
+    )
+    .join("\n");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proofline Evidence Ledger</title>
+    <style>
+      :root { color-scheme: dark; --bg: #090a0b; --panel: #111417; --line: #c7a64a; --text: #f5f1e7; --muted: #a8a08e; --ok: #55f08a; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      main { width: min(1180px, calc(100vw - 32px)); margin: 32px auto; }
+      header { border-bottom: 1px solid rgba(199,166,74,.35); padding-bottom: 18px; margin-bottom: 22px; }
+      h1 { margin: 0 0 8px; font-size: 28px; }
+      p { color: var(--muted); }
+      a { color: var(--ok); }
+      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid rgba(199,166,74,.35); border-radius: 8px; overflow: hidden; }
+      th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(199,166,74,.18); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; }
+      td { overflow-wrap: anywhere; }
+      tr:last-child td { border-bottom: 0; }
+      @media (max-width: 780px) { table, thead, tbody, tr, th, td { display: block; } thead { display: none; } tr { border-bottom: 1px solid rgba(199,166,74,.35); } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Proofline Evidence Ledger</h1>
+        <p>Latest signed Execution Proof Packets generated by Proofline.</p>
+        <p><a href="/proofs/latest.html">Latest proof</a> · <a href="/proofs/ledger.json">ledger.json</a></p>
+      </header>
+      <table>
+        <thead>
+          <tr><th>Proof</th><th>Target</th><th>Verdict</th><th>Score</th><th>Payment</th><th>Ace Calls</th><th>Created</th></tr>
+        </thead>
+        <tbody>
+          ${rows || `<tr><td colspan="7">No proofs published yet.</td></tr>`}
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>
+`;
+}
+
+function buildProofPageHtml(packet: ExecutionProofPacket, cardUrl: string | null): string {
+  const payment = packet.payments[0];
+  const services = packet.aceAnalysis.servicesUsed.length > 0 ? packet.aceAnalysis.servicesUsed.join(", ") : "none";
+  const risks = packet.riskFlags.length > 0 ? packet.riskFlags.join(", ") : "none";
+  const signature = packet.signature;
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proofline Proof Packet ${escapeHtml(packet.proofPacketId)}</title>
+    <style>
+      :root { color-scheme: dark; --bg: #090a0b; --panel: #111417; --line: #c7a64a; --text: #f5f1e7; --muted: #a8a08e; --ok: #55f08a; --bad: #ff5b5b; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+      main { width: min(1120px, calc(100vw - 32px)); margin: 32px auto; }
+      header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; border-bottom: 1px solid rgba(199,166,74,.35); padding-bottom: 20px; }
+      h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+      p { color: var(--muted); line-height: 1.55; }
+      a { color: var(--ok); }
+      .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 20px; margin-top: 24px; }
+      .panel { border: 1px solid rgba(199,166,74,.35); background: var(--panel); border-radius: 8px; padding: 18px; }
+      .card { width: 100%; border-radius: 8px; border: 1px solid rgba(199,166,74,.45); display: block; }
+      dl { display: grid; grid-template-columns: 160px 1fr; gap: 10px 16px; margin: 0; }
+      dt { color: var(--muted); }
+      dd { margin: 0; overflow-wrap: anywhere; }
+      .score { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
+      .score div { border: 1px solid rgba(199,166,74,.25); border-radius: 8px; padding: 12px; }
+      .score strong { display: block; font-size: 24px; margin-top: 4px; }
+      .ok { color: var(--ok); }
+      .bad { color: var(--bad); }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #070808; border: 1px solid rgba(199,166,74,.2); border-radius: 8px; padding: 14px; }
+      @media (max-width: 880px) { .grid, .score { grid-template-columns: 1fr; } header { display: block; } dl { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>Proofline Audit Proof</h1>
+          <p>Signed Execution Proof Packet for ${escapeHtml(packet.targetAgent.name)}.</p>
+        </div>
+        <p><a href="/proofs/latest.json">latest.json</a> · <a href="/proofs/${escapeHtml(packet.proofPacketId)}.json">packet JSON</a></p>
+      </header>
+      <section class="grid">
+        <div class="panel">
+          <dl>
+            <dt>Proof ID</dt><dd>${escapeHtml(packet.proofPacketId)}</dd>
+            <dt>Target</dt><dd>${escapeHtml(packet.targetAgent.name)}</dd>
+            <dt>Target PDA</dt><dd>${escapeHtml(packet.targetAgent.agentId)}</dd>
+            <dt>Tool</dt><dd>${escapeHtml(packet.targetAgent.toolName)}</dd>
+            <dt>Payment</dt><dd>${escapeHtml(payment ? `${payment.status} ${payment.amount} ${payment.currency} via ${payment.method}` : "none")}</dd>
+            <dt>Sentinel</dt><dd>${escapeHtml(packet.sentinelCheck.status)}${packet.sentinelCheck.message ? `: ${escapeHtml(packet.sentinelCheck.message)}` : ""}</dd>
+            <dt>Probe</dt><dd>${escapeHtml(packet.probeResult.status)}${packet.probeResult.latencyMs ? ` in ${packet.probeResult.latencyMs}ms` : ""}</dd>
+            <dt>Ace Services</dt><dd>${escapeHtml(services)}</dd>
+            <dt>Risk Flags</dt><dd>${escapeHtml(risks)}</dd>
+            <dt>Packet Hash</dt><dd>${escapeHtml(signature?.packetHash ?? "unsigned")}</dd>
+            <dt>Signature</dt><dd>${escapeHtml(signature?.signatureBase64 ?? "unsigned")}</dd>
+          </dl>
+          <div class="score">
+            <div><span>Reliability</span><strong>${packet.scores.reliability}</strong></div>
+            <div><span>Capability</span><strong>${packet.scores.capabilityMatch}</strong></div>
+            <div><span>Payment</span><strong>${packet.scores.paymentIntegrity}</strong></div>
+            <div><span>Safety</span><strong>${packet.scores.safety}</strong></div>
+            <div><span>Overall</span><strong>${packet.scores.overall}</strong></div>
+          </div>
+          <h2>Summary</h2>
+          <p>${escapeHtml(packet.aceAnalysis.summary ?? "No summary.")}</p>
+        </div>
+        <div class="panel">
+          ${cardUrl ? `<img class="card" src="${escapeHtml(cardUrl)}" alt="Proofline audit proof card" />` : `<p>No public proof card was generated.</p>`}
+        </div>
+      </section>
+      <section class="panel" style="margin-top:20px">
+        <h2>Raw Probe Preview</h2>
+        <pre>${escapeHtml(JSON.stringify(packet.probeResult.response ?? packet.probeResult.error ?? {}, null, 2).slice(0, 5000))}</pre>
+      </section>
+    </main>
+  </body>
+</html>
+`;
+}
+
+function stableJson(value: unknown): string {
+  return JSON.stringify(sortJson(value));
+}
+
+function sortJson(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortJson);
+  if (!isRecord(value)) return value;
+  return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => [key, sortJson(item)]));
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 async function writeJson(path: string, value: unknown): Promise<string> {

@@ -37,6 +37,11 @@ export interface AceImageOptions {
   responseFormat?: "url" | "b64_json";
 }
 
+export interface AceImageEditOptions extends AceImageOptions {
+  image: Blob;
+  fileName: string;
+}
+
 export interface AceTranslateOptions {
   input: string;
   locale: string;
@@ -120,6 +125,25 @@ export class AceDataCloudClient {
     return this.postJson("/openai/images/generations", "ace_openai_images_generations", body);
   }
 
+  async editImage(options: AceImageEditOptions): Promise<AceServiceResult> {
+    const model = options.model ?? this.imageModel;
+    const body = new FormData();
+    body.append("image", options.image, options.fileName);
+    body.append("prompt", options.prompt);
+    body.append("model", model);
+    body.append("size", options.size ?? "1024x1024");
+    body.append("quality", options.quality ?? (model.startsWith("gpt-image") ? "low" : "standard"));
+    body.append("n", "1");
+
+    if (model.startsWith("gpt-image")) {
+      body.append("output_format", "png");
+    } else {
+      body.append("response_format", options.responseFormat ?? "b64_json");
+    }
+
+    return this.postMultipart("/openai/images/edits", "ace_openai_images_edits", body);
+  }
+
   async translate(options: AceTranslateOptions): Promise<AceServiceResult> {
     return this.postJson("/localization/translate", "ace_localization_translate", {
       input: options.input,
@@ -141,6 +165,55 @@ export class AceDataCloudClient {
           "content-type": "application/json",
         },
         body: JSON.stringify(body),
+        signal: AbortSignal.timeout(this.timeoutMs),
+      });
+      const latencyMs = Date.now() - startedAt;
+      const payload = (await readJsonOrText(response)) as T;
+
+      if (!response.ok) {
+        return {
+          service,
+          endpoint,
+          ok: false,
+          status: response.status,
+          latencyMs,
+          data: payload,
+          error: describeAceError(payload, response.status),
+        };
+      }
+
+      return {
+        service,
+        endpoint,
+        ok: true,
+        status: response.status,
+        latencyMs,
+        data: payload,
+      };
+    } catch (error) {
+      return {
+        service,
+        endpoint,
+        ok: false,
+        status: null,
+        latencyMs: Date.now() - startedAt,
+        error: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  private async postMultipart<T = unknown>(path: string, service: string, body: FormData): Promise<AceServiceResult<T>> {
+    const endpoint = `${this.baseUrl}${path}`;
+    const startedAt = Date.now();
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          authorization: `Bearer ${this.apiKey}`,
+        },
+        body,
         signal: AbortSignal.timeout(this.timeoutMs),
       });
       const latencyMs = Date.now() - startedAt;

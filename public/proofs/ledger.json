@@ -1,0 +1,27 @@
+[
+  {
+    "proofPacketId": "proof_84854b9e4cf2caa6",
+    "targetName": "Syra",
+    "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "verdict": "warning",
+    "overallScore": 64,
+    "riskFlags": [
+      "GENERIC_RESPONSE",
+      "CAPABILITY_MISMATCH",
+      "MISSING_PUBLIC_FOOTPRINT"
+    ],
+    "aceServicesUsed": [
+      "ace_serp_google_search",
+      "ace_openai_chat_completions",
+      "ace_localization_translate",
+      "ace_openai_images_edits"
+    ],
+    "paymentStatus": "skipped",
+    "paymentMethod": "x402",
+    "createdAt": "2026-05-26T17:07:32.972Z",
+    "packetHash": "85baa12ec79a6998010d0af3d15e205856ed619c69496b9228f6b8e14951c57d",
+    "proofHtml": "/proofs/proof_84854b9e4cf2caa6.html",
+    "proofJson": "/proofs/proof_84854b9e4cf2caa6.json",
+    "proofCard": "/proofs/proof_84854b9e4cf2caa6-card.png"
+  }
+]
