@@ -1,5 +1,30 @@
 [
   {
+    "proofPacketId": "proof_37fbcd99e9872fc3",
+    "targetName": "Syra",
+    "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "verdict": "warning",
+    "overallScore": 67,
+    "riskFlags": [
+      "GENERIC_RESPONSE",
+      "SENTINEL_WARNING",
+      "CAPABILITY_MISMATCH"
+    ],
+    "aceServicesUsed": [
+      "ace_serp_google_search",
+      "ace_openai_chat_completions",
+      "ace_localization_translate",
+      "ace_openai_images_edits"
+    ],
+    "paymentStatus": "skipped",
+    "paymentMethod": "x402",
+    "createdAt": "2026-05-27T12:21:47.213Z",
+    "packetHash": "0296d131a90dfe3a3067100c5d36abd586172390de198b1bc990b5c50bcc0377",
+    "proofHtml": "/proofs/proof_37fbcd99e9872fc3.html",
+    "proofJson": "/proofs/proof_37fbcd99e9872fc3.json",
+    "proofCard": "https://platform.cdn.acedata.cloud/gpt-image/74eb40f8-6346-4699-a936-ba539f46c524_0.png"
+  },
+  {
     "proofPacketId": "proof_84854b9e4cf2caa6",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",

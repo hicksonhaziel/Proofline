@@ -1131,7 +1131,7 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
     proofJson: `/proofs/${packet.proofPacketId}.json`,
     latestHtml: "/proofs/latest.html",
     proofHtml: `/proofs/${packet.proofPacketId}.html`,
-    latestCard: publicCardUrl ? "/proofs/latest-card.png" : null,
+    latestCard: publicCardUrl,
     proofCard: publicCardUrl,
   };
 }
@@ -1196,59 +1196,202 @@ function isProofLedgerEntry(value: unknown): value is ProofLedgerEntry {
   return isRecord(value) && typeof value.proofPacketId === "string";
 }
 
+function prooflinePageHead(title: string): string {
+  return `<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${escapeHtml(title)}</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Geist%3Awght%40400%3B500%3B600%3B700%3B800" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#d6b45a",
+              "primary-soft": "#f4d37b",
+              surface: "#090a0b",
+              "surface-panel": "#111417",
+              "surface-panel-2": "#171b1f",
+              "surface-line": "rgba(214,180,90,0.24)",
+              "text-main": "#f6f1e7",
+              "text-muted": "#a8a08e"
+            },
+            fontFamily: { display: ["Geist", "Inter", "sans-serif"] },
+            borderRadius: { DEFAULT: "0.5rem" }
+          }
+        }
+      };
+    </script>
+    <style>
+      body { font-family: Geist, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .proofline-grid { background-image: linear-gradient(rgba(214,180,90,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(214,180,90,.035) 1px, transparent 1px); background-size: 36px 36px; }
+      .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24; }
+    </style>
+  </head>`;
+}
+
+function prooflineHeader(active: "ledger" | "proof"): string {
+  const ledgerClass = active === "ledger" ? "text-primary" : "text-text-muted hover:text-text-main";
+  const proofClass = active === "proof" ? "text-primary" : "text-text-muted hover:text-text-main";
+  return `<header class="sticky top-0 z-20 border-b border-surface-line bg-surface/90 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8">
+        <a class="flex items-center gap-3" href="/proofs/">
+          <img src="/proofline.png" alt="Proofline" class="h-10 w-10 rounded border border-surface-line object-cover" />
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-primary">Proofline</p>
+            <p class="text-xs text-text-muted">Execution proof network</p>
+          </div>
+        </a>
+        <nav class="flex items-center gap-5 text-sm font-medium">
+          <a class="${ledgerClass}" href="/proofs/">Ledger</a>
+          <a class="${proofClass}" href="/proofs/latest.html">Latest Proof</a>
+          <a class="hidden text-text-muted hover:text-text-main sm:inline" href="/proofs/ledger.json">JSON</a>
+        </nav>
+      </div>
+    </header>`;
+}
+
+function verdictClass(verdict: string): string {
+  const normalized = verdict.toLowerCase();
+  if (normalized.includes("pass") || normalized.includes("good") || normalized.includes("low")) {
+    return "border-emerald-400/30 bg-emerald-400/10 text-emerald-200";
+  }
+  if (normalized.includes("fail") || normalized.includes("high") || normalized.includes("critical")) {
+    return "border-red-400/30 bg-red-400/10 text-red-200";
+  }
+  return "border-amber-300/30 bg-amber-300/10 text-amber-100";
+}
+
+function scoreTone(score: number): string {
+  if (score >= 75) return "text-emerald-200";
+  if (score >= 50) return "text-primary-soft";
+  return "text-red-200";
+}
+
+function formatProofDate(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toISOString().replace("T", " ").slice(0, 16);
+}
+
+function shortProofId(value: string): string {
+  return value.length > 18 ? `${value.slice(0, 10)}...${value.slice(-6)}` : value;
+}
+
+function scoreBar(label: string, score: number): string {
+  const bounded = Math.max(0, Math.min(100, Math.round(score)));
+  return `<div class="rounded border border-surface-line bg-surface-panel-2 p-4">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <span class="text-sm text-text-muted">${escapeHtml(label)}</span>
+        <span class="font-semibold ${scoreTone(bounded)}">${bounded}</span>
+      </div>
+      <div class="h-2 overflow-hidden rounded-full bg-black/40">
+        <div class="h-full rounded-full bg-primary" style="width:${bounded}%"></div>
+      </div>
+    </div>`;
+}
+
 function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
+  const latest = entries[0];
+  const totalProofs = entries.length;
+  const latestScore = latest ? latest.overallScore.toString() : "0";
+  const serviceCount = new Set(entries.flatMap((entry) => entry.aceServicesUsed)).size;
   const rows = entries
     .map(
-      (entry) => `<tr>
-        <td><a href="${escapeHtml(entry.proofHtml)}">${escapeHtml(entry.proofPacketId)}</a></td>
-        <td>${escapeHtml(entry.targetName)}</td>
-        <td>${escapeHtml(entry.verdict)}</td>
-        <td>${entry.overallScore}</td>
-        <td>${escapeHtml(entry.paymentStatus)} / ${escapeHtml(entry.paymentMethod)}</td>
-        <td>${escapeHtml(entry.aceServicesUsed.length.toString())}</td>
-        <td>${escapeHtml(entry.createdAt)}</td>
+      (entry) => `<tr class="border-b border-surface-line last:border-0">
+        <td class="px-5 py-4 align-top">
+          <a class="font-mono text-sm text-primary-soft hover:text-primary" href="${escapeHtml(entry.proofHtml)}">${escapeHtml(shortProofId(entry.proofPacketId))}</a>
+          <p class="mt-1 max-w-[220px] truncate text-xs text-text-muted">${escapeHtml(entry.packetHash ?? "unsigned")}</p>
+        </td>
+        <td class="px-5 py-4 align-top">
+          <p class="font-medium text-text-main">${escapeHtml(entry.targetName)}</p>
+          <p class="mt-1 max-w-[220px] truncate text-xs text-text-muted">${escapeHtml(entry.targetAgentId)}</p>
+        </td>
+        <td class="px-5 py-4 align-top">
+          <span class="inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${verdictClass(entry.verdict)}">${escapeHtml(entry.verdict)}</span>
+        </td>
+        <td class="px-5 py-4 align-top">
+          <span class="text-lg font-bold ${scoreTone(entry.overallScore)}">${entry.overallScore}</span>
+          <span class="text-xs text-text-muted">/100</span>
+        </td>
+        <td class="px-5 py-4 align-top">
+          <p class="text-sm text-text-main">${escapeHtml(entry.paymentStatus)}</p>
+          <p class="text-xs text-text-muted">${escapeHtml(entry.paymentMethod)}</p>
+        </td>
+        <td class="px-5 py-4 align-top text-sm text-text-main">${escapeHtml(entry.aceServicesUsed.length.toString())}</td>
+        <td class="px-5 py-4 align-top text-sm text-text-muted">${escapeHtml(formatProofDate(entry.createdAt))}</td>
+        <td class="px-5 py-4 align-top">
+          <div class="flex items-center gap-2">
+            <a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofHtml)}" title="View proof"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
+            <a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofJson)}" title="View JSON"><span class="material-symbols-outlined text-[18px]">data_object</span></a>
+            ${entry.proofCard ? `<a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofCard)}" title="View proof card"><span class="material-symbols-outlined text-[18px]">image</span></a>` : ""}
+          </div>
+        </td>
       </tr>`,
     )
     .join("\n");
 
   return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Proofline Evidence Ledger</title>
-    <style>
-      :root { color-scheme: dark; --bg: #090a0b; --panel: #111417; --line: #c7a64a; --text: #f5f1e7; --muted: #a8a08e; --ok: #55f08a; }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      main { width: min(1180px, calc(100vw - 32px)); margin: 32px auto; }
-      header { border-bottom: 1px solid rgba(199,166,74,.35); padding-bottom: 18px; margin-bottom: 22px; }
-      h1 { margin: 0 0 8px; font-size: 28px; }
-      p { color: var(--muted); }
-      a { color: var(--ok); }
-      table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid rgba(199,166,74,.35); border-radius: 8px; overflow: hidden; }
-      th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(199,166,74,.18); vertical-align: top; }
-      th { color: var(--muted); font-weight: 600; }
-      td { overflow-wrap: anywhere; }
-      tr:last-child td { border-bottom: 0; }
-      @media (max-width: 780px) { table, thead, tbody, tr, th, td { display: block; } thead { display: none; } tr { border-bottom: 1px solid rgba(199,166,74,.35); } }
-    </style>
-  </head>
-  <body>
-    <main>
-      <header>
-        <h1>Proofline Evidence Ledger</h1>
-        <p>Latest signed Execution Proof Packets generated by Proofline.</p>
-        <p><a href="/proofs/latest.html">Latest proof</a> · <a href="/proofs/ledger.json">ledger.json</a></p>
-      </header>
-      <table>
-        <thead>
-          <tr><th>Proof</th><th>Target</th><th>Verdict</th><th>Score</th><th>Payment</th><th>Ace Calls</th><th>Created</th></tr>
-        </thead>
-        <tbody>
-          ${rows || `<tr><td colspan="7">No proofs published yet.</td></tr>`}
-        </tbody>
-      </table>
+<html lang="en" class="dark">
+  ${prooflinePageHead("Proofline Evidence Ledger")}
+  <body class="proofline-grid min-h-screen bg-surface text-text-main">
+    ${prooflineHeader("ledger")}
+    <main class="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <section class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Evidence ledger</p>
+          <h1 class="mt-3 text-3xl font-bold tracking-normal text-text-main sm:text-5xl">Signed execution proofs</h1>
+          <p class="mt-4 max-w-3xl text-sm leading-6 text-text-muted sm:text-base">Proofline records agent audits as public proof packets: payment route, probe result, Sentinel status, Ace analysis, proof card, hash, and wallet signature.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a class="inline-flex items-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="/proofs/latest.html"><span class="material-symbols-outlined text-[18px]">receipt_long</span>Latest proof</a>
+          <a class="inline-flex items-center gap-2 rounded border border-surface-line bg-surface-panel px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/ledger.json"><span class="material-symbols-outlined text-[18px]">data_object</span>ledger.json</a>
+        </div>
+      </section>
+
+      <section class="mb-8 grid gap-4 md:grid-cols-3">
+        <div class="rounded border border-surface-line bg-surface-panel p-5">
+          <p class="text-sm text-text-muted">Total proofs</p>
+          <p class="mt-2 text-3xl font-bold">${totalProofs}</p>
+        </div>
+        <div class="rounded border border-surface-line bg-surface-panel p-5">
+          <p class="text-sm text-text-muted">Latest overall score</p>
+          <p class="mt-2 text-3xl font-bold ${scoreTone(Number(latestScore))}">${escapeHtml(latestScore)}<span class="text-base text-text-muted">/100</span></p>
+        </div>
+        <div class="rounded border border-surface-line bg-surface-panel p-5">
+          <p class="text-sm text-text-muted">Ace services seen</p>
+          <p class="mt-2 text-3xl font-bold">${serviceCount}</p>
+        </div>
+      </section>
+
+      <section class="overflow-hidden rounded border border-surface-line bg-surface-panel shadow-2xl shadow-black/20">
+        <div class="flex flex-col gap-4 border-b border-surface-line p-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="text-xl font-semibold">Proof events</h2>
+            <p class="mt-1 text-sm text-text-muted">Newest packet first. Each row links to the human proof, raw JSON, and card artifact.</p>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs font-semibold">
+            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">SAP</span>
+            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">x402</span>
+            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">Ace Data Cloud</span>
+            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">Signed</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left">
+            <thead class="border-b border-surface-line bg-black/20 text-xs uppercase tracking-[0.14em] text-text-muted">
+              <tr><th class="px-5 py-3">Proof</th><th class="px-5 py-3">Target</th><th class="px-5 py-3">Verdict</th><th class="px-5 py-3">Score</th><th class="px-5 py-3">Payment</th><th class="px-5 py-3">Ace</th><th class="px-5 py-3">Created</th><th class="px-5 py-3">Open</th></tr>
+            </thead>
+            <tbody>
+              ${rows || `<tr><td class="px-5 py-8 text-text-muted" colspan="8">No proofs published yet.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
   </body>
 </html>
@@ -1258,80 +1401,128 @@ function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
 function buildProofPageHtml(packet: ExecutionProofPacket, cardUrl: string | null): string {
   const payment = packet.payments[0];
   const services = packet.aceAnalysis.servicesUsed.length > 0 ? packet.aceAnalysis.servicesUsed.join(", ") : "none";
-  const risks = packet.riskFlags.length > 0 ? packet.riskFlags.join(", ") : "none";
+  const serviceChips =
+    packet.aceAnalysis.servicesUsed.length > 0
+      ? packet.aceAnalysis.servicesUsed
+          .map((service) => `<span class="rounded-full border border-surface-line bg-surface-panel-2 px-3 py-1 text-xs font-semibold text-text-muted">${escapeHtml(service)}</span>`)
+          .join("")
+      : `<span class="rounded-full border border-surface-line bg-surface-panel-2 px-3 py-1 text-xs font-semibold text-text-muted">none</span>`;
+  const riskChips =
+    packet.riskFlags.length > 0
+      ? packet.riskFlags.map((risk) => `<span class="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-100">${escapeHtml(risk)}</span>`).join("")
+      : `<span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">no risk flags</span>`;
   const signature = packet.signature;
+  const probeOk = packet.probeResult.status === "success";
+  const sentinelOk = packet.sentinelCheck.status === "healthy";
+  const paymentLabel = payment ? `${payment.status} ${payment.amount} ${payment.currency}` : "not paid";
+  const paymentProof = payment?.transactionHash ?? payment?.receipt ?? payment?.paymentId;
+  const paymentRoute = payment ? `${payment.method}${paymentProof ? ` / ${paymentProof}` : ""}` : "none";
+  const responsePreview = JSON.stringify(packet.probeResult.response ?? packet.probeResult.error ?? {}, null, 2).slice(0, 5000);
 
   return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Proofline Proof Packet ${escapeHtml(packet.proofPacketId)}</title>
-    <style>
-      :root { color-scheme: dark; --bg: #090a0b; --panel: #111417; --line: #c7a64a; --text: #f5f1e7; --muted: #a8a08e; --ok: #55f08a; --bad: #ff5b5b; }
-      * { box-sizing: border-box; }
-      body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
-      main { width: min(1120px, calc(100vw - 32px)); margin: 32px auto; }
-      header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; border-bottom: 1px solid rgba(199,166,74,.35); padding-bottom: 20px; }
-      h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
-      p { color: var(--muted); line-height: 1.55; }
-      a { color: var(--ok); }
-      .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 20px; margin-top: 24px; }
-      .panel { border: 1px solid rgba(199,166,74,.35); background: var(--panel); border-radius: 8px; padding: 18px; }
-      .card { width: 100%; border-radius: 8px; border: 1px solid rgba(199,166,74,.45); display: block; }
-      dl { display: grid; grid-template-columns: 160px 1fr; gap: 10px 16px; margin: 0; }
-      dt { color: var(--muted); }
-      dd { margin: 0; overflow-wrap: anywhere; }
-      .score { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px; }
-      .score div { border: 1px solid rgba(199,166,74,.25); border-radius: 8px; padding: 12px; }
-      .score strong { display: block; font-size: 24px; margin-top: 4px; }
-      .ok { color: var(--ok); }
-      .bad { color: var(--bad); }
-      pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #070808; border: 1px solid rgba(199,166,74,.2); border-radius: 8px; padding: 14px; }
-      @media (max-width: 880px) { .grid, .score { grid-template-columns: 1fr; } header { display: block; } dl { grid-template-columns: 1fr; } }
-    </style>
-  </head>
-  <body>
-    <main>
-      <header>
+<html lang="en" class="dark">
+  ${prooflinePageHead(`Proofline Proof Packet ${packet.proofPacketId}`)}
+  <body class="proofline-grid min-h-screen bg-surface text-text-main">
+    ${prooflineHeader("proof")}
+    <main class="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <section class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1>Proofline Audit Proof</h1>
-          <p>Signed Execution Proof Packet for ${escapeHtml(packet.targetAgent.name)}.</p>
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Execution proof packet</p>
+          <h1 class="mt-3 text-3xl font-bold tracking-normal text-text-main sm:text-5xl">${escapeHtml(packet.targetAgent.name)}</h1>
+          <p class="mt-4 max-w-3xl text-sm leading-6 text-text-muted">${escapeHtml(packet.aceAnalysis.summary ?? "Signed Proofline audit packet with payment, probe, Sentinel, Ace analysis, and card artifacts.")}</p>
         </div>
-        <p><a href="/proofs/latest.json">latest.json</a> · <a href="/proofs/${escapeHtml(packet.proofPacketId)}.json">packet JSON</a></p>
-      </header>
-      <section class="grid">
-        <div class="panel">
-          <dl>
-            <dt>Proof ID</dt><dd>${escapeHtml(packet.proofPacketId)}</dd>
-            <dt>Target</dt><dd>${escapeHtml(packet.targetAgent.name)}</dd>
-            <dt>Target PDA</dt><dd>${escapeHtml(packet.targetAgent.agentId)}</dd>
-            <dt>Tool</dt><dd>${escapeHtml(packet.targetAgent.toolName)}</dd>
-            <dt>Payment</dt><dd>${escapeHtml(payment ? `${payment.status} ${payment.amount} ${payment.currency} via ${payment.method}` : "none")}</dd>
-            <dt>Sentinel</dt><dd>${escapeHtml(packet.sentinelCheck.status)}${packet.sentinelCheck.message ? `: ${escapeHtml(packet.sentinelCheck.message)}` : ""}</dd>
-            <dt>Probe</dt><dd>${escapeHtml(packet.probeResult.status)}${packet.probeResult.latencyMs ? ` in ${packet.probeResult.latencyMs}ms` : ""}</dd>
-            <dt>Ace Services</dt><dd>${escapeHtml(services)}</dd>
-            <dt>Risk Flags</dt><dd>${escapeHtml(risks)}</dd>
-            <dt>Packet Hash</dt><dd>${escapeHtml(signature?.packetHash ?? "unsigned")}</dd>
-            <dt>Signature</dt><dd>${escapeHtml(signature?.signatureBase64 ?? "unsigned")}</dd>
-          </dl>
-          <div class="score">
-            <div><span>Reliability</span><strong>${packet.scores.reliability}</strong></div>
-            <div><span>Capability</span><strong>${packet.scores.capabilityMatch}</strong></div>
-            <div><span>Payment</span><strong>${packet.scores.paymentIntegrity}</strong></div>
-            <div><span>Safety</span><strong>${packet.scores.safety}</strong></div>
-            <div><span>Overall</span><strong>${packet.scores.overall}</strong></div>
-          </div>
-          <h2>Summary</h2>
-          <p>${escapeHtml(packet.aceAnalysis.summary ?? "No summary.")}</p>
-        </div>
-        <div class="panel">
-          ${cardUrl ? `<img class="card" src="${escapeHtml(cardUrl)}" alt="Proofline audit proof card" />` : `<p>No public proof card was generated.</p>`}
+        <div class="flex flex-wrap gap-3">
+          <a class="inline-flex items-center gap-2 rounded border border-surface-line bg-surface-panel px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/"><span class="material-symbols-outlined text-[18px]">table</span>Ledger</a>
+          <a class="inline-flex items-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="/proofs/${escapeHtml(packet.proofPacketId)}.json"><span class="material-symbols-outlined text-[18px]">data_object</span>Packet JSON</a>
         </div>
       </section>
-      <section class="panel" style="margin-top:20px">
-        <h2>Raw Probe Preview</h2>
-        <pre>${escapeHtml(JSON.stringify(packet.probeResult.response ?? packet.probeResult.error ?? {}, null, 2).slice(0, 5000))}</pre>
+
+      <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px]">
+        <div class="space-y-6">
+          <section class="rounded border border-surface-line bg-surface-panel p-5 shadow-2xl shadow-black/20">
+            <div class="flex flex-col gap-4 border-b border-surface-line pb-5 md:flex-row md:items-start md:justify-between">
+              <div>
+                <h2 class="text-xl font-semibold">Audit summary</h2>
+                <p class="mt-1 font-mono text-xs text-text-muted">${escapeHtml(packet.proofPacketId)}</p>
+              </div>
+              <span class="inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold ${verdictClass(packet.scores.verdict)}">${escapeHtml(packet.scores.verdict)}</span>
+            </div>
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Overall score</p><p class="mt-2 text-3xl font-bold ${scoreTone(packet.scores.overall)}">${packet.scores.overall}<span class="text-sm text-text-muted">/100</span></p></div>
+              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Target tool</p><p class="mt-2 truncate text-sm font-semibold">${escapeHtml(packet.targetAgent.toolName)}</p></div>
+              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Payment</p><p class="mt-2 truncate text-sm font-semibold">${escapeHtml(paymentLabel)}</p></div>
+              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Created</p><p class="mt-2 text-sm font-semibold">${escapeHtml(formatProofDate(packet.createdAt))}</p></div>
+            </div>
+          </section>
+
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Metrics breakdown</h2>
+            <div class="mt-5 grid gap-4 md:grid-cols-2">
+              ${scoreBar("Reliability", packet.scores.reliability)}
+              ${scoreBar("Capability match", packet.scores.capabilityMatch)}
+              ${scoreBar("Payment integrity", packet.scores.paymentIntegrity)}
+              ${scoreBar("Safety", packet.scores.safety)}
+            </div>
+          </section>
+
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Verification timeline</h2>
+            <div class="mt-5 space-y-4">
+              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${payment ? "text-emerald-300" : "text-amber-200"}">${payment ? "check_circle" : "pending"}</span><div><p class="font-semibold">Payment route checked</p><p class="mt-1 break-all text-sm text-text-muted">${escapeHtml(paymentRoute)}</p></div></div>
+              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${sentinelOk ? "text-emerald-300" : "text-amber-200"}">${sentinelOk ? "check_circle" : "warning"}</span><div><p class="font-semibold">Sentinel status reviewed</p><p class="mt-1 text-sm text-text-muted">${escapeHtml(packet.sentinelCheck.status)}${packet.sentinelCheck.message ? ` - ${escapeHtml(packet.sentinelCheck.message)}` : ""}</p></div></div>
+              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${probeOk ? "text-emerald-300" : "text-red-200"}">${probeOk ? "check_circle" : "error"}</span><div><p class="font-semibold">Tool probe completed</p><p class="mt-1 text-sm text-text-muted">${escapeHtml(packet.probeResult.status)}${packet.probeResult.latencyMs ? ` in ${packet.probeResult.latencyMs}ms` : ""}</p></div></div>
+              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 text-primary">verified</span><div><p class="font-semibold">Packet hashed and signed</p><p class="mt-1 break-all font-mono text-xs text-text-muted">${escapeHtml(signature?.packetHash ?? "unsigned")}</p></div></div>
+            </div>
+          </section>
+
+          <section class="grid gap-6 lg:grid-cols-2">
+            <div class="rounded border border-surface-line bg-surface-panel p-5">
+              <h2 class="text-xl font-semibold">Ace usage</h2>
+              <p class="mt-2 text-sm text-text-muted">${escapeHtml(services)}</p>
+              <div class="mt-4 flex flex-wrap gap-2">${serviceChips}</div>
+            </div>
+            <div class="rounded border border-surface-line bg-surface-panel p-5">
+              <h2 class="text-xl font-semibold">Risk flags</h2>
+              <div class="mt-4 flex flex-wrap gap-2">${riskChips}</div>
+            </div>
+          </section>
+
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Raw probe preview</h2>
+            <pre class="mt-4 max-h-[420px] overflow-auto rounded border border-surface-line bg-black/40 p-4 text-xs leading-5 text-text-muted">${escapeHtml(responsePreview)}</pre>
+          </section>
+        </div>
+
+        <aside class="space-y-6">
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Proof card</h2>
+            <p class="mt-1 text-sm text-text-muted">Branded card artifact produced from the Proofline template.</p>
+            ${cardUrl ? `<img class="mt-5 w-full rounded border border-surface-line object-cover" src="${escapeHtml(cardUrl)}" alt="Proofline audit proof card" />` : `<div class="mt-5 rounded border border-surface-line bg-black/30 p-6 text-sm text-text-muted">No public proof card was generated.</div>`}
+            <div class="mt-5 grid gap-3">
+              ${cardUrl ? `<a class="inline-flex items-center justify-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="${escapeHtml(cardUrl)}"><span class="material-symbols-outlined text-[18px]">image</span>Open card</a>` : ""}
+              <a class="inline-flex items-center justify-center gap-2 rounded border border-surface-line bg-surface-panel-2 px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/${escapeHtml(packet.proofPacketId)}.json"><span class="material-symbols-outlined text-[18px]">data_object</span>Open JSON</a>
+            </div>
+          </section>
+
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Cryptographic integrity</h2>
+            <dl class="mt-5 space-y-4 text-sm">
+              <div><dt class="text-text-muted">Algorithm</dt><dd class="mt-1 font-mono">${escapeHtml(signature?.algorithm ?? "unsigned")}</dd></div>
+              <div><dt class="text-text-muted">Signer</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(signature?.publicKey ?? "unknown")}</dd></div>
+              <div><dt class="text-text-muted">Signature</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(signature?.signatureBase64 ?? "unsigned")}</dd></div>
+              <div><dt class="text-text-muted">Signed at</dt><dd class="mt-1">${escapeHtml(signature?.signedAt ? formatProofDate(signature.signedAt) : "unknown")}</dd></div>
+            </dl>
+          </section>
+
+          <section class="rounded border border-surface-line bg-surface-panel p-5">
+            <h2 class="text-xl font-semibold">Target identity</h2>
+            <dl class="mt-5 space-y-4 text-sm">
+              <div><dt class="text-text-muted">Agent PDA</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.agentId)}</dd></div>
+              <div><dt class="text-text-muted">Endpoint</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.endpoint ?? "unknown")}</dd></div>
+              <div><dt class="text-text-muted">Payment method</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.paymentMethod)}</dd></div>
+            </dl>
+          </section>
+        </aside>
       </section>
     </main>
   </body>
