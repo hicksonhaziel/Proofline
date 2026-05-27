@@ -1,5 +1,5 @@
 import { createHash, createPrivateKey, randomUUID, sign as cryptoSign } from "node:crypto";
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import {
   assertProofPacket,
@@ -51,6 +51,8 @@ interface CliArgs {
   target?: string | undefined;
   allowPaid: boolean;
   useAce: boolean;
+  republishLatest: boolean;
+  rebuildLedger: boolean;
 }
 
 interface HttpObservation {
@@ -98,6 +100,28 @@ async function main(): Promise<void> {
     paymentPolicy: args.allowPaid ? "paid routes may be attempted only if supported" : "no paid calls will be attempted",
   });
 
+  if (args.rebuildLedger) {
+    const publicProof = await rebuildPublicProofsFromStoredPackets(config.sapKeypairPath);
+    logger.info("Rebuilt public proofs and evidence ledger from stored packets", {
+      publicProof,
+      note: "No audit, Ace call, SOL transaction, or x402 payment was executed.",
+    });
+    return;
+  }
+
+  if (args.republishLatest) {
+    const latestPacket = normalizeProofPacket(JSON.parse(await readFile("public/proofs/latest.json", "utf8")) as ExecutionProofPacket);
+    assertProofPacket(latestPacket);
+    const signedPacket = await finalizeProofPacket(await localizePacketProofCard(latestPacket), config.sapKeypairPath);
+    const publicProof = await publishPublicProofPacket(signedPacket);
+    logger.info("Republished latest public proof pages", {
+      proofPacketId: signedPacket.proofPacketId,
+      publicProof,
+      note: "No audit, Ace call, SOL transaction, or x402 payment was executed.",
+    });
+    return;
+  }
+
   const store = new LocalStore({
     targetsFile: config.targetAgentList,
     proofPacketsDir: "data/proof-packets",
@@ -140,6 +164,7 @@ async function main(): Promise<void> {
 
   const packetWithoutId = {
     version: "0.1" as const,
+    auditStatus: "completed" as const,
     targetAgent: target,
     auditJob: {
       auditJobId,
@@ -169,6 +194,7 @@ async function main(): Promise<void> {
     ...packetWithoutId,
   };
   assertProofPacket(packet);
+  packet = await localizePacketProofCard(packet);
   packet = await finalizeProofPacket(packet, config.sapKeypairPath);
 
   const proofPacketPath = await store.writeProofPacket(packet);
@@ -215,6 +241,8 @@ function parseArgs(argv: string[]): CliArgs {
     target: target && !target.startsWith("--") ? target : undefined,
     allowPaid: argv.includes("--allow-paid"),
     useAce: !argv.includes("--no-ace"),
+    republishLatest: argv.includes("--republish-latest"),
+    rebuildLedger: argv.includes("--rebuild-ledger"),
   };
 }
 
@@ -1089,6 +1117,7 @@ function signEd25519(message: Buffer, solanaSecretKey: Uint8Array): Buffer {
 }
 
 async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<Record<string, string | null>> {
+  packet = normalizeProofPacket(packet);
   const publicDir = resolve("public/proofs");
   await mkdir(publicDir, { recursive: true });
 
@@ -1107,7 +1136,14 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
 
   let publicCardUrl: string | null = null;
   if (packet.artifacts.proofCardPath?.startsWith("https://")) {
+    publicCardUrl = await pinRemoteProofCard(packet.artifacts.proofCardPath, latestCardPath, proofCardPath);
+  } else if (packet.artifacts.proofCardPath?.startsWith("/proofs/")) {
     publicCardUrl = packet.artifacts.proofCardPath;
+    try {
+      await copyFile(resolve("public", packet.artifacts.proofCardPath.replace(/^\//, "")), latestCardPath);
+    } catch {
+      publicCardUrl = packet.artifacts.proofCardPath;
+    }
   } else if (cardSourcePath?.endsWith(".png")) {
     try {
       await copyFile(cardSourcePath, latestCardPath);
@@ -1133,6 +1169,99 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
     proofHtml: `/proofs/${packet.proofPacketId}.html`,
     latestCard: publicCardUrl,
     proofCard: publicCardUrl,
+  };
+}
+
+async function localizePacketProofCard(packet: ExecutionProofPacket): Promise<ExecutionProofPacket> {
+  const proofCardPath = packet.artifacts.proofCardPath;
+  if (!proofCardPath?.startsWith("https://")) {
+    return packet;
+  }
+
+  const publicDir = resolve("public/proofs");
+  await mkdir(publicDir, { recursive: true });
+  const localCardPath = resolve(publicDir, `${packet.proofPacketId}-card.png`);
+  const publicCardUrl = await pinRemoteProofCard(proofCardPath, resolve(publicDir, "latest-card.png"), localCardPath);
+
+  return {
+    ...packet,
+    artifacts: {
+      ...packet.artifacts,
+      proofCardPath: publicCardUrl,
+    },
+  };
+}
+
+async function pinRemoteProofCard(url: string, latestCardPath: string, proofCardPath: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`proof card fetch returned ${response.status}`);
+    }
+
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("image/")) {
+      throw new Error(`proof card fetch returned ${contentType || "unknown content type"}`);
+    }
+
+    const bytes = Buffer.from(await response.arrayBuffer());
+    await writeFile(latestCardPath, bytes);
+    await writeFile(proofCardPath, bytes);
+    return `/proofs/${proofCardPath.split("/").pop()}`;
+  } catch {
+    return url;
+  }
+}
+
+async function rebuildPublicProofsFromStoredPackets(keypairPath: string): Promise<Record<string, string | null | number>> {
+  const packetsDir = resolve("data/proof-packets");
+  const publicDir = resolve("public/proofs");
+  await mkdir(publicDir, { recursive: true });
+  await writeFile(resolve(publicDir, "ledger.json"), "[]\n", "utf8");
+
+  const packetFiles = (await readdir(packetsDir))
+    .filter((file) => file.startsWith("proof_") && file.endsWith(".json"))
+    .sort();
+  const packets = [];
+
+  for (const file of packetFiles) {
+    const packetPath = resolve(packetsDir, file);
+    const packet = await finalizeProofPacket(
+      await localizePacketProofCard(normalizeProofPacket(JSON.parse(await readFile(packetPath, "utf8")) as ExecutionProofPacket)),
+      keypairPath,
+    );
+    assertProofPacket(packet);
+    await writeFile(packetPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
+    packets.push(packet);
+  }
+
+  packets.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+  let latest: Record<string, string | null> = {
+    ledger: "/proofs/",
+    ledgerJson: "/proofs/ledger.json",
+    latestJson: null,
+    proofJson: null,
+    latestHtml: null,
+    proofHtml: null,
+    latestCard: null,
+    proofCard: null,
+  };
+
+  for (const packet of packets) {
+    latest = await publishPublicProofPacket(packet);
+  }
+
+  return {
+    ...latest,
+    packetCount: packets.length,
+  };
+}
+
+function normalizeProofPacket(packet: ExecutionProofPacket): ExecutionProofPacket {
+  return {
+    ...packet,
+    auditStatus: packet.auditStatus ?? packet.auditJob.status,
   };
 }
 
@@ -1201,55 +1330,134 @@ function prooflinePageHead(title: string): string {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${escapeHtml(title)}</title>
+    <link rel="icon" href="/proofline.png" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&family=Geist%3Awght%40400%3B500%3B600%3B700%3B800" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <script>
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
             colors: {
-              primary: "#d6b45a",
-              "primary-soft": "#f4d37b",
-              surface: "#090a0b",
-              "surface-panel": "#111417",
-              "surface-panel-2": "#171b1f",
-              "surface-line": "rgba(214,180,90,0.24)",
-              "text-main": "#f6f1e7",
-              "text-muted": "#a8a08e"
+              "on-primary-fixed-variant": "#584400",
+              "on-surface": "#e3e2e5",
+              "inverse-surface": "#e3e2e5",
+              "tertiary-fixed-dim": "#bbc3ff",
+              "primary-fixed": "#ffe08d",
+              "outline-variant": "#4d4637",
+              "surface-container": "#1f2022",
+              "inverse-primary": "#745b00",
+              "on-secondary-fixed-variant": "#484740",
+              "secondary-fixed": "#e6e2d8",
+              "error-container": "#93000a",
+              "on-tertiary-fixed-variant": "#38427e",
+              "surface-container-highest": "#343537",
+              "on-background": "#e3e2e5",
+              "on-error": "#690005",
+              "error": "#ffb4ab",
+              "on-tertiary": "#202b66",
+              "on-primary-fixed": "#241a00",
+              "surface-dim": "#121315",
+              "surface-variant": "#343537",
+              "secondary-fixed-dim": "#cac6bd",
+              "on-primary-container": "#5c4800",
+              "on-tertiary-container": "#3b4681",
+              "secondary-container": "#484740",
+              "tertiary": "#ced3ff",
+              "tertiary-container": "#acb6fa",
+              "on-surface-variant": "#d0c5b2",
+              "primary-fixed-dim": "#e5c365",
+              "tertiary-fixed": "#dee0ff",
+              "surface-container-high": "#292a2c",
+              "surface-tint": "#e5c365",
+              "surface-container-low": "#1b1c1e",
+              "surface-bright": "#38393b",
+              "on-secondary-fixed": "#1c1c16",
+              "secondary": "#cac6bd",
+              "surface-container-lowest": "#0d0e10",
+              "background": "#121315",
+              "primary-container": "#d8b75a",
+              "on-secondary-container": "#b8b5ac",
+              "on-secondary": "#31312a",
+              "inverse-on-surface": "#303033",
+              "primary": "#f6d372",
+              "on-primary": "#3d2f00",
+              "surface": "#121315",
+              "on-tertiary-fixed": "#081450",
+              "on-error-container": "#ffdad6",
+              "outline": "#98907e"
             },
-            fontFamily: { display: ["Geist", "Inter", "sans-serif"] },
-            borderRadius: { DEFAULT: "0.5rem" }
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem"
+            },
+            spacing: {
+              "panel-gap": "1px",
+              "container-padding": "24px",
+              unit: "4px",
+              "stack-sm": "8px",
+              "stack-md": "16px",
+              gutter: "16px"
+            },
+            fontFamily: {
+              "body-sm": ["Geist", "sans-serif"],
+              "body-lg": ["Geist", "sans-serif"],
+              "display-lg": ["Geist", "sans-serif"],
+              "headline-sm": ["Geist", "sans-serif"],
+              "headline-md": ["Geist", "sans-serif"],
+              "body-md": ["Geist", "sans-serif"],
+              "mono-data": ["Geist Mono", "monospace"],
+              "mono-label": ["Geist Mono", "monospace"]
+            },
+            fontSize: {
+              "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }],
+              "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "display-lg": ["40px", { lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "600" }],
+              "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "500" }],
+              "headline-md": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "500" }],
+              "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+              "mono-data": ["13px", { lineHeight: "20px", fontWeight: "400" }],
+              "mono-label": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }]
+            }
           }
         }
       };
     </script>
     <style>
-      body { font-family: Geist, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      .proofline-grid { background-image: linear-gradient(rgba(214,180,90,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(214,180,90,.035) 1px, transparent 1px); background-size: 36px 36px; }
-      .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24; }
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+      .material-icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #343537; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #4d4637; }
     </style>
   </head>`;
 }
 
 function prooflineHeader(active: "ledger" | "proof"): string {
-  const ledgerClass = active === "ledger" ? "text-primary" : "text-text-muted hover:text-text-main";
-  const proofClass = active === "proof" ? "text-primary" : "text-text-muted hover:text-text-main";
-  return `<header class="sticky top-0 z-20 border-b border-surface-line bg-surface/90 backdrop-blur">
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8">
+  const ledgerClass =
+    active === "ledger"
+      ? "text-primary border-b-2 border-primary pb-1"
+      : "text-on-surface-variant hover:text-primary pb-[6px]";
+  const proofClass =
+    active === "proof"
+      ? "text-primary border-b-2 border-primary pb-1"
+      : "text-on-surface-variant hover:text-primary pb-[6px]";
+  return `<header class="flex justify-between items-center w-full px-container-padding h-16 sticky top-0 z-50 bg-surface border-b border-outline-variant">
+      <div class="flex items-center gap-8">
         <a class="flex items-center gap-3" href="/proofs/">
-          <img src="/proofline.png" alt="Proofline" class="h-10 w-10 rounded border border-surface-line object-cover" />
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-primary">Proofline</p>
-            <p class="text-xs text-text-muted">Execution proof network</p>
-          </div>
+          <img src="/proofline.png" alt="Proofline" class="h-9 w-9 rounded-lg object-cover border border-outline-variant" />
+          <div class="font-headline-md text-headline-md font-bold tracking-tighter text-primary">Proofline</div>
         </a>
-        <nav class="flex items-center gap-5 text-sm font-medium">
-          <a class="${ledgerClass}" href="/proofs/">Ledger</a>
-          <a class="${proofClass}" href="/proofs/latest.html">Latest Proof</a>
-          <a class="hidden text-text-muted hover:text-text-main sm:inline" href="/proofs/ledger.json">JSON</a>
+        <nav class="hidden md:flex gap-6 h-full items-end">
+          <a class="font-headline-sm text-headline-sm md:font-body-md md:text-body-md ${ledgerClass} transition-colors duration-200" href="/proofs/">Evidence Ledger</a>
+          <a class="font-headline-sm text-headline-sm md:font-body-md md:text-body-md ${proofClass} transition-colors duration-200" href="/proofs/latest.html">Proof JSON</a>
+          <a class="font-headline-sm text-headline-sm md:font-body-md md:text-body-md text-on-surface-variant transition-colors duration-200 hover:text-primary pb-[6px]" href="/agent.json">SAP Agent</a>
         </nav>
       </div>
     </header>`;
@@ -1257,25 +1465,22 @@ function prooflineHeader(active: "ledger" | "proof"): string {
 
 function verdictClass(verdict: string): string {
   const normalized = verdict.toLowerCase();
-  if (normalized.includes("pass") || normalized.includes("good") || normalized.includes("low")) {
-    return "border-emerald-400/30 bg-emerald-400/10 text-emerald-200";
-  }
-  if (normalized.includes("fail") || normalized.includes("high") || normalized.includes("critical")) {
-    return "border-red-400/30 bg-red-400/10 text-red-200";
-  }
-  return "border-amber-300/30 bg-amber-300/10 text-amber-100";
+  if (normalized.includes("deliver") || normalized.includes("verified")) return "bg-[#55F08A]/10 text-[#55F08A]";
+  if (normalized.includes("fail")) return "bg-error-container/30 text-error";
+  return "bg-[#f6d372]/10 text-[#f6d372]";
 }
 
-function scoreTone(score: number): string {
-  if (score >= 75) return "text-emerald-200";
-  if (score >= 50) return "text-primary-soft";
-  return "text-red-200";
+function paymentTone(status: string): string {
+  const normalized = status.toLowerCase();
+  if (normalized.includes("settled") || normalized.includes("paid")) return "text-[#55F08A]";
+  if (normalized.includes("failed")) return "text-error";
+  return "text-[#f6d372]";
 }
 
 function formatProofDate(value: string): string {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toISOString().replace("T", " ").slice(0, 16);
+  return new Intl.DateTimeFormat("en", { month: "short", day: "2-digit", year: "numeric" }).format(date);
 }
 
 function shortProofId(value: string): string {
@@ -1284,14 +1489,30 @@ function shortProofId(value: string): string {
 
 function scoreBar(label: string, score: number): string {
   const bounded = Math.max(0, Math.min(100, Math.round(score)));
-  return `<div class="rounded border border-surface-line bg-surface-panel-2 p-4">
-      <div class="mb-3 flex items-center justify-between gap-3">
-        <span class="text-sm text-text-muted">${escapeHtml(label)}</span>
-        <span class="font-semibold ${scoreTone(bounded)}">${bounded}</span>
+  return `<div class="flex flex-col gap-1">
+      <div class="flex justify-between items-center w-full">
+        <span class="font-mono-label text-mono-label text-on-surface-variant">${escapeHtml(label)}</span>
+        <span class="font-mono-data text-mono-data text-on-surface">${bounded}</span>
       </div>
-      <div class="h-2 overflow-hidden rounded-full bg-black/40">
-        <div class="h-full rounded-full bg-primary" style="width:${bounded}%"></div>
+      <div class="w-full h-unit bg-surface-variant rounded-full overflow-hidden">
+        <div class="h-full bg-primary-container" style="width: ${bounded}%"></div>
       </div>
+    </div>`;
+}
+
+function ledgerVerdictBadge(verdict: string): string {
+  const normalized = verdict.toLowerCase();
+  const label = normalized === "delivered" ? "Verified" : verdict;
+  const dot = normalized.includes("fail") ? "bg-error" : normalized.includes("deliver") ? "bg-[#55F08A]" : "bg-[#f6d372]";
+  const extra = normalized.includes("fail")
+    ? `<span class="text-[10px] uppercase tracking-wide text-error">Review Needed</span>`
+    : normalized.includes("warning") || normalized.includes("audit")
+      ? `<span class="text-[10px] uppercase tracking-wide text-error">Risk flags</span>`
+      : "";
+  return `<div class="flex flex-col gap-1 items-start">
+      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full ${verdictClass(verdict)} font-mono-label text-mono-label">
+        <span class="w-1.5 h-1.5 rounded-full ${dot}"></span>${escapeHtml(label)}
+      </span>${extra}
     </div>`;
 }
 
@@ -1302,33 +1523,23 @@ function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
   const serviceCount = new Set(entries.flatMap((entry) => entry.aceServicesUsed)).size;
   const rows = entries
     .map(
-      (entry) => `<tr class="border-b border-surface-line last:border-0">
-        <td class="px-5 py-4 align-top">
-          <a class="font-mono text-sm text-primary-soft hover:text-primary" href="${escapeHtml(entry.proofHtml)}">${escapeHtml(shortProofId(entry.proofPacketId))}</a>
-          <p class="mt-1 max-w-[220px] truncate text-xs text-text-muted">${escapeHtml(entry.packetHash ?? "unsigned")}</p>
+      (entry) => `<tr class="proof-ledger-row border-b border-outline-variant hover:bg-surface-container-high transition-colors" data-verdict="${escapeHtml(entry.verdict)}" data-payment="${escapeHtml(entry.paymentStatus)}" data-risk="${escapeHtml(entry.riskFlags.length >= 2 ? "high" : "normal")}">
+        <td class="py-3 px-4">
+          <a class="text-primary hover:underline" href="${escapeHtml(entry.proofHtml)}">${escapeHtml(shortProofId(entry.proofPacketId))}</a>
         </td>
-        <td class="px-5 py-4 align-top">
-          <p class="font-medium text-text-main">${escapeHtml(entry.targetName)}</p>
-          <p class="mt-1 max-w-[220px] truncate text-xs text-text-muted">${escapeHtml(entry.targetAgentId)}</p>
+        <td class="py-3 px-4 text-on-surface">${escapeHtml(entry.targetName)}</td>
+        <td class="py-3 px-4">
+          ${ledgerVerdictBadge(entry.verdict)}
         </td>
-        <td class="px-5 py-4 align-top">
-          <span class="inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${verdictClass(entry.verdict)}">${escapeHtml(entry.verdict)}</span>
-        </td>
-        <td class="px-5 py-4 align-top">
-          <span class="text-lg font-bold ${scoreTone(entry.overallScore)}">${entry.overallScore}</span>
-          <span class="text-xs text-text-muted">/100</span>
-        </td>
-        <td class="px-5 py-4 align-top">
-          <p class="text-sm text-text-main">${escapeHtml(entry.paymentStatus)}</p>
-          <p class="text-xs text-text-muted">${escapeHtml(entry.paymentMethod)}</p>
-        </td>
-        <td class="px-5 py-4 align-top text-sm text-text-main">${escapeHtml(entry.aceServicesUsed.length.toString())}</td>
-        <td class="px-5 py-4 align-top text-sm text-text-muted">${escapeHtml(formatProofDate(entry.createdAt))}</td>
-        <td class="px-5 py-4 align-top">
-          <div class="flex items-center gap-2">
-            <a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofHtml)}" title="View proof"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
-            <a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofJson)}" title="View JSON"><span class="material-symbols-outlined text-[18px]">data_object</span></a>
-            ${entry.proofCard ? `<a class="rounded border border-surface-line p-2 text-text-muted hover:border-primary hover:text-primary" href="${escapeHtml(entry.proofCard)}" title="View proof card"><span class="material-symbols-outlined text-[18px]">image</span></a>` : ""}
+        <td class="py-3 px-4 text-on-surface">${entry.overallScore}/100</td>
+        <td class="py-3 px-4 ${paymentTone(entry.paymentStatus)}">${escapeHtml(entry.paymentStatus)}</td>
+        <td class="py-3 px-4 text-on-surface-variant">${escapeHtml(entry.aceServicesUsed.length.toString())}</td>
+        <td class="py-3 px-4 text-on-surface-variant">${escapeHtml(formatProofDate(entry.createdAt))}</td>
+        <td class="py-3 px-4 text-right">
+          <div class="flex items-center justify-end gap-3 text-on-surface-variant">
+            <a class="hover:text-primary transition-colors" href="${escapeHtml(entry.proofHtml)}" title="View Proof"><span class="material-symbols-outlined text-[18px]">visibility</span></a>
+            <a class="hover:text-primary transition-colors" href="${escapeHtml(entry.proofJson)}" title="JSON"><span class="material-symbols-outlined text-[18px]">data_object</span></a>
+            ${entry.proofCard ? `<a class="hover:text-primary transition-colors" href="${escapeHtml(entry.proofCard)}" title="Card"><span class="material-symbols-outlined text-[18px]">branding_watermark</span></a>` : ""}
           </div>
         </td>
       </tr>`,
@@ -1338,61 +1549,95 @@ function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
   return `<!doctype html>
 <html lang="en" class="dark">
   ${prooflinePageHead("Proofline Evidence Ledger")}
-  <body class="proofline-grid min-h-screen bg-surface text-text-main">
+  <body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
     ${prooflineHeader("ledger")}
-    <main class="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-      <section class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Evidence ledger</p>
-          <h1 class="mt-3 text-3xl font-bold tracking-normal text-text-main sm:text-5xl">Signed execution proofs</h1>
-          <p class="mt-4 max-w-3xl text-sm leading-6 text-text-muted sm:text-base">Proofline records agent audits as public proof packets: payment route, probe result, Sentinel status, Ace analysis, proof card, hash, and wallet signature.</p>
+    <main class="flex-grow w-full max-w-[1180px] mx-auto px-container-padding py-8 flex flex-col gap-8">
+      <section>
+        <h1 class="font-display-lg text-display-lg text-on-surface mb-2">Evidence Ledger</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">Signed audit records generated by Proofline.</p>
+      </section>
+
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col justify-between h-24">
+          <div class="flex items-center gap-2 text-on-surface-variant font-mono-label text-mono-label uppercase tracking-wider">
+            <span class="material-symbols-outlined text-[16px]">file_copy</span>Total Proofs
+          </div>
+          <div class="font-headline-md text-headline-md text-on-surface">${totalProofs}</div>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <a class="inline-flex items-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="/proofs/latest.html"><span class="material-symbols-outlined text-[18px]">receipt_long</span>Latest proof</a>
-          <a class="inline-flex items-center gap-2 rounded border border-surface-line bg-surface-panel px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/ledger.json"><span class="material-symbols-outlined text-[18px]">data_object</span>ledger.json</a>
+        <div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col justify-between h-24">
+          <div class="flex items-center gap-2 text-on-surface-variant font-mono-label text-mono-label uppercase tracking-wider">
+            <span class="material-symbols-outlined text-[16px]">shield</span>Latest Overall Score
+          </div>
+          <div class="font-headline-md text-headline-md text-on-surface">${escapeHtml(latestScore)}/100</div>
+        </div>
+        <div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col justify-between h-24">
+          <div class="flex items-center gap-2 text-on-surface-variant font-mono-label text-mono-label uppercase tracking-wider">
+            <span class="material-symbols-outlined text-[16px]">search_activity</span>Ace Services Used
+          </div>
+          <div class="font-headline-md text-headline-md text-on-surface">${serviceCount} active</div>
         </div>
       </section>
 
-      <section class="mb-8 grid gap-4 md:grid-cols-3">
-        <div class="rounded border border-surface-line bg-surface-panel p-5">
-          <p class="text-sm text-text-muted">Total proofs</p>
-          <p class="mt-2 text-3xl font-bold">${totalProofs}</p>
-        </div>
-        <div class="rounded border border-surface-line bg-surface-panel p-5">
-          <p class="text-sm text-text-muted">Latest overall score</p>
-          <p class="mt-2 text-3xl font-bold ${scoreTone(Number(latestScore))}">${escapeHtml(latestScore)}<span class="text-base text-text-muted">/100</span></p>
-        </div>
-        <div class="rounded border border-surface-line bg-surface-panel p-5">
-          <p class="text-sm text-text-muted">Ace services seen</p>
-          <p class="mt-2 text-3xl font-bold">${serviceCount}</p>
-        </div>
+      <section class="flex flex-wrap gap-2" aria-label="Ledger filters">
+        <button data-filter="all" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors">All</button>
+        <button data-filter="delivered" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low transition-colors">Delivered</button>
+        <button data-filter="warning" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low transition-colors">Warning</button>
+        <button data-filter="failed" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low transition-colors">Failed</button>
+        <button data-filter="payment-skipped" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low transition-colors">Payment Skipped</button>
+        <button data-filter="high-risk" class="ledger-filter font-body-sm text-body-sm px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface-variant hover:bg-surface-container-low transition-colors">High Risk</button>
       </section>
 
-      <section class="overflow-hidden rounded border border-surface-line bg-surface-panel shadow-2xl shadow-black/20">
-        <div class="flex flex-col gap-4 border-b border-surface-line p-5 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 class="text-xl font-semibold">Proof events</h2>
-            <p class="mt-1 text-sm text-text-muted">Newest packet first. Each row links to the human proof, raw JSON, and card artifact.</p>
-          </div>
-          <div class="flex flex-wrap gap-2 text-xs font-semibold">
-            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">SAP</span>
-            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">x402</span>
-            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">Ace Data Cloud</span>
-            <span class="rounded-full border border-surface-line px-3 py-1 text-text-muted">Signed</span>
-          </div>
-        </div>
+      <section class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-low">
         <div class="overflow-x-auto">
-          <table class="min-w-full text-left">
-            <thead class="border-b border-surface-line bg-black/20 text-xs uppercase tracking-[0.14em] text-text-muted">
-              <tr><th class="px-5 py-3">Proof</th><th class="px-5 py-3">Target</th><th class="px-5 py-3">Verdict</th><th class="px-5 py-3">Score</th><th class="px-5 py-3">Payment</th><th class="px-5 py-3">Ace</th><th class="px-5 py-3">Created</th><th class="px-5 py-3">Open</th></tr>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-outline-variant bg-surface-container">
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Proof ID</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Target Agent</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Verdict</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Score</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Payment Status</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Services</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal">Created Date</th>
+                <th class="py-3 px-4 font-mono-label text-mono-label text-on-surface-variant uppercase tracking-wider font-normal text-right">Actions</th>
+              </tr>
             </thead>
-            <tbody>
-              ${rows || `<tr><td class="px-5 py-8 text-text-muted" colspan="8">No proofs published yet.</td></tr>`}
+            <tbody class="font-mono-data text-mono-data">
+              ${rows || `<tr><td class="py-6 px-4 text-on-surface-variant" colspan="8">No proofs published yet.</td></tr>`}
             </tbody>
           </table>
         </div>
       </section>
     </main>
+    <script>
+      const buttons = Array.from(document.querySelectorAll(".ledger-filter"));
+      const rows = Array.from(document.querySelectorAll(".proof-ledger-row"));
+      const activeClasses = ["bg-surface-container-high", "text-on-surface"];
+      const inactiveClasses = ["bg-surface", "text-on-surface-variant"];
+      function matches(row, filter) {
+        const verdict = row.dataset.verdict || "";
+        const payment = row.dataset.payment || "";
+        const risk = row.dataset.risk || "";
+        if (filter === "all") return true;
+        if (filter === "payment-skipped") return payment === "skipped";
+        if (filter === "high-risk") return risk === "high";
+        return verdict === filter;
+      }
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const filter = button.dataset.filter || "all";
+          buttons.forEach((item) => {
+            item.classList.remove(...activeClasses);
+            item.classList.add(...inactiveClasses);
+          });
+          button.classList.remove(...inactiveClasses);
+          button.classList.add(...activeClasses);
+          rows.forEach((row) => {
+            row.hidden = !matches(row, filter);
+          });
+        });
+      });
+    </script>
   </body>
 </html>
 `;
@@ -1400,130 +1645,124 @@ function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
 
 function buildProofPageHtml(packet: ExecutionProofPacket, cardUrl: string | null): string {
   const payment = packet.payments[0];
-  const services = packet.aceAnalysis.servicesUsed.length > 0 ? packet.aceAnalysis.servicesUsed.join(", ") : "none";
   const serviceChips =
     packet.aceAnalysis.servicesUsed.length > 0
       ? packet.aceAnalysis.servicesUsed
-          .map((service) => `<span class="rounded-full border border-surface-line bg-surface-panel-2 px-3 py-1 text-xs font-semibold text-text-muted">${escapeHtml(service)}</span>`)
+          .map(
+            (service) => `<span class="px-2 py-1 border border-outline-variant rounded bg-surface-dim font-mono-label text-mono-label text-on-surface-variant flex items-center gap-1">
+                ${escapeHtml(service)} <span class="text-on-surface">used</span>
+              </span>`,
+          )
           .join("")
-      : `<span class="rounded-full border border-surface-line bg-surface-panel-2 px-3 py-1 text-xs font-semibold text-text-muted">none</span>`;
-  const riskChips =
-    packet.riskFlags.length > 0
-      ? packet.riskFlags.map((risk) => `<span class="rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-100">${escapeHtml(risk)}</span>`).join("")
-      : `<span class="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-200">no risk flags</span>`;
+      : `<span class="px-2 py-1 border border-outline-variant rounded bg-surface-dim font-mono-label text-mono-label text-on-surface-variant">none</span>`;
   const signature = packet.signature;
-  const probeOk = packet.probeResult.status === "success";
-  const sentinelOk = packet.sentinelCheck.status === "healthy";
-  const paymentLabel = payment ? `${payment.status} ${payment.amount} ${payment.currency}` : "not paid";
   const paymentProof = payment?.transactionHash ?? payment?.receipt ?? payment?.paymentId;
-  const paymentRoute = payment ? `${payment.method}${paymentProof ? ` / ${paymentProof}` : ""}` : "none";
-  const responsePreview = JSON.stringify(packet.probeResult.response ?? packet.probeResult.error ?? {}, null, 2).slice(0, 5000);
+  const signedStatus = signature ? "Cryptographically Signed" : "Unsigned";
+  const badgeLabel = packet.scores.verdict === "delivered" ? "VERIFIED" : packet.scores.verdict.toUpperCase();
 
   return `<!doctype html>
 <html lang="en" class="dark">
   ${prooflinePageHead(`Proofline Proof Packet ${packet.proofPacketId}`)}
-  <body class="proofline-grid min-h-screen bg-surface text-text-main">
+  <body class="bg-surface-container-lowest text-on-surface antialiased font-body-md min-h-screen flex flex-col">
     ${prooflineHeader("proof")}
-    <main class="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-      <section class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <main class="flex-grow w-full max-w-[1180px] mx-auto pt-stack-md pb-12 px-container-padding">
+      <div class="mb-gutter flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-sm">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Execution proof packet</p>
-          <h1 class="mt-3 text-3xl font-bold tracking-normal text-text-main sm:text-5xl">${escapeHtml(packet.targetAgent.name)}</h1>
-          <p class="mt-4 max-w-3xl text-sm leading-6 text-text-muted">${escapeHtml(packet.aceAnalysis.summary ?? "Signed Proofline audit packet with payment, probe, Sentinel, Ace analysis, and card artifacts.")}</p>
+          <h1 class="font-display-lg text-display-lg text-on-surface m-0">Proof ID #${escapeHtml(shortProofId(packet.proofPacketId))}</h1>
+          <p class="font-mono-data text-mono-data text-on-surface-variant mt-1">Target: ${escapeHtml(packet.targetAgent.name)}</p>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <a class="inline-flex items-center gap-2 rounded border border-surface-line bg-surface-panel px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/"><span class="material-symbols-outlined text-[18px]">table</span>Ledger</a>
-          <a class="inline-flex items-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="/proofs/${escapeHtml(packet.proofPacketId)}.json"><span class="material-symbols-outlined text-[18px]">data_object</span>Packet JSON</a>
-        </div>
-      </section>
+      </div>
 
-      <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px]">
-        <div class="space-y-6">
-          <section class="rounded border border-surface-line bg-surface-panel p-5 shadow-2xl shadow-black/20">
-            <div class="flex flex-col gap-4 border-b border-surface-line pb-5 md:flex-row md:items-start md:justify-between">
-              <div>
-                <h2 class="text-xl font-semibold">Audit summary</h2>
-                <p class="mt-1 font-mono text-xs text-text-muted">${escapeHtml(packet.proofPacketId)}</p>
+      <div class="flex flex-col-reverse md:grid md:grid-cols-12 gap-gutter">
+        <div class="md:col-span-7 lg:col-span-8 flex flex-col gap-stack-md">
+          <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-md">
+            <div class="flex justify-between items-center pb-stack-sm border-b border-surface-variant">
+              <h2 class="font-headline-sm text-headline-sm text-on-surface">Execution Proof Packet</h2>
+              <div class="px-2 py-1 rounded font-mono-label text-mono-label flex items-center gap-1 border border-[#55F08A]/20 ${verdictClass(packet.scores.verdict)}">
+                <span class="material-symbols-outlined text-[14px]">verified_user</span>${escapeHtml(badgeLabel)}
               </div>
-              <span class="inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold ${verdictClass(packet.scores.verdict)}">${escapeHtml(packet.scores.verdict)}</span>
             </div>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Overall score</p><p class="mt-2 text-3xl font-bold ${scoreTone(packet.scores.overall)}">${packet.scores.overall}<span class="text-sm text-text-muted">/100</span></p></div>
-              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Target tool</p><p class="mt-2 truncate text-sm font-semibold">${escapeHtml(packet.targetAgent.toolName)}</p></div>
-              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Payment</p><p class="mt-2 truncate text-sm font-semibold">${escapeHtml(paymentLabel)}</p></div>
-              <div class="rounded border border-surface-line bg-surface-panel-2 p-4"><p class="text-xs text-text-muted">Created</p><p class="mt-2 text-sm font-semibold">${escapeHtml(formatProofDate(packet.createdAt))}</p></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md">
+              <div class="flex flex-col gap-1">
+                <span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Target</span>
+                <span class="font-body-md text-body-md text-on-surface">${escapeHtml(packet.targetAgent.name)}</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Score</span>
+                <span class="font-body-md text-body-md text-primary-container">${packet.scores.overall} / 100</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Created</span>
+                <span class="font-body-md text-body-md text-on-surface">${escapeHtml(formatProofDate(packet.createdAt))}</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Status</span>
+                <span class="font-body-md text-body-md text-on-surface">${escapeHtml(signedStatus)}</span>
+              </div>
             </div>
-          </section>
+          </div>
 
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Metrics breakdown</h2>
-            <div class="mt-5 grid gap-4 md:grid-cols-2">
+          <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-md">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Metrics Breakdown</h2>
+            <div class="flex flex-col gap-3">
               ${scoreBar("Reliability", packet.scores.reliability)}
-              ${scoreBar("Capability match", packet.scores.capabilityMatch)}
-              ${scoreBar("Payment integrity", packet.scores.paymentIntegrity)}
+              ${scoreBar("Capability", packet.scores.capabilityMatch)}
+              ${scoreBar("Payment Integrity", packet.scores.paymentIntegrity)}
+              ${scoreBar("Public Footprint", packet.scores.publicFootprint)}
               ${scoreBar("Safety", packet.scores.safety)}
             </div>
-          </section>
+          </div>
 
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Verification timeline</h2>
-            <div class="mt-5 space-y-4">
-              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${payment ? "text-emerald-300" : "text-amber-200"}">${payment ? "check_circle" : "pending"}</span><div><p class="font-semibold">Payment route checked</p><p class="mt-1 break-all text-sm text-text-muted">${escapeHtml(paymentRoute)}</p></div></div>
-              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${sentinelOk ? "text-emerald-300" : "text-amber-200"}">${sentinelOk ? "check_circle" : "warning"}</span><div><p class="font-semibold">Sentinel status reviewed</p><p class="mt-1 text-sm text-text-muted">${escapeHtml(packet.sentinelCheck.status)}${packet.sentinelCheck.message ? ` - ${escapeHtml(packet.sentinelCheck.message)}` : ""}</p></div></div>
-              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 ${probeOk ? "text-emerald-300" : "text-red-200"}">${probeOk ? "check_circle" : "error"}</span><div><p class="font-semibold">Tool probe completed</p><p class="mt-1 text-sm text-text-muted">${escapeHtml(packet.probeResult.status)}${packet.probeResult.latencyMs ? ` in ${packet.probeResult.latencyMs}ms` : ""}</p></div></div>
-              <div class="flex gap-4"><span class="material-symbols-outlined mt-0.5 text-primary">verified</span><div><p class="font-semibold">Packet hashed and signed</p><p class="mt-1 break-all font-mono text-xs text-text-muted">${escapeHtml(signature?.packetHash ?? "unsigned")}</p></div></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+            <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-md">
+              <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Verification Timeline</h2>
+              <ul class="flex flex-col gap-3">
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Target selected</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Sentinel preflight: ${escapeHtml(packet.sentinelCheck.status)}</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Probe executed: ${escapeHtml(packet.probeResult.status)}</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Ace analysis</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Proof signed</span></li>
+                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px] material-icon-filled">check_circle</span><span class="font-body-md text-body-md text-on-surface">Public artifact published</span></li>
+              </ul>
             </div>
-          </section>
+            <div class="flex flex-col gap-stack-md">
+              <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Payment Ledger</h2>
+                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Method</span><span class="font-body-md text-body-md text-on-surface">${escapeHtml(payment?.method ?? "none")}</span></div>
+                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Amount</span><span class="font-mono-data text-mono-data text-on-surface">${escapeHtml(payment ? `${payment.amount} ${payment.currency}` : "0")}</span></div>
+                <div class="flex justify-between items-center gap-4"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Tx Hash</span><span class="font-mono-data text-mono-data text-primary-container truncate">${escapeHtml(paymentProof ?? payment?.status ?? "none")}</span></div>
+              </div>
+              <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm flex-grow">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Ace Usage Metrics</h2>
+                <div class="flex flex-wrap gap-2 mt-1">${serviceChips}</div>
+              </div>
+            </div>
+          </div>
 
-          <section class="grid gap-6 lg:grid-cols-2">
-            <div class="rounded border border-surface-line bg-surface-panel p-5">
-              <h2 class="text-xl font-semibold">Ace usage</h2>
-              <p class="mt-2 text-sm text-text-muted">${escapeHtml(services)}</p>
-              <div class="mt-4 flex flex-wrap gap-2">${serviceChips}</div>
+          <div class="bg-[#101215] border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm">
+            <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-[#242629]">Cryptographic Integrity</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md mt-2">
+              <div class="flex flex-col gap-1 overflow-hidden"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Packet Hash</span><div class="flex items-center justify-between bg-surface-container-lowest p-2 border border-[#242629] rounded"><span class="font-mono-data text-mono-data text-on-surface truncate pr-2">${escapeHtml(signature?.packetHash ?? "unsigned")}</span></div></div>
+              <div class="flex flex-col gap-1 overflow-hidden"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Signature</span><div class="flex items-center justify-between bg-surface-container-lowest p-2 border border-[#242629] rounded"><span class="font-mono-data text-mono-data text-on-surface truncate pr-2">${escapeHtml(signature?.signatureBase64 ?? "unsigned")}</span></div></div>
+              <div class="flex flex-col gap-1 overflow-hidden"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Signing Wallet</span><div class="flex items-center justify-between bg-surface-container-lowest p-2 border border-[#242629] rounded"><span class="font-mono-data text-mono-data text-on-surface truncate pr-2">${escapeHtml(signature?.publicKey ?? "unknown")}</span></div></div>
             </div>
-            <div class="rounded border border-surface-line bg-surface-panel p-5">
-              <h2 class="text-xl font-semibold">Risk flags</h2>
-              <div class="mt-4 flex flex-wrap gap-2">${riskChips}</div>
-            </div>
-          </section>
-
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Raw probe preview</h2>
-            <pre class="mt-4 max-h-[420px] overflow-auto rounded border border-surface-line bg-black/40 p-4 text-xs leading-5 text-text-muted">${escapeHtml(responsePreview)}</pre>
-          </section>
+          </div>
         </div>
 
-        <aside class="space-y-6">
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Proof card</h2>
-            <p class="mt-1 text-sm text-text-muted">Branded card artifact produced from the Proofline template.</p>
-            ${cardUrl ? `<img class="mt-5 w-full rounded border border-surface-line object-cover" src="${escapeHtml(cardUrl)}" alt="Proofline audit proof card" />` : `<div class="mt-5 rounded border border-surface-line bg-black/30 p-6 text-sm text-text-muted">No public proof card was generated.</div>`}
-            <div class="mt-5 grid gap-3">
-              ${cardUrl ? `<a class="inline-flex items-center justify-center gap-2 rounded border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary-soft hover:bg-primary/15" href="${escapeHtml(cardUrl)}"><span class="material-symbols-outlined text-[18px]">image</span>Open card</a>` : ""}
-              <a class="inline-flex items-center justify-center gap-2 rounded border border-surface-line bg-surface-panel-2 px-4 py-2 text-sm font-semibold text-text-muted hover:text-text-main" href="/proofs/${escapeHtml(packet.proofPacketId)}.json"><span class="material-symbols-outlined text-[18px]">data_object</span>Open JSON</a>
+        <div class="md:col-span-5 lg:col-span-4 flex flex-col gap-stack-md relative">
+          <div class="bg-[#101215] border border-[#242629] rounded-xl p-4 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden group">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-container/10 via-background/0 to-transparent pointer-events-none"></div>
+            ${cardUrl ? `<img alt="Proofline Execution Proof Packet ${escapeHtml(packet.proofPacketId)}" class="relative z-10 max-w-full h-auto drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500 ease-out" src="${escapeHtml(cardUrl)}" />` : `<div class="relative z-10 text-on-surface-variant">No proof card available</div>`}
+          </div>
+          <div class="flex flex-col gap-3 w-full">
+            ${cardUrl ? `<a class="w-full flex items-center justify-center gap-2 bg-primary-container text-on-primary-container font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-primary border border-transparent shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" href="${escapeHtml(cardUrl)}"><span class="material-symbols-outlined text-[18px]">download</span>Download Card</a>` : ""}
+            <div class="grid grid-cols-2 gap-3">
+              <a class="w-full flex items-center justify-center gap-2 bg-transparent border border-outline-variant text-on-surface font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-surface-variant" href="/proofs/${escapeHtml(packet.proofPacketId)}.json"><span class="material-symbols-outlined text-[18px]">data_object</span>View JSON</a>
+              <a class="w-full flex items-center justify-center gap-2 bg-transparent border border-outline-variant text-on-surface font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-surface-variant" href="/proofs/"><span class="material-symbols-outlined text-[18px]">account_tree</span>Open Ledger</a>
             </div>
-          </section>
-
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Cryptographic integrity</h2>
-            <dl class="mt-5 space-y-4 text-sm">
-              <div><dt class="text-text-muted">Algorithm</dt><dd class="mt-1 font-mono">${escapeHtml(signature?.algorithm ?? "unsigned")}</dd></div>
-              <div><dt class="text-text-muted">Signer</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(signature?.publicKey ?? "unknown")}</dd></div>
-              <div><dt class="text-text-muted">Signature</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(signature?.signatureBase64 ?? "unsigned")}</dd></div>
-              <div><dt class="text-text-muted">Signed at</dt><dd class="mt-1">${escapeHtml(signature?.signedAt ? formatProofDate(signature.signedAt) : "unknown")}</dd></div>
-            </dl>
-          </section>
-
-          <section class="rounded border border-surface-line bg-surface-panel p-5">
-            <h2 class="text-xl font-semibold">Target identity</h2>
-            <dl class="mt-5 space-y-4 text-sm">
-              <div><dt class="text-text-muted">Agent PDA</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.agentId)}</dd></div>
-              <div><dt class="text-text-muted">Endpoint</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.endpoint ?? "unknown")}</dd></div>
-              <div><dt class="text-text-muted">Payment method</dt><dd class="mt-1 break-all font-mono text-xs">${escapeHtml(packet.targetAgent.paymentMethod)}</dd></div>
-            </dl>
-          </section>
-        </aside>
-      </section>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
 </html>

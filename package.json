@@ -13,6 +13,8 @@
     "sap:payment-plan": "tsx apps/agent/src/sap-payment-plan.ts",
     "sentinel:check": "tsx apps/agent/src/sentinel-check.ts",
     "audit:once": "tsx apps/agent/src/audit-once.ts",
+    "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
+    "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",
     "build": "tsc --noEmit",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit"

@@ -193,9 +193,10 @@
   "signature": {
     "algorithm": "ed25519",
     "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
-    "packetHash": "74dc6ce3dbf98ec02d3bb377eca98584ec770e2234f2568490e43c9c13d08368",
-    "signedPayload": "sha256:74dc6ce3dbf98ec02d3bb377eca98584ec770e2234f2568490e43c9c13d08368",
-    "signatureBase64": "6lwpx2mr8uLsQGnxsBhA+VEkajNJL0PiXupsbmMKtYEx5+vmtsF59IuqGYavhSY92VY+lRVogxPtfXGgn1fIBQ==",
-    "signedAt": "2026-05-26T16:56:25.706Z"
-  }
+    "packetHash": "c647388e77b62d1f5b5eb8d1b831fcc43f01f10037d9d51d7328dbbb1e4a317e",
+    "signedPayload": "sha256:c647388e77b62d1f5b5eb8d1b831fcc43f01f10037d9d51d7328dbbb1e4a317e",
+    "signatureBase64": "0FiHD38zrzaR6eoq1O6PXRhdhVQ13xihJvexZQJIPp0EMiLPUO+TvxVxXKa/o1e2/ozow8powoodR4Ewod9GBw==",
+    "signedAt": "2026-05-27T20:48:18.471Z"
+  },
+  "auditStatus": "completed"
 }

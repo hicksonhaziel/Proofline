@@ -112,6 +112,7 @@ export interface ScoreBreakdown {
 export interface ExecutionProofPacket {
   proofPacketId: string;
   version: "0.1";
+  auditStatus: AuditStatus;
   targetAgent: AgentTarget;
   auditJob: AuditJob;
   sentinelCheck: SentinelCheck;

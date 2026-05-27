@@ -205,7 +205,7 @@
     "CAPABILITY_MISMATCH"
   ],
   "artifacts": {
-    "proofCardPath": "https://platform.cdn.acedata.cloud/gpt-image/74eb40f8-6346-4699-a936-ba539f46c524_0.png"
+    "proofCardPath": "/proofs/proof_37fbcd99e9872fc3-card.png"
   },
   "createdAt": "2026-05-27T12:21:47.213Z",
   "auditorAgent": {
@@ -215,9 +215,10 @@
   "signature": {
     "algorithm": "ed25519",
     "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
-    "packetHash": "0296d131a90dfe3a3067100c5d36abd586172390de198b1bc990b5c50bcc0377",
-    "signedPayload": "sha256:0296d131a90dfe3a3067100c5d36abd586172390de198b1bc990b5c50bcc0377",
-    "signatureBase64": "SNz0NcbYCSCaqZcw0Oq2SlSDZq/IfTmsPnhqte0J1RkXfDm0SN+nXbq/5TE2Nr4ORGBJh4bfnBXRWxO8uFFwDg==",
-    "signedAt": "2026-05-27T12:21:47.352Z"
-  }
+    "packetHash": "f3617ecc7731f3f5d64a1dd28bbafb84f51fb09ac16312d2729fc3e9fa989977",
+    "signedPayload": "sha256:f3617ecc7731f3f5d64a1dd28bbafb84f51fb09ac16312d2729fc3e9fa989977",
+    "signatureBase64": "ompW56CNMdeTGz/J2jgrCB6pJo5ei2KchyXbvdfw2mLNkZq52E+I1VNn8zx6mq8HTb1DHASK/5BGEjaxJYNEBQ==",
+    "signedAt": "2026-05-27T20:48:18.423Z"
+  },
+  "auditStatus": "completed"
 }

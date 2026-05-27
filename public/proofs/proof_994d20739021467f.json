@@ -1,0 +1,213 @@
+{
+  "proofPacketId": "proof_994d20739021467f",
+  "version": "0.1",
+  "targetAgent": {
+    "agentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "name": "Syra",
+    "toolId": "standard",
+    "toolName": "standard",
+    "description": "active, priced, endpoint present, and within budget",
+    "category": "sap_agent",
+    "price": "0.000005 SOL",
+    "currency": "SOL",
+    "paymentMethod": "x402",
+    "endpoint": "https://api.syraa.fun",
+    "source": "sap_discovery"
+  },
+  "auditJob": {
+    "auditJobId": "audit_909a12bf-be58-4795-aec5-a0f31417fee0",
+    "target": {
+      "agentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+      "name": "Syra",
+      "toolId": "standard",
+      "toolName": "standard",
+      "description": "active, priced, endpoint present, and within budget",
+      "category": "sap_agent",
+      "price": "0.000005 SOL",
+      "currency": "SOL",
+      "paymentMethod": "x402",
+      "endpoint": "https://api.syraa.fun",
+      "source": "sap_discovery"
+    },
+    "status": "completed",
+    "createdAt": "2026-05-24T17:20:59.715Z",
+    "startedAt": "2026-05-24T17:20:59.715Z",
+    "completedAt": "2026-05-24T17:22:33.784Z",
+    "maxSpendUsdc": 0.03
+  },
+  "sentinelCheck": {
+    "status": "healthy",
+    "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+    "checkedAt": "2026-05-24T17:20:59.716Z",
+    "raw": {
+      "mode": "local_preflight",
+      "note": "No paid Sentinel call was made in this low-spend runner.",
+      "observations": [
+        {
+          "url": "https://api.syraa.fun",
+          "method": "HEAD",
+          "ok": true,
+          "status": 200,
+          "statusText": "OK",
+          "contentType": "text/html; charset=utf-8",
+          "latencyMs": 1219
+        },
+        {
+          "url": "https://syraa.fun",
+          "method": "GET",
+          "ok": true,
+          "status": 200,
+          "statusText": "OK",
+          "contentType": "text/html; charset=utf-8",
+          "latencyMs": 723,
+          "bodyPreview": "<!DOCTYPE html>\n<html lang=\"en\" class=\"dark\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta\n      name=\"viewport\"\n      content=\"width=device-width, initial-scale=1.0, viewport-fit=cover\"\n    />\n    <title>Syra | Smart Intelligence Agent for Traders</title>\n    <meta\n      name=\"description\"\n      content=\"Syra is the smart intelligence agent for traders on Solana—research, signals, and execution workflows with x402 pay-per-call APIs. Fund your stack, stay in control.\"\n    />\n    <meta name=\"author\" content=\"Syra\" />\n    <meta\n      name=\"keywords\"\n      content=\"AI trading agent, Solana trading, x402, smart money, whale tracking, DeFi, automated trading, agentic trading\"\n    />\n\n    <meta\n      property=\"og:title\"\n      content=\"Syra | Smart Intelligence Agent for Traders\"\n    />\n    <meta\n      property=\"og:description\"\n      content=\"Syra is the smart intelligence agent for traders on Solana—research, signals, and execution workflows with x402 pay-per-call APIs.\"\n    />\n    <meta property=\"og:type\" content=\"website\" />\n    <meta property=\"og:url\" content=\"https://www.syraa.fun/\" />\n    <meta property=\"og:image\" content=\"https://www.syraa.fun/images/og-banner.png\" />\n    <meta property=\"og:image:type\" content=\"image/png\" />\n    <meta property=\"og:image:width\" content=\"1200\" />\n    <meta property=\"og:image:height\" content=\"628\" />\n    <meta property=\"og:image:alt\" content=\"Syra — Smart Intelligence Agent for Traders\" />\n\n    <meta name=\"twitter:card\" content=\"summary_large_image\" />\n    <meta name=\"twitter:site\" content=\"@syra_agent\" />\n    <meta name=\"twitter:creator\" content=\"@syra_agent\" />\n    <meta name=\"twitter:title\" content=\"Syra | Smart Intelligence Agent for Traders\" />\n    <meta name=\"twitter:description\" content=\"Smart intelligence agent for traders on Solana—research, signals, and workflows with x402 pay-per-call APIs.\" />\n    <meta name=\"twitter:image\" content=\"https://www.syraa.fun/images/og-banner.png\" />\n    <meta name=\"twitter:image:alt\" content=\"Syra — Smart Intelligence Agent for Traders\" />\n\n    <link rel=\"canonical\" href=\"https://www.syraa.fun/\" />\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />\n    <script src=\"https://widget.qwerti.ai/buy.js\" data-widget=\"qwerti-widget\" data-campaign=\"syra-792703809-99467\" data-token=\"8a3sEw2kizHxVnT9oLEVLADx8fTMPkjbEGSraqNWpump\" data-chain=\"792703809\" data-auto-open=\"false\"></script>\n    <link rel=\"preconnect\" href=\"https://widget.qwerti.ai\" crossorigin />\n    <link rel=\"preconnect\" href=\"https://app.qwerti.ai\" crossorigin />\n    <link\n      href=\"https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap\"\n      rel=\"stylesheet\"\n    />\n    <script type=\"module\" crossorigin src=\"/assets/index-LtaMj6D4.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"/assets/index-BALoYiJr.css\">\n  </head>\n\n  <body>\n    <div id=\"root\"></div>\n  </body>\n</html>\n"
+        }
+      ]
+    },
+    "message": "Target endpoint responded during local preflight."
+  },
+  "payments": [
+    {
+      "paymentId": "pay_6c5c08be-0ded-4675-bcb8-cc73715a9781",
+      "auditJobId": "audit_909a12bf-be58-4795-aec5-a0f31417fee0",
+      "provider": "sap",
+      "method": "x402",
+      "amount": "0.000005",
+      "currency": "SOL",
+      "service": "Syra",
+      "createdAt": "2026-05-24T17:21:01.683Z",
+      "recipient": "53JhuF8bgxvUQ59nDG6kWs4awUQYCS3wswQmUsV5uC7t",
+      "status": "skipped",
+      "receipt": "Paid execution disabled. Re-run with --allow-paid only after the payment adapter is verified."
+    }
+  ],
+  "probeResult": {
+    "probeId": "probe_9a1434ea-063f-4c44-a05d-79756716d60f",
+    "auditJobId": "audit_909a12bf-be58-4795-aec5-a0f31417fee0",
+    "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "targetToolId": "standard",
+    "request": {
+      "method": "GET",
+      "url": "https://api.syraa.fun",
+      "paid": false,
+      "purpose": "Proofline one-shot audit probe"
+    },
+    "response": {
+      "url": "https://api.syraa.fun",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "statusText": "OK",
+      "contentType": "text/html; charset=utf-8",
+      "latencyMs": 1230,
+      "bodyPreview": "\n    <!DOCTYPE html>\n    <html lang=\"en\">\n    <head>\n      <meta charset=\"UTF-8\" />\n      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n\n      <!-- OG Metadata -->\n      <meta property=\"og:title\" content=\"Syra API Gateway\" />\n      <meta property=\"og:description\" content=\"Smart intelligence agent for traders on Solana—x402 pay-per-call APIs, research, and tools.\" />\n      <meta property=\"og:image\" content=\"https://www.syraa.fun/images/og-banner.png\" />\n      <meta property=\"og:image:type\" content=\"image/png\" />\n      <meta property=\"og:image:width\" content=\"1200\" />\n      <meta property=\"og:image:height\" content=\"628\" />\n      <meta property=\"og:image:alt\" content=\"Syra — Smart Intelligence Agent for Traders\" />\n      <meta property=\"og:type\" content=\"website\" />\n\n      <meta name=\"twitter:card\" content=\"summary_large_image\" />\n      <meta name=\"twitter:site\" content=\"@syra_agent\" />\n      <meta name=\"twitter:creator\" content=\"@syra_agent\" />\n      <meta name=\"twitter:title\" content=\"Syra API Gateway\" />\n      <meta name=\"twitter:description\" content=\"Smart intelligence agent for traders on Solana—x402 pay-per-call APIs, research, and tools.\" />\n      <meta name=\"twitter:image\" content=\"https://www.syraa.fun/images/og-banner.png\" />\n      <meta name=\"twitter:image:alt\" content=\"Syra — Smart Intelligence Agent for Traders\" />\n\n      <!-- Favicon -->\n      <link rel=\"icon\" href=\"/favicon.ico\" />\n\n      <title>Syra API Gateway</title>\n\n      <style>\n        body {\n          background: #000;\n          color: #0f0;\n          font-family: \"Courier New\", monospace;\n          white-space: pre;\n          padding: 20px;\n          font-size: 12px;\n        }\n        .art {\n          white-space: pre-wrap;\n        }\n      </style>\n\n    </head>\n    <body>\n      <div class=\"art\">\n╔══════════════════════════════════════════════════════════════════════════════╗\n║                                                                              ║\n║          ███████╗██╗   ██╗██████╗  █████╗      █████╗ ██╗                    ║\n║          ██╔════╝╚██╗ ██╔╝██╔══██╗██╔══██╗    ██╔══██╗██║                    ║\n║          ███████╗ ╚████╔╝ ██████╔╝███████║    ███████║██║                    ║\n║          ╚════██║  ╚██╔╝  ██╔══██╗██╔══██║    ██╔══██║██║                    ║\n║          ███████║   ██║   ██║  ██║██║  ██║    ██║  ██║██║                    ║\n║          ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝                    ║\n║                                                                              ║\n║                           API GATEWAY v1.0                                   ║\n║                                                                              ║\n║                    ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                       ║\n║                                                                              ║\n║                    AUTONOMOUS TRADING • NEVER SLEEPS                         ║\n║                                                                              ║                      \n║                    ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓                       ║\n║                                                                              ║\n╚══════════════════════════════════════════════════════════════════════════════╝\n\n┌──────────────────────────────────────────────────────────────────────────────┐\n│                         WELCOME TO THE FUTURE                                │\n├──────────────────────────────────────────────────────────────────────────────┤\n│                                                                              │\n│  ⚡ The world's first X402-native AI agent trading assistant on Solana        │\n│                                                                              │\n│  While you sleep, SYRA works. While markets move, SYRA reacts. 24/7/365.     │\n│                                                                              │\n│  → Automated signal generation powered by real-time market intelligence      │\n│  → Lightning-fast execution with Solana's sub-second transaction speeds      │\n│  → Zero human intervention required - your AI co-pilot never takes breaks    │\n│  → Seamless Telegram integration - control everything from your phone        │\n│  → Web3-native payments via X402 protocol - no banks, no delays              │\n│                                                                              │\n│  The market doesn't sleep. Why should your trading strategy?                 │\n│                                                                              │\n│  🤖 AI-driven decisions │ 💰 Micro-payments (0.0001 USDC) │ 🚀 Instant on-chain │\n│                                                                              │\n└──────────────────────────────────────────────────────────────────────────────┘\n\n┌──────────────────────────────────────────────────────────────────────────────┐\n│                         SYSTEM STATUS                                        │\n├──────────────────────────────────────────────────────────────────────────────┤\n│                                                                              │\n│  ● Agent Status         : ✓ ACTIVE & MONITORING MARKETS                      │\n│  ● API Version          : v1.0.0 (24/7 Operations)                           │\n│  ● System Uptime        : 57393.37s                                                │\n│  ● Current Time (UTC)   : 2026-05-24T17:21:02.610Z                           │\n│  ● Trading Network      : Solana Devnet (Production Ready)                   │\n│  ● Payment Token        : USDC (Instant Settlement)                          │\n│  ● Signal Cost          : 0.0001 USDC (~$0.0001 per signal)                  │\n│  ● Avg Response Time    : <100ms (Real-time Processing)                      │\n│                                                                              │\n└──────────────────────────────────────────────────────────────────────────────┘\n\n┌──────────",
+      "targetMetadata": {
+        "pricingTier": "standard",
+        "route": "x402",
+        "token": "SOL",
+        "pricePerCallDisplay": "0.000005 SOL",
+        "protocolIds": [
+          "MCP",
+          "A2A"
+        ],
+        "agentUri": "https://syraa.fun"
+      }
+    },
+    "status": "success",
+    "latencyMs": 1230,
+    "startedAt": "2026-05-24T17:21:01.683Z",
+    "completedAt": "2026-05-24T17:21:02.919Z"
+  },
+  "aceAnalysis": {
+    "analysisId": "ace_a8d7bbf2-be45-4ff8-8163-85ebb35e95d2",
+    "auditJobId": "audit_909a12bf-be58-4795-aec5-a0f31417fee0",
+    "servicesUsed": [
+      "ace_serp_google_search",
+      "ace_openai_chat_completions",
+      "ace_localization_translate",
+      "ace_openai_images_generations"
+    ],
+    "outputQualityScore": 42,
+    "capabilityMatchScore": 38,
+    "summary": "Endpoint is reachable and responds consistently with branded HTML gateway pages, but there is no verified functional agent execution, no paid x402 flow tested, and no evidence of actual MCP/A2A capability delivery. Metadata claims partially conflict with live response details: advertised pricing/token is 0.000005 SOL while gateway page references 0.0001 USDC signals. The endpoint currently behaves more like a landing/gateway page than a proven callable SAP agent tool. Public footprint is effectively absent. Ace services used successfully: ace_serp_google_search, ace_openai_chat_completions, ace_localization_translate, ace_openai_images_generations.",
+    "riskFlags": [
+      "CAPABILITY_MISMATCH",
+      "GENERIC_RESPONSE",
+      "MISSING_PUBLIC_FOOTPRINT"
+    ],
+    "raw": {
+      "mode": "ace_full_pipeline",
+      "servicesAttempted": [
+        {
+          "service": "ace_serp_google_search",
+          "endpoint": "https://api.acedata.cloud/serp/google",
+          "ok": true,
+          "status": 200,
+          "latencyMs": 4630
+        },
+        {
+          "service": "ace_openai_chat_completions",
+          "endpoint": "https://api.acedata.cloud/openai/chat/completions",
+          "ok": true,
+          "status": 200,
+          "latencyMs": 8796
+        },
+        {
+          "service": "ace_localization_translate",
+          "endpoint": "https://api.acedata.cloud/localization/translate",
+          "ok": true,
+          "status": 200,
+          "latencyMs": 8391
+        },
+        {
+          "service": "ace_openai_images_generations",
+          "endpoint": "https://api.acedata.cloud/openai/images/generations",
+          "ok": true,
+          "status": 200,
+          "latencyMs": 60146
+        }
+      ],
+      "artifacts": {
+        "directory": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0",
+        "searchPath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/ace-serp-search.json",
+        "summaryPath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/ace-analysis.json",
+        "translationPath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/ace-translation-zh-CN.md",
+        "imagePath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/proof-card.png",
+        "imageResponsePath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/ace-proof-card-response.json"
+      },
+      "note": "servicesUsed contains only successful Ace Data Cloud service calls."
+    },
+    "createdAt": "2026-05-24T17:21:02.921Z"
+  },
+  "scores": {
+    "reliability": 90,
+    "capabilityMatch": 38,
+    "paymentIntegrity": 25,
+    "publicFootprint": 100,
+    "safety": 90,
+    "overall": 62,
+    "verdict": "warning"
+  },
+  "riskFlags": [
+    "CAPABILITY_MISMATCH",
+    "GENERIC_RESPONSE",
+    "MISSING_PUBLIC_FOOTPRINT"
+  ],
+  "artifacts": {
+    "proofCardPath": "/home/hickson/Proofline/data/artifacts/audit_909a12bf-be58-4795-aec5-a0f31417fee0/proof-card.png"
+  },
+  "createdAt": "2026-05-24T17:22:33.784Z",
+  "auditorAgent": {
+    "name": "Proofline",
+    "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
+  },
+  "auditStatus": "completed",
+  "signature": {
+    "algorithm": "ed25519",
+    "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+    "packetHash": "007521adbb9f6af7029a6b74959f6f8ddcb478efe92e29139b7f152d150340f6",
+    "signedPayload": "sha256:007521adbb9f6af7029a6b74959f6f8ddcb478efe92e29139b7f152d150340f6",
+    "signatureBase64": "VT6gKjzrNJ2TPCEgkUyI6zhdFDLWrlS2owEah/br1okgRQWY12kBCTW4cEPd3ouIRvkrDqpAC6yc604p9tz8Ag==",
+    "signedAt": "2026-05-27T20:48:18.453Z"
+  }
+}
