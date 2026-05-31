@@ -1,0 +1,401 @@
+{
+  "proofPacketId": "proof_1e1165203bbc4d30",
+  "version": "0.1",
+  "auditStatus": "skipped",
+  "targetAgent": {
+    "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+    "name": "antigravity_agent",
+    "toolId": "clawdmint-launch",
+    "toolName": "clawdmint-launch",
+    "description": "active, priced, endpoint present, and within budget",
+    "category": "sap_agent",
+    "price": "0.000001 SOL",
+    "currency": "SOL",
+    "paymentMethod": "x402",
+    "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+    "source": "sap_discovery"
+  },
+  "auditJob": {
+    "auditJobId": "audit_c9c467c0-2dca-4434-93e8-57bc4046f688",
+    "target": {
+      "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+      "name": "antigravity_agent",
+      "toolId": "clawdmint-launch",
+      "toolName": "clawdmint-launch",
+      "description": "active, priced, endpoint present, and within budget",
+      "category": "sap_agent",
+      "price": "0.000001 SOL",
+      "currency": "SOL",
+      "paymentMethod": "x402",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "source": "sap_discovery"
+    },
+    "status": "skipped",
+    "createdAt": "2026-05-31T01:27:33.215Z",
+    "startedAt": "2026-05-31T01:27:33.215Z",
+    "completedAt": "2026-05-31T01:27:39.686Z",
+    "maxSpendUsdc": 0.03
+  },
+  "sentinelCheck": {
+    "status": "warning",
+    "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+    "checkedAt": "2026-05-31T01:27:33.358Z",
+    "raw": {
+      "mode": "synapse_sentinel_preflight",
+      "target": {
+        "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+        "name": "antigravity_agent",
+        "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+        "pricePerCall": "1000",
+        "pricePerCallDisplay": "0.000001 SOL",
+        "token": "SOL",
+        "route": "x402"
+      },
+      "selectedTool": "spl-token_getBalance",
+      "calls": {
+        "health": {
+          "url": "https://invalid.invalid/health",
+          "method": "GET",
+          "status": null,
+          "ok": false,
+          "headers": {},
+          "body": null,
+          "latencyMs": 5,
+          "attempts": 3,
+          "error": "fetch failed"
+        },
+        "profile": {
+          "url": "https://invalid.invalid/agent",
+          "method": "GET",
+          "status": null,
+          "ok": false,
+          "headers": {},
+          "body": null,
+          "latencyMs": 7,
+          "attempts": 3,
+          "error": "fetch failed"
+        },
+        "tools": {
+          "url": "https://invalid.invalid/tools",
+          "method": "GET",
+          "status": null,
+          "ok": false,
+          "headers": {},
+          "body": null,
+          "latencyMs": 12,
+          "attempts": 3,
+          "error": "fetch failed"
+        },
+        "unpaidToolCall": {
+          "url": "https://invalid.invalid/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": null,
+          "ok": false,
+          "headers": {},
+          "body": null,
+          "latencyMs": 6,
+          "attempts": 3,
+          "error": "fetch failed"
+        },
+        "depositorToolCall": {
+          "url": "https://invalid.invalid/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": null,
+          "ok": false,
+          "headers": {},
+          "body": null,
+          "latencyMs": 5,
+          "attempts": 3,
+          "error": "fetch failed"
+        },
+        "endpointHead": {
+          "url": "https://clawdmint.xyz/api/x402/pricing",
+          "method": "HEAD",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "41",
+            "cache-control": "public,max-age=300",
+            "cache-status": "\"Netlify Edge\"; hit",
+            "connection": "close",
+            "content-encoding": "br",
+            "content-type": "application/json",
+            "date": "Sun, 31 May 2026 01:27:38 GMT",
+            "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
+            "server": "Netlify",
+            "strict-transport-security": "max-age=31536000",
+            "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-nf-request-id": "01KSXT9KB10K95QPE54EYJ1STG"
+          },
+          "body": {},
+          "latencyMs": 644,
+          "attempts": 1
+        },
+        "endpointGet": null,
+        "agentUriGet": {
+          "url": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "0",
+            "cache-control": "no-cache",
+            "cache-status": "\"Netlify Durable\"; fwd=bypass, \"Netlify Edge\"; fwd=miss",
+            "content-encoding": "br",
+            "content-type": "application/json",
+            "date": "Sun, 31 May 2026 01:27:39 GMT",
+            "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
+            "server": "Netlify",
+            "strict-transport-security": "max-age=31536000",
+            "transfer-encoding": "chunked",
+            "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-nf-request-id": "01KSXT9KXHMQCDZ0F6CKMYQ4C8"
+          },
+          "body": {
+            "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+            "name": "antigravity_agent",
+            "description": "Antigravity AI Assistant agent for deploying Solana NFT collections.",
+            "image": "https://clawdmint.xyz/logo.png",
+            "active": true,
+            "services": [
+              {
+                "name": "web",
+                "endpoint": "https://clawdmint.xyz/agents/cmotytfs90001kf64fxa95tz7",
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ],
+                "version": "1.0.0"
+              },
+              {
+                "name": "A2A",
+                "endpoint": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/a2a",
+                "version": "0.3.0",
+                "domains": [
+                  "solana",
+                  "nft-launch",
+                  "agent"
+                ]
+              },
+              {
+                "name": "MCP",
+                "endpoint": "https://clawdmint.xyz/api/mcp",
+                "version": "2026-04-01",
+                "domains": [
+                  "solana",
+                  "nft-launch",
+                  "agent"
+                ]
+              },
+              {
+                "name": "skill",
+                "endpoint": "https://clawdmint.xyz/skill.md",
+                "version": "2.4.0",
+                "skills": [
+                  "solana-nft-deploy",
+                  "metaplex-candy-machine",
+                  "agent-wallet-automation"
+                ],
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "openclaw",
+                "endpoint": "https://clawdmint.xyz/api/tools/openclaw.json",
+                "version": "2.4.0",
+                "skills": [
+                  "register_agent",
+                  "deploy_collection",
+                  "get_agent_profile"
+                ],
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "x402",
+                "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+                "version": "2.0.0",
+                "skills": [
+                  "x402_register_agent",
+                  "x402_market_data",
+                  "x402_launch_access"
+                ],
+                "domains": [
+                  "payments",
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "Synapse SAP",
+                "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+                "version": "0.9.2",
+                "skills": [
+                  "sap_agent_registration",
+                  "sap_discovery",
+                  "x402_launch_access"
+                ],
+                "domains": [
+                  "sap",
+                  "synapse",
+                  "x402",
+                  "solana",
+                  "nft-launch"
+                ]
+              }
+            ],
+            "registrations": [
+              {
+                "agentId": "9oWgdqXoEgwmEZ6ZGQqJrk7y6pqwdecUmu2Q1FU7P723",
+                "agentRegistry": "solana:101:metaplex"
+              }
+            ],
+            "supportedTrust": [
+              "reputation",
+              "crypto-economic",
+              "synapse-sap"
+            ],
+            "links": {
+              "profile": "https://clawdmint.xyz/agents/cmotytfs90001kf64fxa95tz7",
+              "tools": "https://clawdmint.xyz/api/tools/openclaw.json",
+              "skill": "https://clawdmint.xyz/skill.md",
+              "a2a": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/a2a",
+              "mcp": "https://clawdmint.xyz/api/mcp",
+              "x402": "https://clawdmint.xyz/api/x402/pricing",
+              "sap": "https://explorer.oobeprotocol.ai/docs"
+            },
+            "owner": {
+              "wallet": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+              "chain": "solana"
+            },
+            "onchain": {
+              "collection": "eedwyFQFT4yCCSfNMog9jnnmvSbQVrdKJAGnovWprLW",
+              "asset": "9oWgdqXoEgwmEZ6ZGQqJrk7y6pqwdecUmu2Q1FU7P723",
+              "identity_pda": "6g7dbUyq1GA2U6RVf8isoy4m3D7D29HSfMqwW9ZQoHfN",
+              "executive_profile_pda": "5wywYCXS3TtE9yudVbN5w1YYGY6UmcZHahLKKPVzks1i",
+              "execution_delegate_record_pda": "BBR6NXvd4xBJAw3Vbdpd8UBs9ERtT7ymN3utmPxJkFCX"
+            }
+          },
+          "latencyMs": 912,
+          "attempts": 1
+        }
+      },
+      "signals": {
+        "serviceReachable": false,
+        "realToolReached": false,
+        "paymentRequired": false,
+        "metadataComplete": true,
+        "endpointReachable": true,
+        "metadataReachable": true,
+        "spendWithinBudget": true,
+        "sentinelMalformed": true,
+        "minEscrowDepositLamports": null,
+        "minEscrowDepositSol": null,
+        "pricePerCallLamports": null
+      },
+      "gate": {
+        "proceed": false,
+        "reasons": [
+          "sentinel service unavailable",
+          "sentinel tool path did not return a valid payment-aware response",
+          "sentinel response payload malformed"
+        ],
+        "warnings": []
+      },
+      "note": "Sentinel preflight verifies Sentinel liveness/payment path plus target endpoint reachability before audit execution."
+    },
+    "message": "Sentinel preflight blocked execution: sentinel service unavailable; sentinel tool path did not return a valid payment-aware response; sentinel response payload malformed"
+  },
+  "payments": [
+    {
+      "paymentId": "pay_462f7551-c802-418a-a224-663a3854cd5a",
+      "auditJobId": "audit_c9c467c0-2dca-4434-93e8-57bc4046f688",
+      "provider": "sap",
+      "method": "x402",
+      "amount": "0.000001",
+      "currency": "SOL",
+      "service": "antigravity_agent",
+      "createdAt": "2026-05-31T01:27:39.684Z",
+      "recipient": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+      "status": "skipped",
+      "receipt": "Sentinel preflight blocked paid execution: sentinel service unavailable; sentinel tool path did not return a valid payment-aware response; sentinel response payload malformed"
+    }
+  ],
+  "probeResult": {
+    "probeId": "probe_bde0fb5a-3281-4ee5-bd10-3e0a95f52a9a",
+    "auditJobId": "audit_c9c467c0-2dca-4434-93e8-57bc4046f688",
+    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+    "targetToolId": "clawdmint-launch",
+    "request": {
+      "method": "GET",
+      "url": "https://clawdmint.xyz/api/x402/pricing",
+      "paid": false,
+      "purpose": "Probe skipped by Sentinel preflight gate"
+    },
+    "response": {
+      "skipped": true,
+      "preflightGate": {
+        "proceed": false,
+        "reasons": [
+          "sentinel service unavailable",
+          "sentinel tool path did not return a valid payment-aware response",
+          "sentinel response payload malformed"
+        ],
+        "warnings": []
+      },
+      "targetMetadata": {
+        "pricingTier": "clawdmint-launch",
+        "route": "x402",
+        "token": "SOL",
+        "pricePerCallDisplay": "0.000001 SOL"
+      }
+    },
+    "status": "not_run",
+    "error": "Skipped: sentinel service unavailable; sentinel tool path did not return a valid payment-aware response; sentinel response payload malformed",
+    "startedAt": "2026-05-31T01:27:39.685Z",
+    "completedAt": "2026-05-31T01:27:39.685Z"
+  },
+  "aceAnalysis": {
+    "analysisId": "ace_caa3a7cc-25da-42fb-beb9-be7ca317cd30",
+    "auditJobId": "audit_c9c467c0-2dca-4434-93e8-57bc4046f688",
+    "servicesUsed": [],
+    "riskFlags": [],
+    "summary": "Skipped: Sentinel preflight blocked execution (sentinel service unavailable; sentinel tool path did not return a valid payment-aware response; sentinel response payload malformed)",
+    "createdAt": "2026-05-31T01:27:39.685Z"
+  },
+  "scores": {
+    "reliability": 20,
+    "capabilityMatch": 25,
+    "paymentIntegrity": 25,
+    "publicFootprint": 100,
+    "safety": 60,
+    "overall": 37,
+    "verdict": "warning"
+  },
+  "riskFlags": [
+    "SENTINEL_WARNING"
+  ],
+  "artifacts": {},
+  "createdAt": "2026-05-31T01:27:39.686Z",
+  "auditorAgent": {
+    "name": "Proofline",
+    "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+    "packetHash": "23cb774ead07149e6a7cd0402d1ec77e9f655bef2dfaf858a3222971466bce43",
+    "signedPayload": "sha256:23cb774ead07149e6a7cd0402d1ec77e9f655bef2dfaf858a3222971466bce43",
+    "signatureBase64": "KZQessDMMzr8WZm1HOBetqNohZzOnVdZmhPR/bdBTiz1o+YSbhsgqiRPEnT9W3834mjxUiwaTz5DCPBk/LpWDQ==",
+    "signedAt": "2026-05-31T01:27:39.714Z"
+  }
+}

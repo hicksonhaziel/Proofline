@@ -1,0 +1,1544 @@
+{
+  "proofPacketId": "proof_3afd482eab143c6c",
+  "version": "0.1",
+  "auditStatus": "completed",
+  "targetAgent": {
+    "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+    "name": "antigravity_agent",
+    "toolId": "clawdmint-launch",
+    "toolName": "clawdmint-launch",
+    "description": "active, priced, endpoint present, and within budget",
+    "category": "sap_agent",
+    "price": "0.000001 SOL",
+    "currency": "SOL",
+    "paymentMethod": "x402",
+    "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+    "source": "sap_discovery"
+  },
+  "auditJob": {
+    "auditJobId": "audit_0eec6d4f-00d9-4d04-a193-0919ca72fecf",
+    "target": {
+      "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+      "name": "antigravity_agent",
+      "toolId": "clawdmint-launch",
+      "toolName": "clawdmint-launch",
+      "description": "active, priced, endpoint present, and within budget",
+      "category": "sap_agent",
+      "price": "0.000001 SOL",
+      "currency": "SOL",
+      "paymentMethod": "x402",
+      "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+      "source": "sap_discovery"
+    },
+    "status": "completed",
+    "createdAt": "2026-05-31T01:26:44.044Z",
+    "startedAt": "2026-05-31T01:26:44.044Z",
+    "completedAt": "2026-05-31T01:27:03.489Z",
+    "maxSpendUsdc": 0.03
+  },
+  "sentinelCheck": {
+    "status": "healthy",
+    "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+    "checkedAt": "2026-05-31T01:26:44.148Z",
+    "raw": {
+      "mode": "synapse_sentinel_preflight",
+      "target": {
+        "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+        "name": "antigravity_agent",
+        "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+        "pricePerCall": "1000",
+        "pricePerCallDisplay": "0.000001 SOL",
+        "token": "SOL",
+        "route": "x402"
+      },
+      "selectedTool": "spl-token_getBalance",
+      "calls": {
+        "health": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/health",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "148",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Sun, 31 May 2026 01:26:44 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "status": "ok",
+            "network": "mainnet",
+            "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "usdcMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+          },
+          "latencyMs": 744,
+          "attempts": 1
+        },
+        "profile": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/agent",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "417",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Sun, 31 May 2026 01:26:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "name": "Synapse Sentinel",
+            "description": "Pay-per-call gateway exposing 110 SynapseAgentKit tools via SAP x402",
+            "network": "mainnet",
+            "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "acceptedTokens": [
+              "SOL",
+              "USDC:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+            ],
+            "minEscrowDeposit": 10000000,
+            "x402": {
+              "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+              "method": "POST",
+              "depositorHeader": "x-sap-depositor"
+            }
+          },
+          "latencyMs": 593,
+          "attempts": 1
+        },
+        "tools": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "22792",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Sun, 31 May 2026 01:26:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "count": 110,
+            "total": 110,
+            "tools": [
+              {
+                "name": "spl-token_deployToken",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Deploy a new SPL token with Metaplex metadata. Returns the mint address and an unsigned transaction.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_transfer",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Transfer SPL tokens between wallets. Optionally creates the recipient ATA.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_transferSol",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Transfer native SOL between wallets via SystemProgram.transfer.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_getBalance",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Get token or SOL balance for a wallet. If mint is omitted, returns native SOL balance.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_getTokenAccounts",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "List all SPL token accounts for a wallet with balances and metadata.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_mintTo",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Mint additional tokens to a destination wallet (requires mint authority).",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_burn",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Burn SPL tokens from the owner's token account.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_freezeAccount",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Freeze a token account (prevents all transfers). Requires freeze authority.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_thawAccount",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Thaw (unfreeze) a previously frozen token account.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_closeAccount",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Close a token account and reclaim the rent SOL.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_rugCheck",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Check a token for potential rug pull risks: mint/freeze authority, holder concentration, liquidity.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_stakeSOL",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "spl-token",
+                "description": "Stake native SOL to a validator. Creates a stake account and delegates.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_unstakeSOL",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "spl-token",
+                "description": "Deactivate and withdraw SOL from a stake account.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_getStakeAccounts",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "spl-token",
+                "description": "List all stake accounts for a wallet with delegation status.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_stakeJupSOL",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "jupiter",
+                "description": "Stake SOL for jupSOL (Jupiter liquid staking). Instant liquidity, auto-compounding.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_unstakeJupSOL",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "jupiter",
+                "description": "Unstake jupSOL back to SOL.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_stakeSolayer",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "solayer",
+                "description": "Stake SOL for sSOL via Solayer. Re-staking protocol with additional yield.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "staking_unstakeSolayer",
+                "plugin": "token",
+                "category": "Stake",
+                "protocol": "solayer",
+                "description": "Unstake sSOL back to SOL via Solayer.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "bridging_bridgeWormhole",
+                "plugin": "token",
+                "category": "Bridge",
+                "protocol": "wormhole",
+                "description": "Bridge tokens across chains via Wormhole. Supports Solana ↔ EVM chains.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "bridging_bridgeWormholeStatus",
+                "plugin": "token",
+                "category": "Bridge",
+                "protocol": "wormhole",
+                "description": "Check the status of a Wormhole bridge transfer.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "bridging_bridgeDeBridge",
+                "plugin": "token",
+                "category": "Bridge",
+                "protocol": "debridge",
+                "description": "Bridge tokens across chains via deBridge DLN. Fast cross-chain transfers with deterministic pricing.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "bridging_bridgeDeBridgeStatus",
+                "plugin": "token",
+                "category": "Bridge",
+                "protocol": "debridge",
+                "description": "Check the status of a deBridge DLN cross-chain transfer.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_deployCollection",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Deploy a new NFT collection via Metaplex. Returns the collection mint and metadata addresses.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_mintNFT",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Mint a new NFT via Metaplex. Supports both standard and compressed (cNFT) minting.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_updateMetadata",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "metaplex",
+                "description": "Update NFT metadata fields (name, symbol, URI, creators, royalties, authority).",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_verifyCreator",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "metaplex",
+                "description": "Verify a creator on an NFT's metadata (requires creator's signature).",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_verifyCollection",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "metaplex",
+                "description": "Verify an NFT as part of a collection.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_setAndVerifyCollect",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "metaplex",
+                "description": "Set and verify a collection on an NFT in a single transaction.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_delegateAuthority",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Delegate a specific authority (update, mint, freeze, collection) to another wallet.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_revokeAuthority",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Revoke (remove) a specific authority. Irreversible for some types.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "metaplex-nft_configureRoyalties",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "metaplex",
+                "description": "Configure royalty fee and creator splits for an NFT.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "3land_createCollection",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "3land",
+                "description": "Create a new NFT collection on 3.Land marketplace.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "3land_mintAndList",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "3land",
+                "description": "Mint an NFT on 3.Land and automatically list it for sale.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "3land_listForSale",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "3land",
+                "description": "List an NFT for sale on 3.Land in any SPL token.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "3land_cancelListing",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "3land",
+                "description": "Cancel an active NFT listing on 3.Land.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "3land_buyNFT",
+                "plugin": "nft",
+                "category": "Nft",
+                "protocol": "3land",
+                "description": "Purchase an NFT from a 3.Land listing.",
+                "pricePerCall": 20000,
+                "currency": "lamports"
+              },
+              {
+                "name": "das_getAsset",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "das",
+                "description": "Get detailed information about a single NFT/asset via DAS.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "das_getAssetsByOwner",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "das",
+                "description": "Get all NFTs/assets owned by a wallet via DAS (supports pagination).",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "das_getAssetsByCreator",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "das",
+                "description": "Get all NFTs/assets created by a specific creator via DAS.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "das_getAssetsByCollection",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "das",
+                "description": "Get all NFTs in a collection via DAS.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "das_searchAssets",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "das",
+                "description": "Search NFTs/assets with flexible filters via DAS.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "pump_launchToken",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "pump-fun",
+                "description": "Launch a new token on Pump.fun via PumpPortal. Optionally include an initial dev buy.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "pump_trade",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "pump-fun",
+                "description": "Buy or sell tokens on Pump.fun bonding curve.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "raydium-pools_createCPMM",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "raydium",
+                "description": "Create a Raydium CPMM (Constant Product Market Maker) pool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "raydium-pools_createCLMM",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "raydium",
+                "description": "Create a Raydium CLMM (Concentrated Liquidity) pool with a price range.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "raydium-pools_createAMMv4",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "raydium",
+                "description": "Create a Raydium AMM v4 pool (requires an existing Openbook market).",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "raydium-pools_addLiquidity",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "raydium",
+                "description": "Add liquidity to a Raydium pool (CPMM, CLMM, or AMM v4).",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "raydium-pools_removeLiquidity",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "raydium",
+                "description": "Remove liquidity from a Raydium pool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "orca_getWhirlpool",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "orca",
+                "description": "Get Orca Whirlpool pool information.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "orca_swap",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "orca",
+                "description": "Swap tokens on an Orca Whirlpool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "orca_openPosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "orca",
+                "description": "Open a concentrated liquidity position on an Orca Whirlpool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "orca_closePosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "orca",
+                "description": "Close a Whirlpool position and collect all fees/rewards.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "orca_collectFees",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "orca",
+                "description": "Collect accumulated fees from a Whirlpool position.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "manifest_createMarket",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "manifest",
+                "description": "Create a new Manifest market for a token pair.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "manifest_placeLimitOrder",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "manifest",
+                "description": "Place a limit order on a Manifest market.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "manifest_cancelOrder",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "manifest",
+                "description": "Cancel a limit order on a Manifest market.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "manifest_getOrderbook",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "manifest",
+                "description": "Get the current orderbook for a Manifest market.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "meteora_createDynamicPool",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "meteora",
+                "description": "Create a Meteora Dynamic AMM pool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "meteora_createDLMMPool",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "meteora",
+                "description": "Create a Meteora DLMM (Discrete Liquidity Market Maker) pool.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "meteora_addDLMMLiquidity",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "meteora",
+                "description": "Add liquidity to a Meteora DLMM pool with a distribution strategy.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "meteora_removeDLMMLiquidity",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "meteora",
+                "description": "Remove liquidity from a Meteora DLMM position.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "meteora_createAlphaVault",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "meteora",
+                "description": "Create a Meteora Alpha Vault for fair token launches with vesting.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "openbook_createMarket",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "openbook",
+                "description": "Create a new Openbook DEX market for a token pair.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "openbook_placeOrder",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "openbook",
+                "description": "Place an order on an Openbook market.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "openbook_cancelOrder",
+                "plugin": "defi",
+                "category": "Swap",
+                "protocol": "openbook",
+                "description": "Cancel an open order on an Openbook market.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_deposit",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "drift",
+                "description": "Deposit tokens into a Drift account for trading or lending.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_withdraw",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "drift",
+                "description": "Withdraw tokens from a Drift account.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_openPerpPosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "drift",
+                "description": "Open a perpetual futures position on Drift.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_closePerpPosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "drift",
+                "description": "Close a perpetual position on Drift.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_getPositions",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "drift",
+                "description": "Get all open positions and account info for a Drift account.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_lend",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "drift",
+                "description": "Lend tokens on Drift to earn interest.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "drift_borrow",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "drift",
+                "description": "Borrow tokens on Drift against deposited collateral.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "adrena_openPosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "adrena",
+                "description": "Open a leveraged perpetual position on Adrena Protocol.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "adrena_closePosition",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "adrena",
+                "description": "Close a perpetual position on Adrena Protocol.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "adrena_addCollateral",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "adrena",
+                "description": "Add collateral to an existing Adrena position.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "adrena_removeCollateral",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "adrena",
+                "description": "Remove collateral from an Adrena position.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "adrena_getPositions",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "adrena",
+                "description": "Get all open positions on Adrena Protocol.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "lulo_deposit",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "lulo",
+                "description": "Deposit into the best APR lending protocol via Lulo aggregator.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "lulo_withdraw",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "lulo",
+                "description": "Withdraw from Lulo lending position.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "lulo_getBestRates",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "lulo",
+                "description": "Get the best lending/yield rates across all protocols via Lulo.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "lulo_getPositions",
+                "plugin": "defi",
+                "category": "Lend",
+                "protocol": "lulo",
+                "description": "Get all Lulo lending positions for a wallet.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "jito_sendBundle",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "jito",
+                "description": "Send a Jito bundle for MEV-protected, atomic transaction execution.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "jito_getBundleStatus",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "jito",
+                "description": "Check the status of a submitted Jito bundle.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "jito_getTipEstimate",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "jito",
+                "description": "Get current Jito tip percentile estimates for bundle inclusion priority.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "sns_registerDomain",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Register a .sol domain name on Solana Name Service.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "sns_resolveDomain",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Resolve a .sol domain to its owner wallet address.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "sns_reverseLookup",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Reverse-lookup all .sol domains owned by a wallet.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "alldomains_registerDomain",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Register a domain on AllDomains (supports multiple TLDs: .abc, .bonk, .poor, etc.).",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "alldomains_resolveDomain",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Resolve a multi-TLD domain to its owner wallet.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "alldomains_getOwnedDomains",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "sns",
+                "description": "Get all domains owned by a wallet across all TLDs.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "pyth_getPrice",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "pyth",
+                "description": "Get the current price from a Pyth on-chain oracle feed.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "pyth_getPriceHistory",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "pyth",
+                "description": "Get historical price data from Pyth oracle.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "pyth_listPriceFeeds",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "pyth",
+                "description": "List available Pyth price feeds, optionally filtered by query or asset type.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getTokenPrice",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "coingecko",
+                "description": "Get token price and market data from CoinGecko.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getTrending",
+                "plugin": "misc",
+                "category": "Analytics",
+                "protocol": "coingecko",
+                "description": "Get trending tokens and NFTs on CoinGecko.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getTopGainersLosers",
+                "plugin": "misc",
+                "category": "Analytics",
+                "protocol": "coingecko",
+                "description": "Get top gainers and losers from CoinGecko.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getTokenInfo",
+                "plugin": "misc",
+                "category": "Analytics",
+                "protocol": "coingecko",
+                "description": "Get detailed token information from CoinGecko (description, links, market data).",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getPoolsByToken",
+                "plugin": "defi",
+                "category": "Custom",
+                "protocol": "coingecko",
+                "description": "Get all liquidity pools for a token from CoinGecko on-chain DEX tracker.",
+                "pricePerCall": 50000,
+                "currency": "lamports"
+              },
+              {
+                "name": "coingecko_getOHLCV",
+                "plugin": "misc",
+                "category": "Data",
+                "protocol": "coingecko",
+                "description": "Get OHLCV (price chart) data from CoinGecko.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "gibwork_createBounty",
+                "plugin": "misc",
+                "category": "Custom",
+                "protocol": "gibwork",
+                "description": "Create a new bounty on Gib Work with on-chain escrow.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "gibwork_listBounties",
+                "plugin": "misc",
+                "category": "Custom",
+                "protocol": "gibwork",
+                "description": "List available bounties on Gib Work.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "gibwork_submitWork",
+                "plugin": "misc",
+                "category": "Custom",
+                "protocol": "gibwork",
+                "description": "Submit completed work for a Gib Work bounty.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "send-arcade_listGames",
+                "plugin": "misc",
+                "category": "Custom",
+                "protocol": "send-arcade",
+                "description": "List available games on Send Arcade.",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "send-arcade_playGame",
+                "plugin": "misc",
+                "category": "Custom",
+                "protocol": "send-arcade",
+                "description": "Enter and play a game on Send Arcade (pays entry fee via transaction).",
+                "pricePerCall": 5000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_getAction",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Fetch metadata for a Solana Action (Blink) — returns title, description, available actions, and parameters.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_executeAction",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Execute a Solana Action — sends wallet to the Action endpoint and receives a transaction to sign.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_confirmAction",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Confirm a completed Solana Action by sending the tx signature back to the Action provider.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_resolveBlinkUrl",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Resolve a Blink URL (e.g. dial.to link) to its underlying Solana Action URL.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_validateActionsJson",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Validate a domain's actions.json file — checks if a website correctly implements the Solana Actions spec.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              },
+              {
+                "name": "blinks_buildActionUrl",
+                "plugin": "blinks",
+                "category": "Custom",
+                "protocol": "solana-actions",
+                "description": "Build and optionally wrap a Solana Action URL for sharing as a Blink.",
+                "pricePerCall": 2000,
+                "currency": "lamports"
+              }
+            ]
+          },
+          "latencyMs": 379,
+          "attempts": 1
+        },
+        "unpaidToolCall": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": 402,
+          "ok": false,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "415",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Sun, 31 May 2026 01:26:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "error": "payment_required",
+            "protocol": "sap-x402",
+            "tool": "spl-token_getBalance",
+            "pricePerCall": 1000,
+            "currency": "lamports",
+            "acceptedTokens": [
+              "SOL",
+              "USDC:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+            ],
+            "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "minEscrowDeposit": 10000000,
+            "hint": "POST /payment/quote with {\"depositor\":\"<pubkey>\"} for an escrow plan, then retry with header \"x-sap-depositor: <pubkey>\""
+          },
+          "latencyMs": 213,
+          "attempts": 1
+        },
+        "depositorToolCall": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": 402,
+          "ok": false,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "369",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Sun, 31 May 2026 01:26:50 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "error": "escrow_not_funded",
+            "reason": "no v2 escrow found for this depositor at any nonce 0..64",
+            "tool": "spl-token_getBalance",
+            "pricePerCall": 1000,
+            "minEscrowDeposit": 10000000,
+            "hint": "Open or top-up an escrow with client.escrowV2.create(merchantWallet, { escrowNonce: BN(<next free integer>), ... }) or escrowV2.deposit — the server scans nonces 0..16 automatically."
+          },
+          "latencyMs": 4208,
+          "attempts": 1
+        },
+        "endpointHead": {
+          "url": "https://clawdmint.xyz/api/x402/pricing",
+          "method": "HEAD",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "3",
+            "cache-control": "public,max-age=300",
+            "cache-status": "\"Netlify Durable\"; fwd=stale; ttl=-11708; stored, \"Netlify Edge\"; fwd=miss",
+            "connection": "close",
+            "content-encoding": "br",
+            "content-type": "application/json",
+            "date": "Sun, 31 May 2026 01:27:00 GMT",
+            "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
+            "server": "Netlify",
+            "strict-transport-security": "max-age=31536000",
+            "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-nf-request-id": "01KSXT89XB8YWJC1H3FZD0HCYS"
+          },
+          "body": {},
+          "latencyMs": 10377,
+          "attempts": 1
+        },
+        "endpointGet": null,
+        "agentUriGet": {
+          "url": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "access-control-allow-origin": "*",
+            "age": "1",
+            "cache-control": "no-cache",
+            "cache-status": "\"Netlify Durable\"; fwd=bypass, \"Netlify Edge\"; fwd=miss",
+            "content-encoding": "br",
+            "content-type": "application/json",
+            "date": "Sun, 31 May 2026 01:27:02 GMT",
+            "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
+            "server": "Netlify",
+            "strict-transport-security": "max-age=31536000",
+            "transfer-encoding": "chunked",
+            "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-nf-request-id": "01KSXT8EPNJS180ZQ8P47T1J32"
+          },
+          "body": {
+            "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+            "name": "antigravity_agent",
+            "description": "Antigravity AI Assistant agent for deploying Solana NFT collections.",
+            "image": "https://clawdmint.xyz/logo.png",
+            "active": true,
+            "services": [
+              {
+                "name": "web",
+                "endpoint": "https://clawdmint.xyz/agents/cmotytfs90001kf64fxa95tz7",
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ],
+                "version": "1.0.0"
+              },
+              {
+                "name": "A2A",
+                "endpoint": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/a2a",
+                "version": "0.3.0",
+                "domains": [
+                  "solana",
+                  "nft-launch",
+                  "agent"
+                ]
+              },
+              {
+                "name": "MCP",
+                "endpoint": "https://clawdmint.xyz/api/mcp",
+                "version": "2026-04-01",
+                "domains": [
+                  "solana",
+                  "nft-launch",
+                  "agent"
+                ]
+              },
+              {
+                "name": "skill",
+                "endpoint": "https://clawdmint.xyz/skill.md",
+                "version": "2.4.0",
+                "skills": [
+                  "solana-nft-deploy",
+                  "metaplex-candy-machine",
+                  "agent-wallet-automation"
+                ],
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "openclaw",
+                "endpoint": "https://clawdmint.xyz/api/tools/openclaw.json",
+                "version": "2.4.0",
+                "skills": [
+                  "register_agent",
+                  "deploy_collection",
+                  "get_agent_profile"
+                ],
+                "domains": [
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "x402",
+                "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+                "version": "2.0.0",
+                "skills": [
+                  "x402_register_agent",
+                  "x402_market_data",
+                  "x402_launch_access"
+                ],
+                "domains": [
+                  "payments",
+                  "solana",
+                  "nft-launch"
+                ]
+              },
+              {
+                "name": "Synapse SAP",
+                "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+                "version": "0.9.2",
+                "skills": [
+                  "sap_agent_registration",
+                  "sap_discovery",
+                  "x402_launch_access"
+                ],
+                "domains": [
+                  "sap",
+                  "synapse",
+                  "x402",
+                  "solana",
+                  "nft-launch"
+                ]
+              }
+            ],
+            "registrations": [
+              {
+                "agentId": "9oWgdqXoEgwmEZ6ZGQqJrk7y6pqwdecUmu2Q1FU7P723",
+                "agentRegistry": "solana:101:metaplex"
+              }
+            ],
+            "supportedTrust": [
+              "reputation",
+              "crypto-economic",
+              "synapse-sap"
+            ],
+            "links": {
+              "profile": "https://clawdmint.xyz/agents/cmotytfs90001kf64fxa95tz7",
+              "tools": "https://clawdmint.xyz/api/tools/openclaw.json",
+              "skill": "https://clawdmint.xyz/skill.md",
+              "a2a": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/a2a",
+              "mcp": "https://clawdmint.xyz/api/mcp",
+              "x402": "https://clawdmint.xyz/api/x402/pricing",
+              "sap": "https://explorer.oobeprotocol.ai/docs"
+            },
+            "owner": {
+              "wallet": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+              "chain": "solana"
+            },
+            "onchain": {
+              "collection": "eedwyFQFT4yCCSfNMog9jnnmvSbQVrdKJAGnovWprLW",
+              "asset": "9oWgdqXoEgwmEZ6ZGQqJrk7y6pqwdecUmu2Q1FU7P723",
+              "identity_pda": "6g7dbUyq1GA2U6RVf8isoy4m3D7D29HSfMqwW9ZQoHfN",
+              "executive_profile_pda": "5wywYCXS3TtE9yudVbN5w1YYGY6UmcZHahLKKPVzks1i",
+              "execution_delegate_record_pda": "BBR6NXvd4xBJAw3Vbdpd8UBs9ERtT7ymN3utmPxJkFCX"
+            }
+          },
+          "latencyMs": 2262,
+          "attempts": 1
+        }
+      },
+      "signals": {
+        "serviceReachable": true,
+        "realToolReached": true,
+        "paymentRequired": true,
+        "metadataComplete": true,
+        "endpointReachable": true,
+        "metadataReachable": true,
+        "spendWithinBudget": true,
+        "sentinelMalformed": false,
+        "minEscrowDepositLamports": 10000000,
+        "minEscrowDepositSol": 0.01,
+        "pricePerCallLamports": 1000
+      },
+      "gate": {
+        "proceed": true,
+        "reasons": [],
+        "warnings": [
+          "sentinel confirms payment is required before tool execution"
+        ]
+      },
+      "note": "Sentinel preflight verifies Sentinel liveness/payment path plus target endpoint reachability before audit execution."
+    },
+    "message": "Sentinel preflight passed and target is eligible for audit."
+  },
+  "payments": [
+    {
+      "paymentId": "pay_bc6fb7f0-6b61-4743-a4fe-17b9fe2015bc",
+      "auditJobId": "audit_0eec6d4f-00d9-4d04-a193-0919ca72fecf",
+      "provider": "sap",
+      "method": "x402",
+      "amount": "0.000001",
+      "currency": "SOL",
+      "service": "antigravity_agent",
+      "createdAt": "2026-05-31T01:27:02.927Z",
+      "recipient": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+      "status": "skipped",
+      "receipt": "Paid execution disabled. Re-run with --allow-paid only after the payment adapter is verified."
+    }
+  ],
+  "probeResult": {
+    "probeId": "probe_b5b66811-0a35-486e-8387-110f1756bba9",
+    "auditJobId": "audit_0eec6d4f-00d9-4d04-a193-0919ca72fecf",
+    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+    "targetToolId": "clawdmint-launch",
+    "request": {
+      "method": "GET",
+      "url": "https://clawdmint.xyz/api/x402/pricing",
+      "paid": false,
+      "purpose": "Proofline one-shot audit probe"
+    },
+    "response": {
+      "url": "https://clawdmint.xyz/api/x402/pricing",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "statusText": "OK",
+      "contentType": "application/json",
+      "latencyMs": 554,
+      "bodyPreview": {
+        "enabled": true,
+        "protocol": "x402",
+        "version": 1,
+        "network": "solana",
+        "settlement": "solana-spl-token",
+        "payTo": "HzPZ2ayMJXwo9kP1tgYwWiMkzFbvvPHN34UPpTmP1EGx",
+        "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "currency": "USDC",
+        "decimals": 6,
+        "openapi": "https://clawdmint.xyz/api/x402/openapi.json",
+        "endpoints": [
+          {
+            "method": "POST",
+            "path": "/api/x402/register",
+            "url": "https://clawdmint.xyz/api/x402/register",
+            "price": "$0.01",
+            "description": "Register a Clawdmint agent and receive a dedicated Solana wallet",
+            "mimeType": "application/json"
+          },
+          {
+            "method": "POST",
+            "path": "/api/x402/deploy",
+            "url": "https://clawdmint.xyz/api/x402/deploy",
+            "price": "$2.00",
+            "description": "Deploy a Solana NFT collection after the agent wallet is funded and verified",
+            "mimeType": "application/json"
+          },
+          {
+            "method": "POST",
+            "path": "/api/x402/agent-token",
+            "url": "https://clawdmint.xyz/api/x402/agent-token",
+            "price": "$2.00",
+            "description": "Paid third-party wrapper for launching a Solana-native Metaplex Genesis agent token. Verified owner agents should use POST /api/v1/agent-tokens instead and do not need AgentCash USDC.",
+            "mimeType": "application/json"
+          },
+          {
+            "method": "GET",
+            "path": "/api/x402/collections",
+            "url": "https://clawdmint.xyz/api/x402/collections",
+            "price": "$0.001",
+            "description": "List Solana NFT collections with agent info",
+            "mimeType": "application/json"
+          },
+          {
+            "method": "GET",
+            "path": "/api/x402/stats",
+            "url": "https://clawdmint.xyz/api/x402/stats",
+            "price": "$0.005",
+            "description": "Premium Clawdmint Solana analytics and statistics",
+            "mimeType": "application/json"
+          },
+          {
+            "method": "GET",
+            "path": "/api/x402/agents",
+            "url": "https://clawdmint.xyz/api/x402/agents",
+            "price": "$0.001",
+            "description": "List Clawdmint AI agents with Solana profiles",
+            "mimeType": "application/json"
+          }
+        ]
+      },
+      "targetMetadata": {
+        "pricingTier": "clawdmint-launch",
+        "route": "x402",
+        "token": "SOL",
+        "pricePerCallDisplay": "0.000001 SOL",
+        "protocolIds": [
+          "A2A",
+          "MCP",
+          "x402",
+          "metaplex",
+          "clawdmint"
+        ],
+        "agentUri": "https://clawdmint.xyz/api/agents/cmotytfs90001kf64fxa95tz7/registration?v=2026-04-13-a2a-mcp-x402"
+      }
+    },
+    "status": "success",
+    "latencyMs": 554,
+    "startedAt": "2026-05-31T01:27:02.928Z",
+    "completedAt": "2026-05-31T01:27:03.487Z"
+  },
+  "aceAnalysis": {
+    "analysisId": "ace_d7fc55a4-0570-41a0-9487-1230722de738",
+    "auditJobId": "audit_0eec6d4f-00d9-4d04-a193-0919ca72fecf",
+    "servicesUsed": [],
+    "riskFlags": [],
+    "summary": "Ace analysis was skipped with --no-ace.",
+    "createdAt": "2026-05-31T01:27:03.488Z"
+  },
+  "scores": {
+    "reliability": 90,
+    "capabilityMatch": 60,
+    "paymentIntegrity": 25,
+    "publicFootprint": 100,
+    "safety": 90,
+    "overall": 67,
+    "verdict": "warning"
+  },
+  "riskFlags": [],
+  "artifacts": {},
+  "createdAt": "2026-05-31T01:27:03.489Z",
+  "auditorAgent": {
+    "name": "Proofline",
+    "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+    "packetHash": "1acba10cf1950dd1380fdda5a3e3a57368c72e92c8f0d0406c8494f96f74e4b9",
+    "signedPayload": "sha256:1acba10cf1950dd1380fdda5a3e3a57368c72e92c8f0d0406c8494f96f74e4b9",
+    "signatureBase64": "MG9lwW4tljjBnkQoRxSxdI+Qg4khydT8PvFaN5HrN09Sj+55n2ZBm8MZCrT/HtyOfBZRtFgHQOA04Q7y4e5QCg==",
+    "signedAt": "2026-05-31T01:27:03.538Z"
+  }
+}

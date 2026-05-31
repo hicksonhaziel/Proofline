@@ -5,3 +5,4 @@ export interface IntegrationPlaceholder {
 
 export * from "./ace-client.js";
 export * from "./sap-sdk.js";
+export * from "./sentinel-client.js";

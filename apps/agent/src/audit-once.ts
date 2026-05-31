@@ -18,6 +18,8 @@ import { LocalStore } from "../../../packages/db/src/index.js";
 import {
   AceDataCloudClient,
   extractAceChatContent,
+  SentinelClient,
+  type SentinelGate,
   type AceServiceResult,
 } from "../../../packages/integrations/src/index.js";
 import { loadConfig, safeConfigSummary } from "./config.js";
@@ -84,6 +86,11 @@ interface AceArtifacts {
   summaryPath?: string;
 }
 
+interface PreflightResult {
+  sentinelCheck: SentinelCheck;
+  gate: SentinelGate;
+}
+
 const PLAN_PATH = "data/sap/audit-target-plan.json";
 const MAX_PREVIEW_CHARS = 6000;
 const CARD_TEMPLATE_PATH = "public/card-temp1.png";
@@ -133,6 +140,13 @@ async function main(): Promise<void> {
   const plannedTarget = await selectTarget(args.target);
   const target = toAgentTarget(plannedTarget);
   const startedAt = new Date().toISOString();
+  const prooflineWallet = await readWalletAddress(config.sapKeypairPath);
+  const sentinelClient = new SentinelClient({
+    ...(process.env.SENTINEL_BASE_URL ? { baseUrl: process.env.SENTINEL_BASE_URL } : {}),
+    ...(process.env.SENTINEL_TOOL_NAME ? { defaultToolName: process.env.SENTINEL_TOOL_NAME } : {}),
+    timeoutMs: Number(process.env.SENTINEL_TIMEOUT_MS ?? 15000),
+    retries: Number(process.env.SENTINEL_RETRIES ?? 2),
+  });
 
   logger.info("Selected audit target", {
     name: target.name,
@@ -144,12 +158,32 @@ async function main(): Promise<void> {
     status: plannedTarget.status,
   });
 
-  const sentinelCheck = await runPreflight(plannedTarget, config.sentinelAgentId);
-  const payment = buildPaymentReceipt(auditJobId, plannedTarget, args.allowPaid);
-  const probeResult = await runProbe(auditJobId, target, plannedTarget, payment);
-  const aceAnalysis = args.useAce
-    ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
-    : buildSkippedAceAnalysis(auditJobId);
+  const preflight = await runPreflight(
+    plannedTarget,
+    config.sentinelAgentId,
+    config.limits.maxSpendPerAuditUsdc,
+    prooflineWallet,
+    sentinelClient,
+  );
+  const sentinelCheck = preflight.sentinelCheck;
+  const preflightGate = preflight.gate;
+
+  logger.info("Sentinel preflight evaluated", {
+    sentinelStatus: sentinelCheck.status,
+    proceed: preflightGate.proceed,
+    reasons: preflightGate.reasons,
+    warnings: preflightGate.warnings,
+  });
+
+  const payment = buildPaymentReceipt(auditJobId, plannedTarget, args.allowPaid, preflightGate);
+  const probeResult = preflightGate.proceed
+    ? await runProbe(auditJobId, target, plannedTarget, payment)
+    : buildBlockedProbeResult(auditJobId, target, plannedTarget, preflightGate);
+  const aceAnalysis = preflightGate.proceed
+    ? args.useAce
+      ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
+      : buildSkippedAceAnalysis(auditJobId)
+    : buildSkippedAceAnalysis(auditJobId, `Skipped: Sentinel preflight blocked execution (${preflightGate.reasons.join("; ")})`);
 
   const riskFlags = mergeRiskFlags(sentinelCheck, payment, probeResult, aceAnalysis);
   const scores = scoreExecution({
@@ -161,15 +195,16 @@ async function main(): Promise<void> {
     riskFlags,
   });
   const completedAt = new Date().toISOString();
+  const finalAuditStatus: ExecutionProofPacket["auditStatus"] = preflightGate.proceed ? "completed" : "skipped";
 
-  const packetWithoutId = {
+  const packetWithoutId: Omit<ExecutionProofPacket, "proofPacketId"> = {
     version: "0.1" as const,
-    auditStatus: "completed" as const,
+    auditStatus: finalAuditStatus,
     targetAgent: target,
     auditJob: {
       auditJobId,
       target,
-      status: "completed" as const,
+      status: finalAuditStatus,
       createdAt: startedAt,
       startedAt,
       completedAt,
@@ -202,10 +237,16 @@ async function main(): Promise<void> {
   const runStatePath = await store.writeRunState(auditJobId, {
     auditJobId,
     proofPacketId: packet.proofPacketId,
+    auditStatus: finalAuditStatus,
     target: {
       name: target.name,
       agentId: target.agentId,
       endpoint: target.endpoint,
+    },
+    sentinel: {
+      status: sentinelCheck.status,
+      message: sentinelCheck.message,
+      gate: preflightGate,
     },
     payment: {
       status: payment.status,
@@ -223,6 +264,7 @@ async function main(): Promise<void> {
 
   logger.info("Proofline audit complete", {
     proofPacketId: packet.proofPacketId,
+    auditStatus: finalAuditStatus,
     verdict: packet.scores.verdict,
     overallScore: packet.scores.overall,
     riskFlags,
@@ -274,6 +316,11 @@ async function selectTarget(targetQuery: string | undefined): Promise<PlannedTar
   return targets.find((target) => target.status === "free") ?? targets[0]!;
 }
 
+async function readWalletAddress(keypairPath: string): Promise<string> {
+  const keypair = await loadKeypairFromFile(keypairPath);
+  return keypair.publicKey.toBase58();
+}
+
 function isUsableTarget(target: PlannedTarget): boolean {
   return (
     (target.status === "good_audit_target" || target.status === "free") &&
@@ -300,56 +347,68 @@ function toAgentTarget(target: PlannedTarget): AgentTarget {
   };
 }
 
-async function runPreflight(target: PlannedTarget, sentinelAgentId: string): Promise<SentinelCheck> {
-  const checkedAt = new Date().toISOString();
-  const endpointHead = target.endpoint ? await observeUrl(target.endpoint, "HEAD") : null;
-  const endpointGet = shouldFollowUpWithGet(endpointHead) && target.endpoint ? await observeUrl(target.endpoint, "GET") : null;
-  const agentUriGet = target.agentUri ? await observeUrl(target.agentUri, "GET") : null;
-  const observations = [endpointHead, endpointGet, agentUriGet].filter((item): item is HttpObservation => item !== null);
-  const hasReachableEndpoint = observations.some((item) => item.url === target.endpoint && isReachableStatus(item.status));
-  const hasAnyReachableUrl = observations.some((item) => isReachableStatus(item.status));
-
-  if (hasReachableEndpoint) {
-    return {
-      status: "healthy",
+async function runPreflight(
+  target: PlannedTarget,
+  sentinelAgentId: string,
+  maxSpendUsdc: number,
+  wallet: string,
+  sentinelClient: SentinelClient,
+): Promise<PreflightResult> {
+  try {
+    return await sentinelClient.checkTarget({
       sentinelAgentId,
-      checkedAt,
-      raw: {
-        mode: "local_preflight",
-        note: "No paid Sentinel call was made in this low-spend runner.",
-        observations,
+      wallet,
+      maxSpendUsdc,
+      target: {
+        agentId: target.pda,
+        name: target.name,
+        endpoint: target.endpoint,
+        agentUri: target.agentUri,
+        pricePerCall: target.pricePerCall,
+        pricePerCallDisplay: target.pricePerCallDisplay,
+        token: target.token,
+        route: target.route,
       },
-      message: "Target endpoint responded during local preflight.",
+    });
+  } catch (error) {
+    const checkedAt = new Date().toISOString();
+    const endpointHead = target.endpoint ? await observeUrl(target.endpoint, "HEAD") : null;
+    const endpointGet = shouldFollowUpWithGet(endpointHead) && target.endpoint ? await observeUrl(target.endpoint, "GET") : null;
+    const agentUriGet = target.agentUri ? await observeUrl(target.agentUri, "GET") : null;
+    const observations = [endpointHead, endpointGet, agentUriGet].filter((item): item is HttpObservation => item !== null);
+    const hasReachableEndpoint = observations.some((item) => item.url === target.endpoint && isReachableStatus(item.status));
+    const gate: SentinelGate = {
+      proceed: false,
+      reasons: [
+        `sentinel preflight request failed: ${error instanceof Error ? error.message : String(error)}`,
+        ...(hasReachableEndpoint ? [] : ["target endpoint unreachable during fallback preflight"]),
+      ],
+      warnings: hasReachableEndpoint ? ["fallback preflight reached target endpoint but Sentinel was unavailable"] : [],
+    };
+
+    return {
+      sentinelCheck: {
+        status: hasReachableEndpoint ? "warning" : "failed",
+        sentinelAgentId,
+        checkedAt,
+        raw: {
+          mode: "sentinel_preflight_fallback",
+          observations,
+          gate,
+        },
+        message: gate.reasons.join("; "),
+      },
+      gate,
     };
   }
-
-  if (hasAnyReachableUrl) {
-    return {
-      status: "warning",
-      sentinelAgentId,
-      checkedAt,
-      raw: {
-        mode: "local_preflight",
-        note: "Agent metadata responded, but the execution endpoint did not clearly respond.",
-        observations,
-      },
-      message: "Target has a public footprint, but endpoint health is uncertain.",
-    };
-  }
-
-  return {
-    status: "failed",
-    sentinelAgentId,
-    checkedAt,
-    raw: {
-      mode: "local_preflight",
-      observations,
-    },
-    message: "Target endpoint and metadata were not reachable during preflight.",
-  };
 }
 
-function buildPaymentReceipt(auditJobId: string, target: PlannedTarget, allowPaid: boolean): PaymentReceipt {
+function buildPaymentReceipt(
+  auditJobId: string,
+  target: PlannedTarget,
+  allowPaid: boolean,
+  preflightGate: SentinelGate,
+): PaymentReceipt {
   const isFree = target.status === "free" || target.pricePerCall === "0";
   const amount = target.pricePerCallDisplay?.split(" ")[0] ?? "0";
   const currency = target.token === "unknown" ? "unknown" : target.token;
@@ -363,8 +422,16 @@ function buildPaymentReceipt(auditJobId: string, target: PlannedTarget, allowPai
     currency,
     service: target.name,
     createdAt: new Date().toISOString(),
-    ...(target.wallet ? { recipient: target.wallet } : {}),
+      ...(target.wallet ? { recipient: target.wallet } : {}),
   };
+
+  if (!preflightGate.proceed) {
+    return {
+      ...baseReceipt,
+      status: "skipped",
+      receipt: `Sentinel preflight blocked paid execution: ${preflightGate.reasons.join("; ")}`,
+    };
+  }
 
   if (isFree) {
     return {
@@ -387,6 +454,41 @@ function buildPaymentReceipt(auditJobId: string, target: PlannedTarget, allowPai
     ...baseReceipt,
     status: "failed",
     receipt: "Paid route requested, but this runner does not yet sign SAP/x402 payments. No funds were sent.",
+  };
+}
+
+function buildBlockedProbeResult(
+  auditJobId: string,
+  target: AgentTarget,
+  plannedTarget: PlannedTarget,
+  preflightGate: SentinelGate,
+): ProbeResult {
+  const startedAt = new Date().toISOString();
+  return {
+    probeId: `probe_${randomUUID()}`,
+    auditJobId,
+    targetAgentId: target.agentId,
+    targetToolId: target.toolId,
+    request: {
+      method: "GET",
+      url: target.endpoint,
+      paid: false,
+      purpose: "Probe skipped by Sentinel preflight gate",
+    },
+    response: {
+      skipped: true,
+      preflightGate,
+      targetMetadata: {
+        pricingTier: plannedTarget.pricingTier,
+        route: plannedTarget.route,
+        token: plannedTarget.token,
+        pricePerCallDisplay: plannedTarget.pricePerCallDisplay,
+      },
+    },
+    status: "not_run",
+    error: `Skipped: ${preflightGate.reasons.join("; ")}`,
+    startedAt,
+    completedAt: new Date().toISOString(),
   };
 }
 
@@ -881,13 +983,13 @@ function safeHostname(url: string): string {
   }
 }
 
-function buildSkippedAceAnalysis(auditJobId: string): AceAnalysisResult {
+function buildSkippedAceAnalysis(auditJobId: string, reason?: string): AceAnalysisResult {
   return {
     analysisId: `ace_${randomUUID()}`,
     auditJobId,
     servicesUsed: [],
     riskFlags: [],
-    summary: "Ace analysis was skipped with --no-ace.",
+    summary: reason ?? "Ace analysis was skipped with --no-ace.",
     createdAt: new Date().toISOString(),
   };
 }
