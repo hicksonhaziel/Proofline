@@ -1,8 +1,32 @@
 [
   {
+    "proofPacketId": "proof_2aaecf54b119a7da",
+    "targetName": "Pablito Settlement Sentinel",
+    "targetAgentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+    "toolName": "demo",
+    "category": "sap_agent",
+    "auditStatus": "completed",
+    "verdict": "warning",
+    "overallScore": 67,
+    "riskFlags": [],
+    "riskLevel": "medium",
+    "aceServicesUsed": [],
+    "paymentStatus": "skipped",
+    "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
+    "createdAt": "2026-05-31T01:13:37.161Z",
+    "packetHash": "038c23582c45125e68e526f3519a44ac4f7e0d2e2e3f077ba9bd171ee20d4fb7",
+    "proofHtml": "/proofs/proof_2aaecf54b119a7da.html",
+    "proofJson": "/proofs/proof_2aaecf54b119a7da.json",
+    "proofCard": null
+  },
+  {
     "proofPacketId": "proof_37fbcd99e9872fc3",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 67,
     "riskFlags": [
@@ -10,6 +34,7 @@
       "SENTINEL_WARNING",
       "CAPABILITY_MISMATCH"
     ],
+    "riskLevel": "high",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -18,6 +43,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-27T12:21:47.213Z",
     "packetHash": "f3617ecc7731f3f5d64a1dd28bbafb84f51fb09ac16312d2729fc3e9fa989977",
     "proofHtml": "/proofs/proof_37fbcd99e9872fc3.html",
@@ -28,6 +54,9 @@
     "proofPacketId": "proof_84854b9e4cf2caa6",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 64,
     "riskFlags": [
@@ -35,6 +64,7 @@
       "CAPABILITY_MISMATCH",
       "MISSING_PUBLIC_FOOTPRINT"
     ],
+    "riskLevel": "high",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -43,6 +73,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:07:32.972Z",
     "packetHash": "5d9c43c0535ce19061e47959a6d36c50169d6dc0794b3f393d4f51a8fb496ae9",
     "proofHtml": "/proofs/proof_84854b9e4cf2caa6.html",
@@ -53,6 +84,9 @@
     "proofPacketId": "proof_dcb99f46c41be44f",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 68,
     "riskFlags": [
@@ -60,6 +94,7 @@
       "CAPABILITY_MISMATCH",
       "MISSING_PUBLIC_FOOTPRINT"
     ],
+    "riskLevel": "high",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -68,6 +103,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:02:03.735Z",
     "packetHash": "75482bf01d03c0f9da490e0ff0747d2cbae455824f9d03b3af94a2cd68637717",
     "proofHtml": "/proofs/proof_dcb99f46c41be44f.html",
@@ -78,11 +114,15 @@
     "proofPacketId": "proof_e363bee0d7e54936",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 67,
     "riskFlags": [
       "GENERIC_RESPONSE"
     ],
+    "riskLevel": "medium",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -91,6 +131,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T16:56:25.526Z",
     "packetHash": "c647388e77b62d1f5b5eb8d1b831fcc43f01f10037d9d51d7328dbbb1e4a317e",
     "proofHtml": "/proofs/proof_e363bee0d7e54936.html",
@@ -101,11 +142,15 @@
     "proofPacketId": "proof_4e8a2fcd361ca7a0",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 72,
     "riskFlags": [
       "GENERIC_RESPONSE"
     ],
+    "riskLevel": "medium",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -114,6 +159,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:25:14.508Z",
     "packetHash": "acd74a0d719192e8e72a1a819d2b025691491a50ce30616bca206c287ae4da9b",
     "proofHtml": "/proofs/proof_4e8a2fcd361ca7a0.html",
@@ -124,6 +170,9 @@
     "proofPacketId": "proof_994d20739021467f",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 62,
     "riskFlags": [
@@ -131,6 +180,7 @@
       "GENERIC_RESPONSE",
       "MISSING_PUBLIC_FOOTPRINT"
     ],
+    "riskLevel": "high",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -139,6 +189,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:22:33.784Z",
     "packetHash": "007521adbb9f6af7029a6b74959f6f8ddcb478efe92e29139b7f152d150340f6",
     "proofHtml": "/proofs/proof_994d20739021467f.html",
@@ -149,6 +200,9 @@
     "proofPacketId": "proof_dc6c8b1975ac9c88",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 63,
     "riskFlags": [
@@ -156,6 +210,7 @@
       "GENERIC_RESPONSE",
       "MISSING_PUBLIC_FOOTPRINT"
     ],
+    "riskLevel": "high",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -164,6 +219,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:20:08.083Z",
     "packetHash": "45b4acdfae0f40bab235e165140156386a9a96223af7aadb3c4b9fc00b17a259",
     "proofHtml": "/proofs/proof_dc6c8b1975ac9c88.html",
@@ -174,12 +230,16 @@
     "proofPacketId": "proof_fc8fcdb996c6225b",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 72,
     "riskFlags": [
       "GENERIC_RESPONSE",
       "SENTINEL_WARNING"
     ],
+    "riskLevel": "medium",
     "aceServicesUsed": [
       "ace_serp_google_search",
       "ace_openai_chat_completions",
@@ -187,6 +247,7 @@
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:18:14.150Z",
     "packetHash": "52d6c0a8303b631756302806e224d9cbc1085364a0f7472573f7fb4d5024b903",
     "proofHtml": "/proofs/proof_fc8fcdb996c6225b.html",
@@ -197,12 +258,17 @@
     "proofPacketId": "proof_fbf379635ce3331f",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "free",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 77,
     "riskFlags": [],
+    "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:44:12.560Z",
     "packetHash": "7e7eb8645cd05cafc16f13ee667ffeeab0ed352bcdf33a347902939c1132b9e8",
     "proofHtml": "/proofs/proof_fbf379635ce3331f.html",
@@ -213,14 +279,19 @@
     "proofPacketId": "proof_012800eeedda85b7",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "warning",
     "overallScore": 75,
     "riskFlags": [],
+    "riskLevel": "medium",
     "aceServicesUsed": [
       "ace_openai_chat_completions"
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:43:25.658Z",
     "packetHash": "e0da5ebb1885b4340b0a8de28f17454102cfd3ed49612c426dfbec7644388cd5",
     "proofHtml": "/proofs/proof_012800eeedda85b7.html",
@@ -231,14 +302,19 @@
     "proofPacketId": "proof_8beba150bb717391",
     "targetName": "Syra",
     "targetAgentId": "29Mw1QJRYb8BwiR4iPRYGp276PHeoCzSQMHxUYQd3o47",
+    "toolName": "standard",
+    "category": "sap_agent",
+    "auditStatus": "completed",
     "verdict": "delivered",
     "overallScore": 85,
     "riskFlags": [],
+    "riskLevel": "low",
     "aceServicesUsed": [
       "ace_openai_chat_completions"
     ],
     "paymentStatus": "skipped",
     "paymentMethod": "x402",
+    "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:42:27.098Z",
     "packetHash": "26f17cdaf3a49379c9390fa271611b6e701dc57388397cedab8d92cf0391a49f",
     "proofHtml": "/proofs/proof_8beba150bb717391.html",

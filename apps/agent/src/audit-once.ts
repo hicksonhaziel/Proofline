@@ -1269,12 +1269,17 @@ interface ProofLedgerEntry {
   proofPacketId: string;
   targetName: string;
   targetAgentId: string;
+  toolName: string;
+  category: string;
+  auditStatus: string;
   verdict: string;
   overallScore: number;
   riskFlags: string[];
+  riskLevel: string;
   aceServicesUsed: string[];
   paymentStatus: string;
   paymentMethod: string;
+  paymentIntegrity: string;
   createdAt: string;
   packetHash: string | null;
   proofHtml: string;
@@ -1293,12 +1298,17 @@ async function updateProofLedger(
     proofPacketId: packet.proofPacketId,
     targetName: packet.targetAgent.name,
     targetAgentId: packet.targetAgent.agentId,
+    toolName: packet.targetAgent.toolName,
+    category: packet.targetAgent.category,
+    auditStatus: packet.auditStatus,
     verdict: packet.scores.verdict,
     overallScore: packet.scores.overall,
     riskFlags: packet.riskFlags,
+    riskLevel: ledgerRiskLevel(packet),
     aceServicesUsed: packet.aceAnalysis.servicesUsed,
     paymentStatus: payment?.status ?? "unknown",
     paymentMethod: payment?.method ?? "unknown",
+    paymentIntegrity: ledgerPaymentIntegrity(packet),
     createdAt: packet.createdAt,
     packetHash: packet.signature?.packetHash ?? null,
     proofHtml: `/proofs/${packet.proofPacketId}.html`,
@@ -1308,6 +1318,20 @@ async function updateProofLedger(
   const ledger = [entry, ...current.filter((item) => item.proofPacketId !== packet.proofPacketId)].slice(0, 100);
   await writeFile(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`, "utf8");
   return ledger;
+}
+
+function ledgerRiskLevel(packet: ExecutionProofPacket): string {
+  if (packet.scores.verdict === "failed" || packet.riskFlags.length >= 3) return "high";
+  if (packet.scores.verdict === "warning" || packet.riskFlags.length > 0) return "medium";
+  return "low";
+}
+
+function ledgerPaymentIntegrity(packet: ExecutionProofPacket): string {
+  const payment = packet.payments[0];
+  if (payment?.status === "settled" && payment.transactionHash) return "settled_with_hash";
+  if (payment?.status === "skipped") return "skipped_no_spend";
+  if (payment?.status === "failed") return "failed";
+  return "unverified";
 }
 
 async function readProofLedger(ledgerPath: string): Promise<ProofLedgerEntry[]> {

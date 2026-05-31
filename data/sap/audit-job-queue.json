@@ -1,0 +1,196 @@
+{
+  "generatedAt": "2026-05-31T01:19:58.420Z",
+  "totalJobs": 10,
+  "jobs": [
+    {
+      "auditJobId": "job_e30f9955-f007-4753-9088-9a8737c8aa6c",
+      "target": {
+        "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
+        "name": "antigravity_agent",
+        "toolId": "clawdmint-launch",
+        "toolName": "clawdmint-launch",
+        "description": "Antigravity AI Assistant agent for deploying Solana NFT collections.",
+        "category": "sap_agent",
+        "price": "0.000001 SOL",
+        "currency": "SOL",
+        "paymentMethod": "x402",
+        "endpoint": "https://clawdmint.xyz/api/x402/pricing",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_beff1296-a1f3-4a80-9c46-9537c3fecfba",
+      "target": {
+        "agentId": "7WES6mSvsw3YnMBBvFQotK2GczLMgUCCiKxJFgRXUbYh",
+        "name": "chainbard",
+        "toolId": "x402-standard",
+        "toolName": "x402-standard",
+        "description": "Hybrid Solana story-minter — autonomous curator + reactive x402 endpoint. Pay-per-mint USDC via x402; provenance-aware OG cards; ≥3 Ace services per story.",
+        "category": "sap_agent",
+        "price": "0.01 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://chainbard.vercel.app/api/mint/story",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_696b14fe-4637-4558-aa05-c2c41db004b7",
+      "target": {
+        "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+        "name": "Hatch",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "Official Hatcher assistant for product questions, CLI/docs help, agent troubleshooting, and community support.",
+        "category": "sap_agent",
+        "price": "0.001 USDC",
+        "currency": "USDC",
+        "paymentMethod": "sap_escrow",
+        "endpoint": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_e851e076-d5ef-46d3-bfd3-4f8ce0d15d02",
+      "target": {
+        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+        "name": "hyre",
+        "toolId": "basic",
+        "toolName": "basic",
+        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
+        "category": "sap_agent",
+        "price": "0.001 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_7c484df2-31b4-4967-a6fc-d1dd19be7801",
+      "target": {
+        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+        "name": "hyre",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
+        "category": "sap_agent",
+        "price": "0.008 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_017b56c3-2af0-45a6-b2d1-f749fa04ed93",
+      "target": {
+        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+        "name": "hyre",
+        "toolId": "premium",
+        "toolName": "premium",
+        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
+        "category": "sap_agent",
+        "price": "0.025 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_f840e4e5-53b3-42e1-adbd-ba88cbb9f14f",
+      "target": {
+        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+        "name": "Ocean",
+        "toolId": "basic",
+        "toolName": "basic",
+        "description": "Ocean agent",
+        "category": "sap_agent",
+        "price": "0.001 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_e683f44e-e43d-46ae-a6fd-dae2638010d1",
+      "target": {
+        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+        "name": "Ocean",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "Ocean agent",
+        "category": "sap_agent",
+        "price": "0.008 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_8c8cfb67-cbeb-4e94-b77a-2608f60bdb78",
+      "target": {
+        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+        "name": "Ocean",
+        "toolId": "premium",
+        "toolName": "premium",
+        "description": "Ocean agent",
+        "category": "sap_agent",
+        "price": "0.025 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    },
+    {
+      "auditJobId": "job_6721a4c7-020e-4021-a89a-1494665c5b1b",
+      "target": {
+        "agentId": "DDfMoM3P1gmDrVdCVoQ1gDeUr41haqCUh3Q1Q2rbGQ4t",
+        "name": "SolanaIntelAgent",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "Fully autonomous on-chain intelligence agent. Analyzes Solana ecosystem every 10 minutes using Ace Data Cloud AI services (LLM, image, audio). Settles all payments via x402 EscrowV2. Zero human input after startup.",
+        "category": "sap_agent",
+        "price": "0.000005 SOL",
+        "currency": "SOL",
+        "paymentMethod": "x402",
+        "endpoint": "https://github.com/yourusername/solana-intel-agent#x402",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-05-31T01:19:58.420Z",
+      "maxSpendUsdc": 0.03
+    }
+  ]
+}
