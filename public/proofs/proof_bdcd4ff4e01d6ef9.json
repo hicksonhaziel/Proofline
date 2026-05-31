@@ -1,5 +1,5 @@
 {
-  "proofPacketId": "proof_650cffa391db6366",
+  "proofPacketId": "proof_bdcd4ff4e01d6ef9",
   "version": "0.1",
   "auditStatus": "completed",
   "targetAgent": {
@@ -16,7 +16,7 @@
     "source": "sap_discovery"
   },
   "auditJob": {
-    "auditJobId": "audit_fc63b05a-c5ec-4ab8-abf0-4e87222680ab",
+    "auditJobId": "audit_e710fb4c-eeb3-44ff-a2e1-5973a668cd88",
     "target": {
       "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
       "name": "antigravity_agent",
@@ -31,15 +31,15 @@
       "source": "sap_discovery"
     },
     "status": "completed",
-    "createdAt": "2026-05-31T08:36:17.547Z",
-    "startedAt": "2026-05-31T08:36:17.547Z",
-    "completedAt": "2026-05-31T08:36:31.635Z",
+    "createdAt": "2026-05-31T02:16:26.558Z",
+    "startedAt": "2026-05-31T02:16:26.558Z",
+    "completedAt": "2026-05-31T02:16:38.336Z",
     "maxSpendUsdc": 0.03
   },
   "sentinelCheck": {
     "status": "healthy",
     "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
-    "checkedAt": "2026-05-31T08:36:17.667Z",
+    "checkedAt": "2026-05-31T02:16:26.701Z",
     "raw": {
       "mode": "synapse_sentinel_preflight",
       "target": {
@@ -63,7 +63,7 @@
             "connection": "keep-alive",
             "content-length": "148",
             "content-type": "application/json; charset=utf-8",
-            "date": "Sun, 31 May 2026 08:36:18 GMT",
+            "date": "Sun, 31 May 2026 02:16:27 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -76,7 +76,7 @@
             "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
             "usdcMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
           },
-          "latencyMs": 748,
+          "latencyMs": 861,
           "attempts": 1
         },
         "profile": {
@@ -88,7 +88,7 @@
             "connection": "keep-alive",
             "content-length": "417",
             "content-type": "application/json; charset=utf-8",
-            "date": "Sun, 31 May 2026 08:36:18 GMT",
+            "date": "Sun, 31 May 2026 02:16:28 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -111,7 +111,7 @@
               "depositorHeader": "x-sap-depositor"
             }
           },
-          "latencyMs": 607,
+          "latencyMs": 615,
           "attempts": 1
         },
         "tools": {
@@ -123,7 +123,7 @@
             "connection": "keep-alive",
             "content-length": "22792",
             "content-type": "application/json; charset=utf-8",
-            "date": "Sun, 31 May 2026 08:36:19 GMT",
+            "date": "Sun, 31 May 2026 02:16:28 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -209,7 +209,7 @@
             ],
             "note": "trimmed 102 tools from Sentinel response"
           },
-          "latencyMs": 434,
+          "latencyMs": 410,
           "attempts": 1
         },
         "unpaidToolCall": {
@@ -221,7 +221,7 @@
             "connection": "keep-alive",
             "content-length": "415",
             "content-type": "application/json; charset=utf-8",
-            "date": "Sun, 31 May 2026 08:36:19 GMT",
+            "date": "Sun, 31 May 2026 02:16:28 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -242,7 +242,7 @@
             "minEscrowDeposit": 10000000,
             "hint": "POST /payment/quote with {\"depositor\":\"<pubkey>\"} for an escrow plan, then retry with header \"x-sap-depositor: <pubkey>\""
           },
-          "latencyMs": 204,
+          "latencyMs": 216,
           "attempts": 1
         },
         "depositorToolCall": {
@@ -254,7 +254,7 @@
             "connection": "keep-alive",
             "content-length": "369",
             "content-type": "application/json; charset=utf-8",
-            "date": "Sun, 31 May 2026 08:36:20 GMT",
+            "date": "Sun, 31 May 2026 02:16:33 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -269,7 +269,7 @@
             "minEscrowDeposit": 10000000,
             "hint": "Open or top-up an escrow with client.escrowV2.create(merchantWallet, { escrowNonce: BN(<next free integer>), ... }) or escrowV2.deposit — the server scans nonces 0..16 automatically."
           },
-          "latencyMs": 1027,
+          "latencyMs": 4319,
           "attempts": 1
         },
         "endpointHead": {
@@ -279,22 +279,22 @@
           "ok": true,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "145",
+            "age": "0",
             "cache-control": "public,max-age=300",
-            "cache-status": "\"Netlify Edge\"; hit",
+            "cache-status": "\"Netlify Durable\"; fwd=stale; ttl=-280; stored, \"Netlify Edge\"; fwd=stale",
             "connection": "close",
             "content-encoding": "br",
             "content-type": "application/json",
-            "date": "Sun, 31 May 2026 08:36:22 GMT",
+            "date": "Sun, 31 May 2026 02:16:35 GMT",
             "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
             "server": "Netlify",
             "strict-transport-security": "max-age=31536000",
             "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
             "x-content-type-options": "nosniff",
-            "x-nf-request-id": "01KSYJTKXW2TAKMGNV419EBJV8"
+            "x-nf-request-id": "01KSXX35JX12ANNTA5JXJ18SMY"
           },
           "body": {},
-          "latencyMs": 1575,
+          "latencyMs": 2902,
           "attempts": 1
         },
         "endpointGet": null,
@@ -305,19 +305,19 @@
           "ok": true,
           "headers": {
             "access-control-allow-origin": "*",
-            "age": "2",
+            "age": "3",
             "cache-control": "no-cache",
             "cache-status": "\"Netlify Durable\"; fwd=bypass, \"Netlify Edge\"; fwd=miss",
             "content-encoding": "br",
             "content-type": "application/json",
-            "date": "Sun, 31 May 2026 08:36:23 GMT",
+            "date": "Sun, 31 May 2026 02:16:38 GMT",
             "netlify-vary": "query=__nextDataReq|_rsc,header=x-nextjs-data|x-next-debug-logging|next-router-prefetch|next-router-segment-prefetch|next-router-state-tree|next-url|rsc,cookie=__prerender_bypass|__next_preview_data",
             "server": "Netlify",
             "strict-transport-security": "max-age=31536000",
             "transfer-encoding": "chunked",
             "vary": "RSC,Next-Router-State-Tree,Next-Router-Prefetch,Accept-Encoding",
             "x-content-type-options": "nosniff",
-            "x-nf-request-id": "01KSYJTMHBZ4KCA9Z4GGA9TK5D"
+            "x-nf-request-id": "01KSXX38BRCYHJ0NQ0D5C3VCCE"
           },
           "body": {
             "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
@@ -448,7 +448,7 @@
               "execution_delegate_record_pda": "BBR6NXvd4xBJAw3Vbdpd8UBs9ERtT7ymN3utmPxJkFCX"
             }
           },
-          "latencyMs": 985,
+          "latencyMs": 2110,
           "attempts": 1
         }
       },
@@ -478,8 +478,8 @@
   },
   "payments": [
     {
-      "paymentId": "pay_22f2848c-9542-461f-9472-48fde83a1f93",
-      "auditJobId": "audit_fc63b05a-c5ec-4ab8-abf0-4e87222680ab",
+      "paymentId": "pay_d2940324cd01719e7bd1a8bb",
+      "auditJobId": "audit_e710fb4c-eeb3-44ff-a2e1-5973a668cd88",
       "provider": "sap",
       "method": "x402",
       "amount": "0.000001",
@@ -488,24 +488,12 @@
       "service": "antigravity_agent",
       "status": "failed",
       "receipt": "SAP escrow payments disabled by ENABLE_SAP_ESCROW=false.",
-      "createdAt": "2026-05-31T08:36:23.392Z"
-    },
-    {
-      "paymentId": "pay_fcd560a0-3c5e-4ac3-ac8d-76c2300bc974",
-      "auditJobId": "audit_fc63b05a-c5ec-4ab8-abf0-4e87222680ab",
-      "provider": "ace_data_cloud",
-      "method": "x402",
-      "amount": "0",
-      "currency": "USDC",
-      "service": "ace_data_cloud_order",
-      "status": "failed",
-      "receipt": "Ace x402 dry-run quote returned HTTP 401; no X-PAYMENT signature was sent. payload={\"status\":401,\"orderId\":\"test-order\",\"responseBody\":{\"detail\":{\"detail\":\"Given platform token not valid\",\"code\":\"token_not_valid\"},\"code\":\"token_not_valid\",\"trace_id\":\"75253e1d6479023128ed7f33a9bf8bfe\"}}",
-      "createdAt": "2026-05-31T08:36:31.628Z"
+      "createdAt": "2026-05-31T02:16:38.331Z"
     }
   ],
   "probeResult": {
-    "probeId": "probe_8db267fd-aeaf-4c59-81e7-fb79128f591c",
-    "auditJobId": "audit_fc63b05a-c5ec-4ab8-abf0-4e87222680ab",
+    "probeId": "probe_63a540ef-c334-419e-9452-e321f9153a56",
+    "auditJobId": "audit_e710fb4c-eeb3-44ff-a2e1-5973a668cd88",
     "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
     "targetToolId": "clawdmint-launch",
     "request": {
@@ -515,17 +503,17 @@
       "purpose": "Proofline one-shot audit probe"
     },
     "status": "failed",
-    "startedAt": "2026-05-31T08:36:31.632Z",
-    "completedAt": "2026-05-31T08:36:31.632Z",
+    "startedAt": "2026-05-31T02:16:38.335Z",
+    "completedAt": "2026-05-31T02:16:38.335Z",
     "error": "SAP escrow payments disabled by ENABLE_SAP_ESCROW=false."
   },
   "aceAnalysis": {
-    "analysisId": "ace_880fd3af-a9fe-4c89-8986-31939a928d1a",
-    "auditJobId": "audit_fc63b05a-c5ec-4ab8-abf0-4e87222680ab",
+    "analysisId": "ace_57b2a45c-355d-4ad0-9af9-476cf162eb04",
+    "auditJobId": "audit_e710fb4c-eeb3-44ff-a2e1-5973a668cd88",
     "servicesUsed": [],
     "riskFlags": [],
     "summary": "Ace API-key integrations are disabled. x402-only mode is active; enable a future x402-native Ace adapter instead.",
-    "createdAt": "2026-05-31T08:36:31.633Z"
+    "createdAt": "2026-05-31T02:16:38.335Z"
   },
   "scores": {
     "reliability": 20,
@@ -541,7 +529,7 @@
     "TOOL_ENDPOINT_UNREACHABLE"
   ],
   "artifacts": {},
-  "createdAt": "2026-05-31T08:36:31.635Z",
+  "createdAt": "2026-05-31T02:16:38.336Z",
   "auditorAgent": {
     "name": "Proofline",
     "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
@@ -549,9 +537,9 @@
   "signature": {
     "algorithm": "ed25519",
     "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
-    "packetHash": "f4fc3af531b0bcb1f3350f5647b850b20fb5b2e93f22969f66fc6d42bc94440f",
-    "signedPayload": "sha256:f4fc3af531b0bcb1f3350f5647b850b20fb5b2e93f22969f66fc6d42bc94440f",
-    "signatureBase64": "6t833uZ2b1kXrMr+AKJuc0TW8XFzaNsKAdliM4P6iBUx1ozoKh5TJ0DP9DVlthtnPVF+8aW3WXzVp9YzOALEAQ==",
-    "signedAt": "2026-05-31T08:36:31.671Z"
+    "packetHash": "a4d6e570df3f8ddb3a043274240b2d55c0fd66b40453016e60e17a496cc25118",
+    "signedPayload": "sha256:a4d6e570df3f8ddb3a043274240b2d55c0fd66b40453016e60e17a496cc25118",
+    "signatureBase64": "62y3hExS1HEWvfskcyRkC7JolLzmsFpm0oAXClYtH98NtSAUNFp7TSPV2PKlaw1K5eAMwwWV4dqbc5SDrQEEAA==",
+    "signedAt": "2026-05-31T02:16:38.368Z"
   }
 }

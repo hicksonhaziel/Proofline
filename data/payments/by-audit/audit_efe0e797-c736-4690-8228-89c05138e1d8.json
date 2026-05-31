@@ -1,0 +1,27 @@
+[
+  {
+    "paymentId": "pay_cdbce7e6-4c82-4b3d-8a91-a19ba30750a6",
+    "auditJobId": "audit_efe0e797-c736-4690-8228-89c05138e1d8",
+    "provider": "sap",
+    "method": "x402",
+    "amount": "0.000001",
+    "currency": "SOL",
+    "recipient": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+    "service": "antigravity_agent",
+    "status": "failed",
+    "receipt": "SAP escrow payments disabled by ENABLE_SAP_ESCROW=false.",
+    "createdAt": "2026-05-31T08:34:51.701Z"
+  },
+  {
+    "paymentId": "pay_5cc66e0a-5ac8-4902-a120-67b8e38b983d",
+    "auditJobId": "audit_efe0e797-c736-4690-8228-89c05138e1d8",
+    "provider": "ace_data_cloud",
+    "method": "x402",
+    "amount": "0",
+    "currency": "USDC",
+    "service": "ace_data_cloud_order",
+    "status": "failed",
+    "receipt": "Ace x402 payment not attempted; missing ACE_PLATFORM_TOKEN, ACE_X402_ORDER_ID.",
+    "createdAt": "2026-05-31T08:34:51.711Z"
+  }
+]

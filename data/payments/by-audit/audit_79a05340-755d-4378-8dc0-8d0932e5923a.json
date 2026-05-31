@@ -1,0 +1,13 @@
+{
+  "paymentId": "pay_3a08a4e3-e83a-4dc6-b70f-b0800ac7d4c0",
+  "auditJobId": "audit_79a05340-755d-4378-8dc0-8d0932e5923a",
+  "provider": "unknown",
+  "method": "x402",
+  "amount": "0.000001",
+  "currency": "SOL",
+  "service": "antigravity_agent",
+  "createdAt": "2026-05-31T02:19:14.796Z",
+  "recipient": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+  "status": "skipped",
+  "receipt": "Paid execution disabled; router did not attempt payment."
+}

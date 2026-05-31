@@ -8,7 +8,6 @@ import {
   type AceAnalysisResult,
   type AgentTarget,
   type ExecutionProofPacket,
-  type PaymentMethod,
   type PaymentReceipt,
   type ProbeResult,
   type RiskFlag,
@@ -25,6 +24,7 @@ import {
 import { loadConfig, safeConfigSummary } from "./config.js";
 import { loadKeypairFromFile } from "./keypair.js";
 import { createLogger } from "./logger.js";
+import { PaymentRouter } from "./payment-router.js";
 
 interface AuditTargetPlan {
   generatedAt?: string;
@@ -175,14 +175,29 @@ async function main(): Promise<void> {
     warnings: preflightGate.warnings,
   });
 
-  const payment = buildPaymentReceipt(auditJobId, plannedTarget, args.allowPaid, preflightGate);
+  const paymentRouter = new PaymentRouter(config, logger);
+  const payment = await paymentRouter.execute({
+    auditJobId,
+    allowPaid: args.allowPaid,
+    sentinelProceed: preflightGate.proceed,
+    target: toPaymentTarget(plannedTarget),
+  });
+  const aceX402Payment = preflightGate.proceed
+    ? await paymentRouter.executeAceX402({
+        auditJobId,
+        allowPaid: args.allowPaid,
+        service: "ace_data_cloud_order",
+      })
+    : undefined;
+  const payments = aceX402Payment ? [payment, aceX402Payment] : [payment];
   const probeResult = preflightGate.proceed
     ? await runProbe(auditJobId, target, plannedTarget, payment)
     : buildBlockedProbeResult(auditJobId, target, plannedTarget, preflightGate);
   const aceAnalysis = preflightGate.proceed
-    ? args.useAce
-      ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
-      : buildSkippedAceAnalysis(auditJobId)
+    ? buildSkippedAceAnalysis(
+        auditJobId,
+        "Ace API-key integrations are disabled. x402-only mode is active; enable a future x402-native Ace adapter instead.",
+      )
     : buildSkippedAceAnalysis(auditJobId, `Skipped: Sentinel preflight blocked execution (${preflightGate.reasons.join("; ")})`);
 
   const riskFlags = mergeRiskFlags(sentinelCheck, payment, probeResult, aceAnalysis);
@@ -211,7 +226,7 @@ async function main(): Promise<void> {
       maxSpendUsdc: config.limits.maxSpendPerAuditUsdc,
     },
     sentinelCheck,
-    payments: [payment],
+    payments,
     probeResult,
     aceAnalysis,
     scores,
@@ -347,6 +362,28 @@ function toAgentTarget(target: PlannedTarget): AgentTarget {
   };
 }
 
+function toPaymentTarget(target: PlannedTarget): {
+  name: string;
+  agentId: string;
+  wallet: string | null;
+  endpoint: string | null;
+  route: "x402" | "sap_escrow" | "instant" | "batched" | "unknown";
+  token: string;
+  pricePerCall: string | null;
+  pricePerCallDisplay: string | null;
+} {
+  return {
+    name: target.name,
+    agentId: target.pda,
+    wallet: target.wallet,
+    endpoint: target.endpoint,
+    route: target.route,
+    token: target.token,
+    pricePerCall: target.pricePerCall,
+    pricePerCallDisplay: target.pricePerCallDisplay,
+  };
+}
+
 async function runPreflight(
   target: PlannedTarget,
   sentinelAgentId: string,
@@ -401,60 +438,6 @@ async function runPreflight(
       gate,
     };
   }
-}
-
-function buildPaymentReceipt(
-  auditJobId: string,
-  target: PlannedTarget,
-  allowPaid: boolean,
-  preflightGate: SentinelGate,
-): PaymentReceipt {
-  const isFree = target.status === "free" || target.pricePerCall === "0";
-  const amount = target.pricePerCallDisplay?.split(" ")[0] ?? "0";
-  const currency = target.token === "unknown" ? "unknown" : target.token;
-  const method: PaymentMethod = target.route === "sap_escrow" ? "sap_escrow" : target.route === "x402" ? "x402" : "unknown";
-  const baseReceipt = {
-    paymentId: `pay_${randomUUID()}`,
-    auditJobId,
-    provider: "sap" as const,
-    method,
-    amount,
-    currency,
-    service: target.name,
-    createdAt: new Date().toISOString(),
-      ...(target.wallet ? { recipient: target.wallet } : {}),
-  };
-
-  if (!preflightGate.proceed) {
-    return {
-      ...baseReceipt,
-      status: "skipped",
-      receipt: `Sentinel preflight blocked paid execution: ${preflightGate.reasons.join("; ")}`,
-    };
-  }
-
-  if (isFree) {
-    return {
-      ...baseReceipt,
-      amount: "0",
-      status: "skipped",
-      receipt: "Free target; no payment required.",
-    };
-  }
-
-  if (!allowPaid) {
-    return {
-      ...baseReceipt,
-      status: "skipped",
-      receipt: "Paid execution disabled. Re-run with --allow-paid only after the payment adapter is verified.",
-    };
-  }
-
-  return {
-    ...baseReceipt,
-    status: "failed",
-    receipt: "Paid route requested, but this runner does not yet sign SAP/x402 payments. No funds were sent.",
-  };
 }
 
 function buildBlockedProbeResult(
@@ -566,6 +549,13 @@ async function runAceAnalysis(
   config: ReturnType<typeof loadConfig>,
 ): Promise<AceAnalysisResult> {
   const createdAt = new Date().toISOString();
+  if (!config.aceApiKey) {
+    return buildSkippedAceAnalysis(
+      auditJobId,
+      "ACE_API_KEY is not configured. Ace API-key integrations are disabled in x402-only mode.",
+    );
+  }
+
   const client = new AceDataCloudClient({
     apiKey: config.aceApiKey,
     ...(process.env.ACE_CHAT_MODEL ? { chatModel: process.env.ACE_CHAT_MODEL } : {}),
@@ -1771,6 +1761,19 @@ function buildLedgerPageHtml(entries: ProofLedgerEntry[]): string {
 
 function buildProofPageHtml(packet: ExecutionProofPacket, cardUrl: string | null): string {
   const payment = packet.payments[0];
+  const paymentRows =
+    packet.payments.length > 0
+      ? packet.payments
+          .map((item) => {
+            const proof = item.transactionHash ?? item.receipt ?? item.paymentId;
+            return `<div class="border border-outline-variant rounded p-3 flex flex-col gap-2 bg-surface-container-low">
+                <div class="flex justify-between items-center gap-3"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">${escapeHtml(item.provider)}</span><span class="${paymentTone(item.status)} font-mono-label text-mono-label">${escapeHtml(item.status)}</span></div>
+                <div class="flex justify-between items-center gap-3"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">${escapeHtml(item.method)}</span><span class="font-mono-data text-mono-data text-on-surface">${escapeHtml(`${item.amount} ${item.currency}`)}</span></div>
+                <div class="font-mono-data text-mono-data text-primary-container truncate">${escapeHtml(proof)}</div>
+              </div>`;
+          })
+          .join("")
+      : `<div class="font-body-md text-body-md text-on-surface-variant">No payment receipts recorded.</div>`;
   const serviceChips =
     packet.aceAnalysis.servicesUsed.length > 0
       ? packet.aceAnalysis.servicesUsed
@@ -1854,9 +1857,7 @@ function buildProofPageHtml(packet: ExecutionProofPacket, cardUrl: string | null
             <div class="flex flex-col gap-stack-md">
               <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm">
                 <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Payment Ledger</h2>
-                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Method</span><span class="font-body-md text-body-md text-on-surface">${escapeHtml(payment?.method ?? "none")}</span></div>
-                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Amount</span><span class="font-mono-data text-mono-data text-on-surface">${escapeHtml(payment ? `${payment.amount} ${payment.currency}` : "0")}</span></div>
-                <div class="flex justify-between items-center gap-4"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Tx Hash</span><span class="font-mono-data text-mono-data text-primary-container truncate">${escapeHtml(paymentProof ?? payment?.status ?? "none")}</span></div>
+                ${paymentRows}
               </div>
               <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm flex-grow">
                 <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Ace Usage Metrics</h2>

@@ -1,0 +1,13 @@
+{
+  "paymentId": "pay_7e8c5163-1441-426a-8ef1-453d010b887e",
+  "auditJobId": "audit_a017205e-dfb1-43f7-95b7-3d180a40c3db",
+  "provider": "sap",
+  "method": "x402",
+  "amount": "0.000001",
+  "currency": "SOL",
+  "recipient": "5nRT2WQEATY4dsjJYqUAhuPKtjB1fKMydzzLrrxKmPTp",
+  "service": "antigravity_agent",
+  "status": "failed",
+  "receipt": "SAP escrow payments disabled by ENABLE_SAP_ESCROW=false.",
+  "createdAt": "2026-05-31T02:19:14.588Z"
+}

@@ -1,15 +1,17 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { config as loadDotenv } from "dotenv";
+import { parse as parseDotenv } from "dotenv";
 
 export interface ProoflineConfig {
   solanaRpcUrl: string;
   synapseRpcUrl: string;
   sapKeypairPath: string;
   sentinelAgentId: string;
-  aceApiKey: string;
-  aceX402WalletKey: string;
+  aceApiKey: string | undefined;
+  acePlatformToken: string | undefined;
+  aceX402WalletKey: string | undefined;
   aceX402FacilitatorUrl: string | undefined;
+  aceX402OrderId: string | undefined;
   publicBaseUrl: string;
   prooflineAgentUri: string | undefined;
   prooflineX402Endpoint: string | undefined;
@@ -31,8 +33,9 @@ export interface ProoflineConfig {
 }
 
 export function loadConfig(): ProoflineConfig {
-  loadDotenvFile(".env");
-  loadDotenvFile(".env.local");
+  const protectedEnv = new Set(Object.keys(process.env));
+  loadDotenvFile(".env", protectedEnv);
+  loadDotenvFile(".env.local", protectedEnv);
 
   const missing = requiredEnvNames().filter((name) => !process.env[name]);
 
@@ -45,9 +48,11 @@ export function loadConfig(): ProoflineConfig {
     synapseRpcUrl: env("SYNAPSE_RPC_URL"),
     sapKeypairPath: env("SAP_KEYPAIR_PATH"),
     sentinelAgentId: env("SENTINEL_AGENT_ID"),
-    aceApiKey: env("ACE_API_KEY"),
-    aceX402WalletKey: env("ACE_X402_WALLET_KEY"),
+    aceApiKey: optionalEnv("ACE_API_KEY"),
+    acePlatformToken: optionalEnv("ACE_PLATFORM_TOKEN"),
+    aceX402WalletKey: optionalEnv("ACE_X402_WALLET_KEY"),
     aceX402FacilitatorUrl: optionalEnv("ACE_X402_FACILITATOR_URL"),
+    aceX402OrderId: optionalEnv("ACE_X402_ORDER_ID"),
     publicBaseUrl: env("PROOFLINE_PUBLIC_BASE_URL"),
     prooflineAgentUri: optionalEnv("PROOFLINE_AGENT_URI"),
     prooflineX402Endpoint: optionalEnv("PROOFLINE_X402_ENDPOINT"),
@@ -76,8 +81,10 @@ export function safeConfigSummary(config: ProoflineConfig): Record<string, unkno
     sapKeypairPath: config.sapKeypairPath,
     sentinelAgentId: config.sentinelAgentId,
     aceApiKey: maskSecret(config.aceApiKey),
+    acePlatformToken: maskSecret(config.acePlatformToken),
     aceX402WalletKey: maskSecret(config.aceX402WalletKey),
     aceX402FacilitatorUrl: config.aceX402FacilitatorUrl ? maskUrl(config.aceX402FacilitatorUrl) : undefined,
+    aceX402OrderId: config.aceX402OrderId ? "[set]" : "[missing]",
     publicBaseUrl: config.publicBaseUrl,
     prooflineAgentUri: config.prooflineAgentUri,
     prooflineX402Endpoint: config.prooflineX402Endpoint ? maskUrl(config.prooflineX402Endpoint) : undefined,
@@ -88,11 +95,16 @@ export function safeConfigSummary(config: ProoflineConfig): Record<string, unkno
   };
 }
 
-function loadDotenvFile(fileName: string): void {
+function loadDotenvFile(fileName: string, protectedEnv: Set<string>): void {
   const path = resolve(fileName);
 
   if (existsSync(path)) {
-    loadDotenv({ path, override: true });
+    const parsed = parseDotenv(readFileSync(path, "utf8"));
+
+    for (const [name, value] of Object.entries(parsed)) {
+      if (protectedEnv.has(name)) continue;
+      process.env[name] = value;
+    }
   }
 }
 
@@ -102,8 +114,6 @@ function requiredEnvNames(): string[] {
     "SYNAPSE_RPC_URL",
     "SAP_KEYPAIR_PATH",
     "SENTINEL_AGENT_ID",
-    "ACE_API_KEY",
-    "ACE_X402_WALLET_KEY",
     "PROOFLINE_PUBLIC_BASE_URL",
     "TARGET_AGENT_LIST",
   ];
@@ -150,8 +160,8 @@ function booleanEnv(name: string, fallback: boolean): boolean {
   return value.toLowerCase() === "true";
 }
 
-function maskSecret(value: string): string {
-  return value.length > 0 ? "[set]" : "[missing]";
+function maskSecret(value: string | undefined): string {
+  return value && value.length > 0 ? "[set]" : "[missing]";
 }
 
 function maskUrl(value: string): string {

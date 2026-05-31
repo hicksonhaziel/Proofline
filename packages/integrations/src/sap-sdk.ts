@@ -20,6 +20,12 @@ export interface SapSdk {
 export interface SapClientLike {
   connection: {
     getBalance(publicKey: unknown): Promise<number>;
+    getSignatureStatuses(signatures: string[]): Promise<{
+      value: Array<{
+        confirmationStatus?: "processed" | "confirmed" | "finalized" | null;
+        err?: unknown;
+      } | null>;
+    }>;
     simulateTransaction(transaction: unknown, config?: unknown): Promise<{
       value: {
         err: unknown;
