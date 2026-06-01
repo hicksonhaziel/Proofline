@@ -29,12 +29,6 @@ export interface PaymentContext {
   target: PaymentTarget;
 }
 
-export interface AceX402Context {
-  auditJobId: string;
-  allowPaid: boolean;
-  service: string;
-}
-
 interface PaymentProvider {
   readonly name: string;
   supports(target: PaymentTarget): boolean;
@@ -107,7 +101,7 @@ export class PaymentRouter {
     };
 
     if (!context.sentinelProceed) {
-      return this.persist({
+      return this.persistReceipt({
         ...baseReceipt,
         status: "skipped",
         receipt: "Sentinel preflight blocked payment flow.",
@@ -115,7 +109,7 @@ export class PaymentRouter {
     }
 
     if (!context.allowPaid) {
-      return this.persist({
+      return this.persistReceipt({
         ...baseReceipt,
         status: "skipped",
         receipt: "Paid execution disabled; router did not attempt payment.",
@@ -123,7 +117,7 @@ export class PaymentRouter {
     }
 
     if (isFreeTarget(context.target)) {
-      return this.persist({
+      return this.persistReceipt({
         ...baseReceipt,
         amount: "0",
         status: "skipped",
@@ -133,7 +127,7 @@ export class PaymentRouter {
 
     const budgetCheck = validateBudget(context.target, this.config.limits.maxSpendPerAuditUsdc);
     if (!budgetCheck.ok) {
-      return this.persist({
+      return this.persistReceipt({
         ...baseReceipt,
         status: "failed",
         receipt: budgetCheck.reason,
@@ -142,7 +136,7 @@ export class PaymentRouter {
 
     const provider = this.providers.find((item) => item.supports(context.target));
     if (!provider) {
-      return this.persist({
+      return this.persistReceipt({
         ...baseReceipt,
         status: "failed",
         receipt: `No payment provider supports target route=${context.target.route}, token=${context.target.token}`,
@@ -177,42 +171,10 @@ export class PaymentRouter {
       receipt = await provider.verifySettlement(receipt, providerContext);
     }
 
-    return this.persist(receipt);
+    return this.persistReceipt(receipt);
   }
 
-  async executeAceX402(context: AceX402Context): Promise<PaymentReceipt> {
-    const providerContext: ProviderContext = {
-      config: this.config,
-      target: {
-        name: context.service,
-        agentId: "ace_data_cloud",
-        wallet: null,
-        endpoint: "https://platform.acedata.cloud",
-        route: "x402",
-        token: "USDC",
-        pricePerCall: null,
-        pricePerCallDisplay: null,
-      },
-      auditJobId: context.auditJobId,
-      logger: this.logger,
-      mode: this.mode,
-      confirmSpend: this.confirmSpend,
-      maxCalls: this.maxCalls,
-      escrowNonce: this.escrowNonce,
-    };
-
-    return this.persist(
-      baseProviderReceipt(
-        providerContext,
-        "ace_data_cloud",
-        "skipped",
-        "Ace x402 is paid per Ace API request by AceDataCloudClient; no order payment is created.",
-        { amount: "0" },
-      ),
-    );
-  }
-
-  private async persist(receipt: PaymentReceipt): Promise<PaymentReceipt> {
+  async persistReceipt(receipt: PaymentReceipt): Promise<PaymentReceipt> {
     const ledgerPath = resolve("data/payments/receipts.jsonl");
     const perAuditPath = resolve("data/payments/by-audit", `${receipt.auditJobId}.json`);
     await mkdir(dirname(ledgerPath), { recursive: true });

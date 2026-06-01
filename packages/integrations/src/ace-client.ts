@@ -13,6 +13,7 @@ export interface AceClientOptions {
   x402PreferScheme?: "exact" | "upto";
   x402PaymentMode?: "dry-run" | "send";
   maxSpendPerRequestUsdc?: number;
+  maxTotalSpendUsdc?: number;
 }
 
 export interface AceServiceResult<T = unknown> {
@@ -34,7 +35,9 @@ export interface AceX402Payment {
   atomicAmount: string;
   asset: string;
   payTo: string;
+  payer?: string;
   transactionHash?: string;
+  responseHeaders?: Record<string, string>;
   paymentResponse?: unknown;
   paymentRequired?: unknown;
 }
@@ -95,6 +98,8 @@ export class AceDataCloudClient {
   private readonly x402PreferScheme: "exact" | "upto";
   private readonly x402PaymentMode: "dry-run" | "send";
   private readonly maxSpendPerRequestUsdc: number;
+  private readonly maxTotalSpendAtomic: bigint;
+  private x402SpentAtomic = 0n;
 
   constructor(options: AceClientOptions) {
     this.apiKey = options.apiKey;
@@ -106,6 +111,7 @@ export class AceDataCloudClient {
     this.x402PreferScheme = options.x402PreferScheme ?? "exact";
     this.x402PaymentMode = options.x402PaymentMode ?? "dry-run";
     this.maxSpendPerRequestUsdc = options.maxSpendPerRequestUsdc ?? 0.25;
+    this.maxTotalSpendAtomic = usdcToAtomic(options.maxTotalSpendUsdc ?? options.maxSpendPerRequestUsdc ?? 0.25);
 
     if (options.x402WalletKey) {
       this.x402Account = privateKeyToAccount(normalizeEvmPrivateKey(options.x402WalletKey));
@@ -350,7 +356,7 @@ export class AceDataCloudClient {
     }
 
     const quotedPayment = paymentFromRequirement(requirement, "quoted", payload);
-    const budget = validateX402Budget(requirement, this.maxSpendPerRequestUsdc);
+    const budget = validateX402Budget(requirement, this.maxSpendPerRequestUsdc, this.maxTotalSpendAtomic, this.x402SpentAtomic);
     if (!budget.ok) {
       return {
         payload,
@@ -372,6 +378,8 @@ export class AceDataCloudClient {
       };
     }
 
+    // The payment header signs the server's exact 402 requirement; the request
+    // body is retried unchanged so pricing and settlement stay bound together.
     const signer = await loadAceX402Signer();
     const envelope =
       requirement.scheme === "upto"
@@ -391,6 +399,11 @@ export class AceDataCloudClient {
     const paidPayload = (await readJsonOrText(paidResponse)) as T;
     const paymentResponse = parsePaymentResponseHeader(paidResponse);
     const transactionHash = inferTransactionHash(paymentResponse, paidResponse);
+    const responseHeaders = extractPaymentHeaders(paidResponse);
+
+    if (paidResponse.ok) {
+      this.x402SpentAtomic += BigInt(requirement.maxAmountRequired);
+    }
 
     return {
       response: paidResponse,
@@ -398,7 +411,9 @@ export class AceDataCloudClient {
       payment: {
         ...quotedPayment,
         status: paidResponse.ok ? "settled" : "failed",
+        ...(this.x402Account ? { payer: this.x402Account.address } : {}),
         ...(transactionHash ? { transactionHash } : {}),
+        ...(Object.keys(responseHeaders).length > 0 ? { responseHeaders } : {}),
         ...(paymentResponse ? { paymentResponse } : {}),
       },
     };
@@ -531,16 +546,33 @@ function paymentFromRequirement(
   };
 }
 
-function validateX402Budget(requirement: PaymentRequirement, maxSpendPerRequestUsdc: number): { ok: true } | { ok: false; reason: string } {
+function validateX402Budget(
+  requirement: PaymentRequirement,
+  maxSpendPerRequestUsdc: number,
+  maxTotalSpendAtomic: bigint,
+  alreadySpentAtomic: bigint,
+): { ok: true } | { ok: false; reason: string } {
   const atomicAmount = BigInt(requirement.maxAmountRequired);
-  const maxAtomicAmount = BigInt(Math.floor(maxSpendPerRequestUsdc * 1_000_000));
-  if (atomicAmount > maxAtomicAmount) {
+  const maxRequestAtomicAmount = usdcToAtomic(maxSpendPerRequestUsdc);
+  if (atomicAmount > maxRequestAtomicAmount) {
     return {
       ok: false,
       reason: `Ace x402 quote ${atomicUsdcToAmount(requirement.maxAmountRequired)} USDC exceeds per-request cap ${maxSpendPerRequestUsdc} USDC.`,
     };
   }
+
+  if (alreadySpentAtomic + atomicAmount > maxTotalSpendAtomic) {
+    return {
+      ok: false,
+      reason: `Ace x402 cumulative quote ${atomicUsdcToAmount((alreadySpentAtomic + atomicAmount).toString())} USDC exceeds audit cap ${atomicUsdcToAmount(maxTotalSpendAtomic.toString())} USDC.`,
+    };
+  }
+
   return { ok: true };
+}
+
+function usdcToAtomic(value: number): bigint {
+  return BigInt(Math.floor(value * 1_000_000));
 }
 
 function atomicUsdcToAmount(value: string): string {
@@ -569,6 +601,27 @@ function parsePaymentResponseHeader(response: Response): unknown {
       return raw;
     }
   }
+}
+
+function extractPaymentHeaders(response: Response): Record<string, string> {
+  const interesting = new Set([
+    "x-payment-response",
+    "x402-tx",
+    "x402_tx",
+    "x-request-id",
+    "x-trace-id",
+    "traceparent",
+  ]);
+  const headers: Record<string, string> = {};
+
+  for (const [key, value] of response.headers.entries()) {
+    const lower = key.toLowerCase();
+    if (interesting.has(lower) || lower.includes("payment") || lower.includes("x402")) {
+      headers[key] = value;
+    }
+  }
+
+  return headers;
 }
 
 function inferTransactionHash(paymentResponse: unknown, response: Response): string | undefined {

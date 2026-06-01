@@ -185,14 +185,16 @@ async function main(): Promise<void> {
   const probeResult = preflightGate.proceed
     ? await runProbe(auditJobId, target, plannedTarget, payment)
     : buildBlockedProbeResult(auditJobId, target, plannedTarget, preflightGate);
-  const aceAnalysis =
-    preflightGate.proceed && args.useAce
-      ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
-      : buildSkippedAceAnalysis(
-          auditJobId,
-          preflightGate.proceed ? "Ace analysis was skipped with --no-ace." : `Skipped: Sentinel preflight blocked execution (${preflightGate.reasons.join("; ")})`,
-        );
-  const payments = [payment, ...acePaymentReceiptsFromAnalysis(auditJobId, aceAnalysis)];
+  // Sentinel gates spending against the target agent. Ace analysis still runs
+  // on skipped probes so the audit can produce paid x402 evidence and a verdict.
+  const aceAnalysis = args.useAce
+    ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
+    : buildSkippedAceAnalysis(auditJobId, "Ace analysis was skipped with --no-ace.");
+  const acePaymentReceipts = acePaymentReceiptsFromAnalysis(auditJobId, aceAnalysis);
+  for (const receipt of acePaymentReceipts) {
+    await paymentRouter.persistReceipt(receipt);
+  }
+  const payments = [payment, ...acePaymentReceipts];
 
   const riskFlags = mergeRiskFlags(sentinelCheck, payment, probeResult, aceAnalysis);
   const scores = scoreExecution({
@@ -403,6 +405,8 @@ function acePaymentReceiptsFromAnalysis(auditJobId: string, aceAnalysis: AceAnal
           scheme: item.scheme,
           asset: item.asset,
           atomicAmount: item.atomicAmount,
+          payer: item.payer,
+          responseHeaders: item.responseHeaders,
           transactionHash,
           note:
             status === "pending"
@@ -517,10 +521,11 @@ async function runProbe(
   const startedAt = new Date().toISOString();
   const probeId = `probe_${randomUUID()}`;
   const request = {
-    method: "GET",
+    method: "HEAD+GET",
     url: target.endpoint,
     paid: payment.status === "settled",
     purpose: "Proofline one-shot audit probe",
+    probeTypes: ["liveness", "capability_match", "delivery_after_payment"],
   };
 
   if (payment.status === "failed") {
@@ -540,10 +545,39 @@ async function runProbe(
     return failedProbe;
   }
 
-  const observation = await observeUrl(target.endpoint, "GET");
-  const status = isReachableStatus(observation.status) ? "success" : "failed";
+  const livenessObservation = await observeUrl(target.endpoint, "HEAD");
+  const getObservation = await observeUrl(target.endpoint, "GET");
+  const status = isReachableStatus(livenessObservation.status) || isReachableStatus(getObservation.status) ? "success" : "failed";
+  const capabilityEvidence = extractCapabilityEvidence(getObservation);
   const response = {
-    ...observation,
+    probeTypeResults: [
+      {
+        type: "liveness",
+        ok: isReachableStatus(livenessObservation.status),
+        status: livenessObservation.status,
+        latencyMs: livenessObservation.latencyMs,
+      },
+      {
+        type: "capability_match",
+        ok: capabilityEvidence.hasUsableOutput,
+        status: getObservation.status,
+        evidence: capabilityEvidence,
+      },
+      {
+        type: "delivery_after_payment",
+        ok: payment.status === "settled" ? capabilityEvidence.hasUsableOutput : false,
+        status: getObservation.status,
+        paymentStatus: payment.status,
+        note:
+          payment.status === "settled"
+            ? "Checks whether the target produced usable output after payment."
+            : "Target payment was not settled, so delivery-after-payment is not claimed.",
+      },
+    ],
+    observations: {
+      liveness: livenessObservation,
+      execution: getObservation,
+    },
     targetMetadata: {
       pricingTier: plannedTarget.pricingTier,
       route: plannedTarget.route,
@@ -562,12 +596,12 @@ async function runProbe(
     request,
     response,
     status,
-    latencyMs: observation.latencyMs,
+    latencyMs: livenessObservation.latencyMs + (getObservation === livenessObservation ? 0 : getObservation.latencyMs),
     startedAt,
     completedAt: new Date().toISOString(),
   };
   if (status === "failed") {
-    result.error = observation.error ?? `HTTP status ${observation.status}`;
+    result.error = getObservation.error ?? livenessObservation.error ?? `HTTP status ${getObservation.status ?? livenessObservation.status}`;
   }
   return result;
 }
@@ -595,6 +629,7 @@ async function runAceAnalysis(
     x402PaymentMode: process.env.PAYMENT_MODE === "send" && process.env.PAYMENT_CONFIRM_SPEND === "true" ? "send" : "dry-run",
     x402PreferScheme: "exact",
     maxSpendPerRequestUsdc: config.limits.maxSpendPerAuditUsdc,
+    maxTotalSpendUsdc: config.limits.maxSpendPerAuditUsdc,
     ...(process.env.ACE_CHAT_MODEL ? { chatModel: process.env.ACE_CHAT_MODEL } : {}),
     ...(process.env.ACE_IMAGE_MODEL ? { imageModel: process.env.ACE_IMAGE_MODEL } : {}),
     timeoutMs: Number(process.env.ACE_TIMEOUT_MS ?? 180000),
@@ -672,6 +707,7 @@ async function runAceAnalysis(
     const servicesUsed = calls.filter((call) => call.ok).map((call) => call.service);
     const failedCalls = calls.filter((call) => !call.ok);
     const riskFlags = new Set<RiskFlag>(verdict.riskFlags);
+    const x402Payments = calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : []));
     if (!chat.ok) riskFlags.add("GENERIC_RESPONSE");
     if (!search.ok) riskFlags.add("MISSING_PUBLIC_FOOTPRINT");
 
@@ -698,7 +734,8 @@ async function runAceAnalysis(
           error: call.error,
           x402: call.x402,
         })),
-        x402Payments: calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : [])),
+        x402Payments,
+        x402Summary: summarizeAceX402Payments(x402Payments),
         artifacts,
         note: "servicesUsed contains only successful Ace Data Cloud service calls.",
       },
@@ -731,6 +768,7 @@ async function runAceAnalysis(
           x402: call.x402,
         })),
         x402Payments: calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : [])),
+        x402Summary: summarizeAceX402Payments(calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : []))),
         artifacts,
       },
       createdAt,
@@ -861,6 +899,30 @@ function buildAceSummary(verdict: AceVerdict, servicesUsed: string[], failedCall
       ? ` Failed Ace services: ${failedCalls.map((call) => `${call.service}${call.status ? ` HTTP ${call.status}` : ""}`).join(", ")}.`
       : "";
   return `${verdict.summary} Ace services used successfully: ${servicesUsed.length > 0 ? servicesUsed.join(", ") : "none"}.${failures}`;
+}
+
+function summarizeAceX402Payments(payments: Array<Record<string, unknown>>): Record<string, unknown> {
+  const settled = payments.filter((payment) => payment.status === "settled");
+  const quoted = payments.filter((payment) => payment.status === "quoted");
+  const failed = payments.filter((payment) => payment.status === "failed");
+  const totalSettledUsdc = settled.reduce((sum, payment) => {
+    const amount = typeof payment.amount === "string" ? Number(payment.amount) : 0;
+    return Number.isFinite(amount) ? sum + amount : sum;
+  }, 0);
+
+  return {
+    totalPayments: payments.length,
+    settled: settled.length,
+    quoted: quoted.length,
+    failed: failed.length,
+    totalSettledUsdc: Number(totalSettledUsdc.toFixed(6)),
+    services: payments.map((payment) => ({
+      service: payment.service,
+      status: payment.status,
+      amount: payment.amount,
+      transactionHash: payment.transactionHash,
+    })),
+  };
 }
 
 function shortCardText(value: string, maxLength: number): string {
@@ -1091,6 +1153,46 @@ function isReachableStatus(status: number | null): boolean {
   return status !== null && status >= 200 && status < 500;
 }
 
+function extractCapabilityEvidence(observation: HttpObservation): { hasUsableOutput: boolean; reason: string; preview?: unknown } {
+  if (!isReachableStatus(observation.status)) {
+    return {
+      hasUsableOutput: false,
+      reason: observation.error ?? `endpoint returned HTTP ${observation.status}`,
+    };
+  }
+
+  if (observation.status === 401 || observation.status === 402 || observation.status === 403) {
+    return {
+      hasUsableOutput: true,
+      reason: "endpoint returned a payment/auth-aware response, which is usable capability evidence before paid execution",
+      preview: observation.bodyPreview,
+    };
+  }
+
+  if (typeof observation.bodyPreview === "string") {
+    const text = observation.bodyPreview.trim();
+    return {
+      hasUsableOutput: text.length > 0,
+      reason: text.length > 0 ? "endpoint returned non-empty text output" : "endpoint returned empty text output",
+      preview: text.slice(0, 500),
+    };
+  }
+
+  if (isRecord(observation.bodyPreview)) {
+    return {
+      hasUsableOutput: Object.keys(observation.bodyPreview).length > 0,
+      reason: "endpoint returned structured output",
+      preview: observation.bodyPreview,
+    };
+  }
+
+  return {
+    hasUsableOutput: observation.ok,
+    reason: observation.ok ? "endpoint returned a successful response" : "endpoint response did not include usable output",
+    preview: observation.bodyPreview,
+  };
+}
+
 function extractAceContent(raw: unknown): string {
   if (!isRecord(raw)) return "";
   const choices = raw.choices;
@@ -1262,6 +1364,8 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
   const ledgerHtmlPath = resolve(publicDir, "index.html");
   const latestCardPath = resolve(publicDir, "latest-card.png");
   const proofCardPath = resolve(publicDir, `${packet.proofPacketId}-card.png`);
+  const latestSvgCardPath = resolve(publicDir, "latest-card.svg");
+  const proofSvgCardPath = resolve(publicDir, `${packet.proofPacketId}-card.svg`);
   const cardSourcePath = packet.artifacts.proofCardPath ? resolve(packet.artifacts.proofCardPath) : null;
 
   await writeFile(latestJsonPath, `${JSON.stringify(packet, null, 2)}\n`, "utf8");
@@ -1285,6 +1389,11 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
     } catch {
       publicCardUrl = null;
     }
+  } else {
+    const svg = buildProofCardSvg(packet);
+    await writeFile(latestSvgCardPath, svg, "utf8");
+    await writeFile(proofSvgCardPath, svg, "utf8");
+    publicCardUrl = `/proofs/${packet.proofPacketId}-card.svg`;
   }
 
   const html = buildProofPageHtml(packet, publicCardUrl);
@@ -1344,6 +1453,45 @@ async function pinRemoteProofCard(url: string, latestCardPath: string, proofCard
   } catch {
     return url;
   }
+}
+
+function buildProofCardSvg(packet: ExecutionProofPacket): string {
+  const width = 1200;
+  const height = 675;
+  const title = shortCardText(packet.targetAgent.name, 34);
+  const verdict = packet.scores.verdict.toUpperCase();
+  const score = String(packet.scores.overall);
+  const services = packet.aceAnalysis.servicesUsed.slice(0, 3).join(" / ") || "none";
+  const paymentSummary = ledgerPaymentSummary(packet);
+  const risks = packet.riskFlags.slice(0, 4).join(" / ") || "none";
+  const created = packet.createdAt.slice(0, 10);
+  const hash = packet.signature?.packetHash?.slice(0, 20) ?? "unsigned";
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Proofline execution proof card">
+  <rect width="1200" height="675" fill="#101215"/>
+  <rect x="36" y="36" width="1128" height="603" rx="18" fill="#17191c" stroke="#4d4637" stroke-width="2"/>
+  <text x="72" y="96" fill="#ffe08d" font-family="monospace" font-size="24" font-weight="700">PROOFLINE EXECUTION PROOF</text>
+  <text x="72" y="154" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="48" font-weight="700">${escapeSvg(title)}</text>
+  <text x="72" y="206" fill="#cac6bd" font-family="monospace" font-size="20">Proof ID ${escapeSvg(packet.proofPacketId)} / ${escapeSvg(created)}</text>
+  <rect x="72" y="254" width="270" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="96" y="302" fill="#cac6bd" font-family="monospace" font-size="18">VERDICT</text>
+  <text x="96" y="360" fill="#ffdf8a" font-family="Arial, sans-serif" font-size="40" font-weight="700">${escapeSvg(verdict)}</text>
+  <rect x="378" y="254" width="210" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="402" y="302" fill="#cac6bd" font-family="monospace" font-size="18">SCORE</text>
+  <text x="402" y="370" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="72" font-weight="700">${escapeSvg(score)}</text>
+  <text x="510" y="370" fill="#cac6bd" font-family="monospace" font-size="24">/100</text>
+  <rect x="624" y="254" width="468" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="648" y="302" fill="#cac6bd" font-family="monospace" font-size="18">PAYMENT</text>
+  <text x="648" y="350" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="30" font-weight="700">${escapeSvg(paymentSummary.status)}</text>
+  <text x="648" y="388" fill="#cac6bd" font-family="monospace" font-size="18">Ace ${escapeSvg(String(paymentSummary.acePaymentTotalUsdc))} USDC</text>
+  <text x="72" y="480" fill="#cac6bd" font-family="monospace" font-size="20">ACE SERVICES</text>
+  <text x="72" y="522" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="28">${escapeSvg(services)}</text>
+  <text x="72" y="580" fill="#cac6bd" font-family="monospace" font-size="20">RISKS</text>
+  <text x="72" y="616" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="24">${escapeSvg(shortCardText(risks, 78))}</text>
+  <text x="812" y="616" fill="#8f918f" font-family="monospace" font-size="18">sha256:${escapeSvg(hash)}</text>
+</svg>
+`;
 }
 
 async function rebuildPublicProofsFromStoredPackets(keypairPath: string): Promise<Record<string, string | null | number>> {
@@ -1413,6 +1561,7 @@ interface ProofLedgerEntry {
   paymentStatus: string;
   paymentMethod: string;
   paymentIntegrity: string;
+  acePaymentTotalUsdc?: number;
   createdAt: string;
   packetHash: string | null;
   proofHtml: string;
@@ -1426,7 +1575,7 @@ async function updateProofLedger(
   cardUrl: string | null,
 ): Promise<ProofLedgerEntry[]> {
   const current = await readProofLedger(ledgerPath);
-  const payment = packet.payments[0];
+  const paymentSummary = ledgerPaymentSummary(packet);
   const entry: ProofLedgerEntry = {
     proofPacketId: packet.proofPacketId,
     targetName: packet.targetAgent.name,
@@ -1439,9 +1588,10 @@ async function updateProofLedger(
     riskFlags: packet.riskFlags,
     riskLevel: ledgerRiskLevel(packet),
     aceServicesUsed: packet.aceAnalysis.servicesUsed,
-    paymentStatus: payment?.status ?? "unknown",
-    paymentMethod: payment?.method ?? "unknown",
+    paymentStatus: paymentSummary.status,
+    paymentMethod: paymentSummary.method,
     paymentIntegrity: ledgerPaymentIntegrity(packet),
+    ...(paymentSummary.acePaymentTotalUsdc > 0 ? { acePaymentTotalUsdc: paymentSummary.acePaymentTotalUsdc } : {}),
     createdAt: packet.createdAt,
     packetHash: packet.signature?.packetHash ?? null,
     proofHtml: `/proofs/${packet.proofPacketId}.html`,
@@ -1460,11 +1610,44 @@ function ledgerRiskLevel(packet: ExecutionProofPacket): string {
 }
 
 function ledgerPaymentIntegrity(packet: ExecutionProofPacket): string {
-  const payment = packet.payments[0];
-  if (payment?.status === "settled" && payment.transactionHash) return "settled_with_hash";
-  if (payment?.status === "skipped") return "skipped_no_spend";
-  if (payment?.status === "failed") return "failed";
+  const targetPayment = packet.payments.find((payment) => payment.provider !== "ace_data_cloud");
+  const acePayments = packet.payments.filter((payment) => payment.provider === "ace_data_cloud");
+  const settledAcePayments = acePayments.filter((payment) => payment.status === "settled");
+
+  if (targetPayment?.status === "settled" && targetPayment.transactionHash) return "target_settled_with_hash";
+  if (targetPayment?.status === "settled") return "target_settled";
+  if (targetPayment?.status === "failed") return "target_payment_failed";
+  if (settledAcePayments.length > 0 && targetPayment?.status === "skipped") return "ace_x402_settled_target_skipped";
+  if (settledAcePayments.length > 0) return "ace_x402_settled";
+  if (targetPayment?.status === "skipped") return "skipped_no_spend";
   return "unverified";
+}
+
+function ledgerPaymentSummary(packet: ExecutionProofPacket): { status: string; method: string; acePaymentTotalUsdc: number } {
+  const targetPayment = packet.payments.find((payment) => payment.provider !== "ace_data_cloud");
+  const acePayments = packet.payments.filter((payment) => payment.provider === "ace_data_cloud");
+  const settledAcePayments = acePayments.filter((payment) => payment.status === "settled");
+  const failedPayments = packet.payments.filter((payment) => payment.status === "failed");
+  const acePaymentTotalUsdc = settledAcePayments.reduce((sum, payment) => {
+    const amount = Number(payment.amount);
+    return Number.isFinite(amount) ? sum + amount : sum;
+  }, 0);
+
+  const status =
+    failedPayments.length > 0
+      ? "failed"
+      : settledAcePayments.length > 0 && targetPayment?.status === "skipped"
+        ? "ace_settled_target_skipped"
+        : settledAcePayments.length > 0
+          ? "settled"
+          : targetPayment?.status ?? "unknown";
+
+  const methods = [...new Set(packet.payments.map((payment) => `${payment.provider}:${payment.method}`))];
+  return {
+    status,
+    method: methods.length > 0 ? methods.join(",") : "unknown",
+    acePaymentTotalUsdc: Number(acePaymentTotalUsdc.toFixed(6)),
+  };
 }
 
 async function readProofLedger(ledgerPath: string): Promise<ProofLedgerEntry[]> {
@@ -1954,6 +2137,10 @@ function escapeHtml(value: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function escapeSvg(value: string): string {
+  return escapeHtml(value);
 }
 
 async function writeJson(path: string, value: unknown): Promise<string> {

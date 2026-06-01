@@ -1,99 +1,35 @@
 [
   {
-    "proofPacketId": "proof_650cffa391db6366",
-    "targetName": "antigravity_agent",
-    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
-    "toolName": "clawdmint-launch",
+    "proofPacketId": "proof_d7220b3d56267955",
+    "targetName": "hyre",
+    "targetAgentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
+    "toolName": "basic",
     "category": "sap_agent",
-    "auditStatus": "completed",
-    "verdict": "failed",
+    "auditStatus": "skipped",
+    "verdict": "warning",
     "overallScore": 35,
     "riskFlags": [
-      "PAYMENT_FAILED",
-      "TOOL_ENDPOINT_UNREACHABLE"
+      "TOOL_ENDPOINT_UNREACHABLE",
+      "CAPABILITY_MISMATCH",
+      "GENERIC_RESPONSE",
+      "SENTINEL_WARNING",
+      "MISSING_PUBLIC_FOOTPRINT"
     ],
     "riskLevel": "high",
-    "aceServicesUsed": [],
-    "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
-    "createdAt": "2026-05-31T08:36:31.635Z",
-    "packetHash": "f4fc3af531b0bcb1f3350f5647b850b20fb5b2e93f22969f66fc6d42bc94440f",
-    "proofHtml": "/proofs/proof_650cffa391db6366.html",
-    "proofJson": "/proofs/proof_650cffa391db6366.json",
-    "proofCard": null
-  },
-  {
-    "proofPacketId": "proof_b669467d99d4c1a5",
-    "targetName": "antigravity_agent",
-    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
-    "toolName": "clawdmint-launch",
-    "category": "sap_agent",
-    "auditStatus": "completed",
-    "verdict": "failed",
-    "overallScore": 35,
-    "riskFlags": [
-      "PAYMENT_FAILED",
-      "TOOL_ENDPOINT_UNREACHABLE"
+    "aceServicesUsed": [
+      "ace_serp_google_search",
+      "ace_openai_chat_completions",
+      "ace_localization_translate"
     ],
-    "riskLevel": "high",
-    "aceServicesUsed": [],
-    "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
-    "createdAt": "2026-05-31T08:35:54.520Z",
-    "packetHash": "88be7dbbf7a51734500b4a19d53b9d71d45c6cd0fdacb1dd9bad2f92fc10a7a5",
-    "proofHtml": "/proofs/proof_b669467d99d4c1a5.html",
-    "proofJson": "/proofs/proof_b669467d99d4c1a5.json",
-    "proofCard": null
-  },
-  {
-    "proofPacketId": "proof_5e3b073e7a1c71f8",
-    "targetName": "antigravity_agent",
-    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
-    "toolName": "clawdmint-launch",
-    "category": "sap_agent",
-    "auditStatus": "completed",
-    "verdict": "failed",
-    "overallScore": 35,
-    "riskFlags": [
-      "PAYMENT_FAILED",
-      "TOOL_ENDPOINT_UNREACHABLE"
-    ],
-    "riskLevel": "high",
-    "aceServicesUsed": [],
-    "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
-    "createdAt": "2026-05-31T08:34:51.715Z",
-    "packetHash": "23e369ab0c929c884861b73b78270852aca91016cd9f9c15c393c6aba909c0d8",
-    "proofHtml": "/proofs/proof_5e3b073e7a1c71f8.html",
-    "proofJson": "/proofs/proof_5e3b073e7a1c71f8.json",
-    "proofCard": null
-  },
-  {
-    "proofPacketId": "proof_c1dd35726bf2abaf",
-    "targetName": "antigravity_agent",
-    "targetAgentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
-    "toolName": "clawdmint-launch",
-    "category": "sap_agent",
-    "auditStatus": "completed",
-    "verdict": "failed",
-    "overallScore": 35,
-    "riskFlags": [
-      "PAYMENT_FAILED",
-      "TOOL_ENDPOINT_UNREACHABLE"
-    ],
-    "riskLevel": "high",
-    "aceServicesUsed": [],
-    "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
-    "createdAt": "2026-05-31T08:34:03.241Z",
-    "packetHash": "77bea0db50e189f4324671a4a0b0ef49a11c0fe84b447ab59e0b1142ff9be9be",
-    "proofHtml": "/proofs/proof_c1dd35726bf2abaf.html",
-    "proofJson": "/proofs/proof_c1dd35726bf2abaf.json",
-    "proofCard": null
+    "paymentStatus": "ace_settled_target_skipped",
+    "paymentMethod": "unknown:x402,ace_data_cloud:x402",
+    "paymentIntegrity": "ace_x402_settled_target_skipped",
+    "acePaymentTotalUsdc": 0.136147,
+    "createdAt": "2026-06-01T08:21:11.447Z",
+    "packetHash": "bd8fe38b6830bb6dbf1007b576f8abae1543d66ddec8cad1859cc3afc0aa238f",
+    "proofHtml": "/proofs/proof_d7220b3d56267955.html",
+    "proofJson": "/proofs/proof_d7220b3d56267955.json",
+    "proofCard": "/proofs/proof_d7220b3d56267955-card.svg"
   },
   {
     "proofPacketId": "proof_47fa29ae90cbf211",
@@ -111,13 +47,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T08:21:18.129Z",
     "packetHash": "b931310b92ac7a03d4347d4a6537512fc8fa40da34eaa4b7cce4064a6b813ae0",
     "proofHtml": "/proofs/proof_47fa29ae90cbf211.html",
     "proofJson": "/proofs/proof_47fa29ae90cbf211.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_47fa29ae90cbf211-card.svg"
   },
   {
     "proofPacketId": "proof_6daea3a28389da80",
@@ -132,13 +68,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "unknown:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T08:21:04.897Z",
     "packetHash": "c8f5b60230047c653dea5c502b8ce0f16b47b116499c421a77c4b1a62ac4ac66",
     "proofHtml": "/proofs/proof_6daea3a28389da80.html",
     "proofJson": "/proofs/proof_6daea3a28389da80.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_6daea3a28389da80-card.svg"
   },
   {
     "proofPacketId": "proof_0525a0ba832b6ea6",
@@ -153,13 +89,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "unknown:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T02:20:26.502Z",
     "packetHash": "7811f3ffdc6e7f70ac64295b40186581a688f6c50b896e3c74732ad9c80592aa",
     "proofHtml": "/proofs/proof_0525a0ba832b6ea6.html",
     "proofJson": "/proofs/proof_0525a0ba832b6ea6.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_0525a0ba832b6ea6-card.svg"
   },
   {
     "proofPacketId": "proof_95d6718e10307ccc",
@@ -174,13 +110,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "unknown:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T02:19:15.345Z",
     "packetHash": "994509c1fe41fb21d0c3a2efab0f51a135d34fdd29912d40d89f2d69af608aa6",
     "proofHtml": "/proofs/proof_95d6718e10307ccc.html",
     "proofJson": "/proofs/proof_95d6718e10307ccc.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_95d6718e10307ccc-card.svg"
   },
   {
     "proofPacketId": "proof_8e88b639e02698b8",
@@ -198,13 +134,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:19:14.593Z",
     "packetHash": "05bc480a14a607f6249e5cd3a8e4af48f9fbb538243914b3435384048b26a37f",
     "proofHtml": "/proofs/proof_8e88b639e02698b8.html",
     "proofJson": "/proofs/proof_8e88b639e02698b8.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_8e88b639e02698b8-card.svg"
   },
   {
     "proofPacketId": "proof_719c785fe838086a",
@@ -222,13 +158,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:17:39.656Z",
     "packetHash": "6fb0cc68bb12e96420da1b9adff6e4a2bbb89a88d3eac9a4166407bb7346a035",
     "proofHtml": "/proofs/proof_719c785fe838086a.html",
     "proofJson": "/proofs/proof_719c785fe838086a.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_719c785fe838086a-card.svg"
   },
   {
     "proofPacketId": "proof_3a0f2bd9eaeee53c",
@@ -246,13 +182,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:16:38.637Z",
     "packetHash": "70349f71bbf56be57f1b2819f17e5fa32d711aae9c8bd121c2c2b62da0aec591",
     "proofHtml": "/proofs/proof_3a0f2bd9eaeee53c.html",
     "proofJson": "/proofs/proof_3a0f2bd9eaeee53c.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_3a0f2bd9eaeee53c-card.svg"
   },
   {
     "proofPacketId": "proof_bdcd4ff4e01d6ef9",
@@ -270,13 +206,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:16:38.336Z",
     "packetHash": "a4d6e570df3f8ddb3a043274240b2d55c0fd66b40453016e60e17a496cc25118",
     "proofHtml": "/proofs/proof_bdcd4ff4e01d6ef9.html",
     "proofJson": "/proofs/proof_bdcd4ff4e01d6ef9.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_bdcd4ff4e01d6ef9-card.svg"
   },
   {
     "proofPacketId": "proof_4ea03e9f60c70be9",
@@ -294,13 +230,13 @@
     "riskLevel": "high",
     "aceServicesUsed": [],
     "paymentStatus": "failed",
-    "paymentMethod": "x402",
-    "paymentIntegrity": "failed",
+    "paymentMethod": "sap:x402",
+    "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:06:59.996Z",
     "packetHash": "398cba17ff6e22377c761e650df2cacc6bc05575bb827f0fb984ba11af1e7ca5",
     "proofHtml": "/proofs/proof_4ea03e9f60c70be9.html",
     "proofJson": "/proofs/proof_4ea03e9f60c70be9.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_4ea03e9f60c70be9-card.svg"
   },
   {
     "proofPacketId": "proof_d11283d6a9ae30ee",
@@ -315,13 +251,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:41.712Z",
     "packetHash": "1ac888a83262f86a6541586b01c60c400d4abf8f2cdf236982401f4d14b46fd8",
     "proofHtml": "/proofs/proof_d11283d6a9ae30ee.html",
     "proofJson": "/proofs/proof_d11283d6a9ae30ee.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_d11283d6a9ae30ee-card.svg"
   },
   {
     "proofPacketId": "proof_1e1165203bbc4d30",
@@ -338,13 +274,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:39.686Z",
     "packetHash": "23cb774ead07149e6a7cd0402d1ec77e9f655bef2dfaf858a3222971466bce43",
     "proofHtml": "/proofs/proof_1e1165203bbc4d30.html",
     "proofJson": "/proofs/proof_1e1165203bbc4d30.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_1e1165203bbc4d30-card.svg"
   },
   {
     "proofPacketId": "proof_3afd482eab143c6c",
@@ -359,13 +295,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:03.489Z",
     "packetHash": "1acba10cf1950dd1380fdda5a3e3a57368c72e92c8f0d0406c8494f96f74e4b9",
     "proofHtml": "/proofs/proof_3afd482eab143c6c.html",
     "proofJson": "/proofs/proof_3afd482eab143c6c.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_3afd482eab143c6c-card.svg"
   },
   {
     "proofPacketId": "proof_2aaecf54b119a7da",
@@ -380,13 +316,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:13:37.161Z",
     "packetHash": "038c23582c45125e68e526f3519a44ac4f7e0d2e2e3f077ba9bd171ee20d4fb7",
     "proofHtml": "/proofs/proof_2aaecf54b119a7da.html",
     "proofJson": "/proofs/proof_2aaecf54b119a7da.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_2aaecf54b119a7da-card.svg"
   },
   {
     "proofPacketId": "proof_37fbcd99e9872fc3",
@@ -410,7 +346,7 @@
       "ace_openai_images_edits"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-27T12:21:47.213Z",
     "packetHash": "f3617ecc7731f3f5d64a1dd28bbafb84f51fb09ac16312d2729fc3e9fa989977",
@@ -440,7 +376,7 @@
       "ace_openai_images_edits"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:07:32.972Z",
     "packetHash": "5d9c43c0535ce19061e47959a6d36c50169d6dc0794b3f393d4f51a8fb496ae9",
@@ -470,7 +406,7 @@
       "ace_openai_images_edits"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:02:03.735Z",
     "packetHash": "75482bf01d03c0f9da490e0ff0747d2cbae455824f9d03b3af94a2cd68637717",
@@ -498,13 +434,13 @@
       "ace_openai_images_edits"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T16:56:25.526Z",
     "packetHash": "c647388e77b62d1f5b5eb8d1b831fcc43f01f10037d9d51d7328dbbb1e4a317e",
     "proofHtml": "/proofs/proof_e363bee0d7e54936.html",
     "proofJson": "/proofs/proof_e363bee0d7e54936.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_e363bee0d7e54936-card.svg"
   },
   {
     "proofPacketId": "proof_4e8a2fcd361ca7a0",
@@ -526,7 +462,7 @@
       "ace_openai_images_generations"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:25:14.508Z",
     "packetHash": "acd74a0d719192e8e72a1a819d2b025691491a50ce30616bca206c287ae4da9b",
@@ -556,7 +492,7 @@
       "ace_openai_images_generations"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:22:33.784Z",
     "packetHash": "007521adbb9f6af7029a6b74959f6f8ddcb478efe92e29139b7f152d150340f6",
@@ -586,13 +522,13 @@
       "ace_openai_images_generations"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:20:08.083Z",
     "packetHash": "45b4acdfae0f40bab235e165140156386a9a96223af7aadb3c4b9fc00b17a259",
     "proofHtml": "/proofs/proof_dc6c8b1975ac9c88.html",
     "proofJson": "/proofs/proof_dc6c8b1975ac9c88.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_dc6c8b1975ac9c88-card.svg"
   },
   {
     "proofPacketId": "proof_fc8fcdb996c6225b",
@@ -614,13 +550,13 @@
       "ace_localization_translate"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:18:14.150Z",
     "packetHash": "52d6c0a8303b631756302806e224d9cbc1085364a0f7472573f7fb4d5024b903",
     "proofHtml": "/proofs/proof_fc8fcdb996c6225b.html",
     "proofJson": "/proofs/proof_fc8fcdb996c6225b.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_fc8fcdb996c6225b-card.svg"
   },
   {
     "proofPacketId": "proof_fbf379635ce3331f",
@@ -635,13 +571,13 @@
     "riskLevel": "medium",
     "aceServicesUsed": [],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:44:12.560Z",
     "packetHash": "7e7eb8645cd05cafc16f13ee667ffeeab0ed352bcdf33a347902939c1132b9e8",
     "proofHtml": "/proofs/proof_fbf379635ce3331f.html",
     "proofJson": "/proofs/proof_fbf379635ce3331f.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_fbf379635ce3331f-card.svg"
   },
   {
     "proofPacketId": "proof_012800eeedda85b7",
@@ -658,13 +594,13 @@
       "ace_openai_chat_completions"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:43:25.658Z",
     "packetHash": "e0da5ebb1885b4340b0a8de28f17454102cfd3ed49612c426dfbec7644388cd5",
     "proofHtml": "/proofs/proof_012800eeedda85b7.html",
     "proofJson": "/proofs/proof_012800eeedda85b7.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_012800eeedda85b7-card.svg"
   },
   {
     "proofPacketId": "proof_8beba150bb717391",
@@ -681,12 +617,12 @@
       "ace_openai_chat_completions"
     ],
     "paymentStatus": "skipped",
-    "paymentMethod": "x402",
+    "paymentMethod": "sap:x402",
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:42:27.098Z",
     "packetHash": "26f17cdaf3a49379c9390fa271611b6e701dc57388397cedab8d92cf0391a49f",
     "proofHtml": "/proofs/proof_8beba150bb717391.html",
     "proofJson": "/proofs/proof_8beba150bb717391.json",
-    "proofCard": null
+    "proofCard": "/proofs/proof_8beba150bb717391-card.svg"
   }
 ]

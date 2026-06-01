@@ -228,9 +228,11 @@
             <div class="flex flex-col gap-stack-md">
               <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm">
                 <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Payment Ledger</h2>
-                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Method</span><span class="font-body-md text-body-md text-on-surface">x402</span></div>
-                <div class="flex justify-between items-center"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Amount</span><span class="font-mono-data text-mono-data text-on-surface">0.000005 SOL</span></div>
-                <div class="flex justify-between items-center gap-4"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">Tx Hash</span><span class="font-mono-data text-mono-data text-primary-container truncate">Paid execution disabled. Re-run with --allow-paid only after the payment adapter is verified.</span></div>
+                <div class="border border-outline-variant rounded p-3 flex flex-col gap-2 bg-surface-container-low">
+                <div class="flex justify-between items-center gap-3"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">sap</span><span class="text-[#f6d372] font-mono-label text-mono-label">skipped</span></div>
+                <div class="flex justify-between items-center gap-3"><span class="font-mono-label text-mono-label text-on-surface-variant uppercase">x402</span><span class="font-mono-data text-mono-data text-on-surface">0.000005 SOL</span></div>
+                <div class="font-mono-data text-mono-data text-primary-container truncate">Paid execution disabled. Re-run with --allow-paid only after the payment adapter is verified.</div>
+              </div>
               </div>
               <div class="bg-surface border border-outline-variant rounded-lg p-stack-md flex flex-col gap-stack-sm flex-grow">
                 <h2 class="font-headline-sm text-headline-sm text-on-surface pb-stack-sm border-b border-surface-variant">Ace Usage Metrics</h2>
@@ -258,10 +260,10 @@
         <div class="md:col-span-5 lg:col-span-4 flex flex-col gap-stack-md relative">
           <div class="bg-[#101215] border border-[#242629] rounded-xl p-4 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden group">
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-container/10 via-background/0 to-transparent pointer-events-none"></div>
-            <div class="relative z-10 text-on-surface-variant">No proof card available</div>
+            <img alt="Proofline Execution Proof Packet proof_fc8fcdb996c6225b" class="relative z-10 max-w-full h-auto drop-shadow-2xl hover:scale-[1.02] transition-transform duration-500 ease-out" src="/proofs/proof_fc8fcdb996c6225b-card.svg" />
           </div>
           <div class="flex flex-col gap-3 w-full">
-            
+            <a class="w-full flex items-center justify-center gap-2 bg-primary-container text-on-primary-container font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-primary border border-transparent shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" href="/proofs/proof_fc8fcdb996c6225b-card.svg"><span class="material-symbols-outlined text-[18px]">download</span>Download Card</a>
             <div class="grid grid-cols-2 gap-3">
               <a class="w-full flex items-center justify-center gap-2 bg-transparent border border-outline-variant text-on-surface font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-surface-variant" href="/proofs/proof_fc8fcdb996c6225b.json"><span class="material-symbols-outlined text-[18px]">data_object</span>View JSON</a>
               <a class="w-full flex items-center justify-center gap-2 bg-transparent border border-outline-variant text-on-surface font-mono-label text-mono-label px-4 py-3 rounded uppercase tracking-wider active:scale-[0.98] transition-all hover:bg-surface-variant" href="/proofs/"><span class="material-symbols-outlined text-[18px]">account_tree</span>Open Ledger</a>

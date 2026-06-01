@@ -36,6 +36,7 @@ async function main(): Promise<void> {
     x402PaymentMode: paymentMode,
     x402PreferScheme: "exact",
     maxSpendPerRequestUsdc: config.limits.maxSpendPerAuditUsdc,
+    maxTotalSpendUsdc: config.limits.maxSpendPerAuditUsdc,
     timeoutMs: Number(process.env.ACE_TIMEOUT_MS ?? 120000),
   });
 

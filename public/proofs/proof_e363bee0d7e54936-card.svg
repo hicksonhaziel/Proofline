@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Proofline execution proof card">
+  <rect width="1200" height="675" fill="#101215"/>
+  <rect x="36" y="36" width="1128" height="603" rx="18" fill="#17191c" stroke="#4d4637" stroke-width="2"/>
+  <text x="72" y="96" fill="#ffe08d" font-family="monospace" font-size="24" font-weight="700">PROOFLINE EXECUTION PROOF</text>
+  <text x="72" y="154" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="48" font-weight="700">Syra</text>
+  <text x="72" y="206" fill="#cac6bd" font-family="monospace" font-size="20">Proof ID proof_e363bee0d7e54936 / 2026-05-26</text>
+  <rect x="72" y="254" width="270" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="96" y="302" fill="#cac6bd" font-family="monospace" font-size="18">VERDICT</text>
+  <text x="96" y="360" fill="#ffdf8a" font-family="Arial, sans-serif" font-size="40" font-weight="700">WARNING</text>
+  <rect x="378" y="254" width="210" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="402" y="302" fill="#cac6bd" font-family="monospace" font-size="18">SCORE</text>
+  <text x="402" y="370" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="72" font-weight="700">67</text>
+  <text x="510" y="370" fill="#cac6bd" font-family="monospace" font-size="24">/100</text>
+  <rect x="624" y="254" width="468" height="160" rx="12" fill="#1f2022" stroke="#4d4637"/>
+  <text x="648" y="302" fill="#cac6bd" font-family="monospace" font-size="18">PAYMENT</text>
+  <text x="648" y="350" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="30" font-weight="700">skipped</text>
+  <text x="648" y="388" fill="#cac6bd" font-family="monospace" font-size="18">Ace 0 USDC</text>
+  <text x="72" y="480" fill="#cac6bd" font-family="monospace" font-size="20">ACE SERVICES</text>
+  <text x="72" y="522" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="28">ace_serp_google_search / ace_openai_chat_completions / ace_localization_translate</text>
+  <text x="72" y="580" fill="#cac6bd" font-family="monospace" font-size="20">RISKS</text>
+  <text x="72" y="616" fill="#e3e2e5" font-family="Arial, sans-serif" font-size="24">GENERIC_RESPONSE</text>
+  <text x="812" y="616" fill="#8f918f" font-family="monospace" font-size="18">sha256:c647388e77b62d1f5b5e</text>
+</svg>
