@@ -1,9 +1,5 @@
 import anchor from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
-import { createWalletClient, http, publicActions, type Hex } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { base } from "viem/chains";
-import { decodeXPaymentResponse, wrapFetchWithPayment } from "x402-fetch";
 import { randomUUID } from "node:crypto";
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -88,7 +84,6 @@ export class PaymentRouter {
     this.confirmSpend = options.confirmSpend ?? envBoolean("PAYMENT_CONFIRM_SPEND", false);
 
     this.providers = [
-      new AceX402PaymentProvider(),
       new SapEscrowPaymentProvider(),
       new GenericX402PaymentProvider(),
     ];
@@ -206,29 +201,15 @@ export class PaymentRouter {
       escrowNonce: this.escrowNonce,
     };
 
-    if (!context.allowPaid) {
-      return this.persist(
-        baseProviderReceipt(providerContext, "ace_data_cloud", "skipped", "Ace x402 payment skipped; paid execution disabled.", {
-          amount: "0",
-        }),
-      );
-    }
-
-    const provider = new AceX402PaymentProvider();
-    const receipt = await withRetry(
-      () => provider.pay(providerContext),
-      this.retryAttempts,
-      this.retryDelayMs,
-      (error, attempt) => {
-        this.logger.warn("Ace x402 payment attempt failed", {
-          provider: provider.name,
-          attempt,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      },
+    return this.persist(
+      baseProviderReceipt(
+        providerContext,
+        "ace_data_cloud",
+        "skipped",
+        "Ace x402 is paid per Ace API request by AceDataCloudClient; no order payment is created.",
+        { amount: "0" },
+      ),
     );
-
-    return this.persist(receipt);
   }
 
   private async persist(receipt: PaymentReceipt): Promise<PaymentReceipt> {
@@ -277,171 +258,6 @@ function isPaymentReceipt(value: unknown): value is PaymentReceipt {
     typeof value.method === "string" &&
     typeof value.status === "string"
   );
-}
-
-class AceX402PaymentProvider implements PaymentProvider {
-  readonly name = "ace_x402_provider";
-
-  supports(target: PaymentTarget): boolean {
-    return target.agentId === "ace_data_cloud" && target.route === "x402";
-  }
-
-  async pay(context: ProviderContext): Promise<PaymentReceipt> {
-    const missing = [
-      context.config.acePlatformToken ? null : "ACE_PLATFORM_TOKEN",
-      context.config.aceX402WalletKey ? null : "ACE_X402_WALLET_KEY",
-      context.config.aceX402OrderId ? null : "ACE_X402_ORDER_ID",
-    ].filter((item): item is string => item !== null);
-
-    if (missing.length > 0) {
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        "failed",
-        `Ace x402 payment not attempted; missing ${missing.join(", ")}.`,
-        { amount: "0" },
-      );
-    }
-
-    const platformToken = context.config.acePlatformToken;
-    const walletKey = context.config.aceX402WalletKey;
-    const orderId = context.config.aceX402OrderId;
-    if (!platformToken || !walletKey || !orderId) {
-      return baseProviderReceipt(context, "ace_data_cloud", "failed", "Ace x402 config unexpectedly missing.", { amount: "0" });
-    }
-
-    const url = `https://platform.acedata.cloud/api/v1/orders/${encodeURIComponent(orderId)}/pay/`;
-    const headers = {
-      accept: "application/json",
-      authorization: `Bearer ${platformToken}`,
-      "content-type": "application/json",
-    };
-    const body = JSON.stringify({ pay_way: "X402" });
-    const maxAtomic = BigInt(Math.floor(context.config.limits.maxSpendPerAuditUsdc * 1_000_000));
-
-    if (context.mode === "dry-run") {
-      return this.quote(context, url, headers, body);
-    }
-
-    if (!context.confirmSpend) {
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        "failed",
-        "Ace x402 send mode blocked: PAYMENT_CONFIRM_SPEND is not true.",
-        { amount: "0" },
-      );
-    }
-
-    try {
-      const privateKey = normalizeEvmPrivateKey(walletKey);
-      const account = privateKeyToAccount(privateKey);
-      const walletClient = createWalletClient({
-        account,
-        chain: base,
-        transport: http(),
-      }).extend(publicActions);
-      const fetchWithPayment = wrapFetchWithPayment(
-        fetch,
-        walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
-        maxAtomic,
-      );
-      const response = await fetchWithPayment(url, {
-        method: "POST",
-        headers,
-        body,
-        signal: AbortSignal.timeout(120000),
-      });
-      const responseBody = await parseBody(response);
-      const paymentResponseHeader = response.headers.get("x-payment-response");
-      const decodedPaymentResponse = paymentResponseHeader ? decodeXPaymentResponse(paymentResponseHeader) : null;
-
-      if (!response.ok) {
-        return baseProviderReceipt(
-          context,
-          "ace_data_cloud",
-          "failed",
-          `Ace x402 payment failed: HTTP ${response.status}`,
-          {
-            amount: inferAceAmount(responseBody, decodedPaymentResponse),
-            receiptPayload: {
-              status: response.status,
-              responseBody,
-              xPaymentResponse: decodedPaymentResponse,
-            },
-          },
-        );
-      }
-
-      const transactionHash = inferTransactionHash(decodedPaymentResponse);
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        "settled",
-        "Ace x402 payment settled.",
-        {
-          amount: inferAceAmount(responseBody, decodedPaymentResponse),
-          confirmedAt: new Date().toISOString(),
-          ...(transactionHash ? { transactionHash } : {}),
-          receiptPayload: {
-            status: response.status,
-            orderId,
-            responseBody,
-            xPaymentResponse: decodedPaymentResponse,
-          },
-        },
-      );
-    } catch (error) {
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        "failed",
-        `Ace x402 payment error: ${error instanceof Error ? error.message : String(error)}`,
-        { amount: "0" },
-      );
-    }
-  }
-
-  private async quote(
-    context: ProviderContext,
-    url: string,
-    headers: Record<string, string>,
-    body: string,
-  ): Promise<PaymentReceipt> {
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body,
-        signal: AbortSignal.timeout(30000),
-      });
-      const responseBody = await parseBody(response);
-      const amount = inferAceAmount(responseBody, null);
-
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        response.status === 402 ? "pending" : response.ok ? "settled" : "failed",
-        `Ace x402 dry-run quote returned HTTP ${response.status}; no X-PAYMENT signature was sent.`,
-        {
-          amount,
-          receiptPayload: {
-            status: response.status,
-            orderId: context.config.aceX402OrderId,
-            responseBody,
-          },
-        },
-      );
-    } catch (error) {
-      return baseProviderReceipt(
-        context,
-        "ace_data_cloud",
-        "failed",
-        `Ace x402 quote failed: ${error instanceof Error ? error.message : String(error)}`,
-        { amount: "0" },
-      );
-    }
-  }
 }
 
 class SapEscrowPaymentProvider implements PaymentProvider {
@@ -853,60 +669,6 @@ async function parseBody(response: Response): Promise<unknown> {
   } catch {
     return text;
   }
-}
-
-function normalizeEvmPrivateKey(value: string): Hex {
-  const normalized = value.startsWith("0x") ? value : `0x${value}`;
-  if (!/^0x[0-9a-fA-F]{64}$/.test(normalized)) {
-    throw new Error("ACE_X402_WALLET_KEY must be a 32-byte EVM private key hex string.");
-  }
-  return normalized as Hex;
-}
-
-function inferAceAmount(responseBody: unknown, paymentResponse: unknown): string {
-  const atomicAmount =
-    findStringValue(paymentResponse, ["amount", "maxAmountRequired", "amountPaid", "value"]) ??
-    findStringValue(responseBody, ["maxAmountRequired", "amount", "amountPaid", "value"]);
-  const numeric = atomicAmount ? Number(atomicAmount) : NaN;
-
-  if (Number.isFinite(numeric) && numeric > 0) {
-    return String(numeric / 1_000_000);
-  }
-
-  return "0";
-}
-
-function inferTransactionHash(paymentResponse: unknown): string | undefined {
-  return (
-    findStringValue(paymentResponse, ["transaction", "transactionHash", "txHash", "hash"]) ??
-    findStringValue(paymentResponse, ["tx"])
-  );
-}
-
-function findStringValue(value: unknown, keys: string[]): string | undefined {
-  if (!isRecord(value)) {
-    return undefined;
-  }
-
-  for (const key of keys) {
-    const item = value[key];
-    if (typeof item === "string" && item.length > 0) return item;
-    if (typeof item === "number" && Number.isFinite(item)) return String(item);
-  }
-
-  for (const item of Object.values(value)) {
-    if (Array.isArray(item)) {
-      for (const child of item) {
-        const found = findStringValue(child, keys);
-        if (found) return found;
-      }
-    } else {
-      const found = findStringValue(item, keys);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
 }
 
 function safeOrigin(url: string): string | null {

@@ -182,23 +182,17 @@ async function main(): Promise<void> {
     sentinelProceed: preflightGate.proceed,
     target: toPaymentTarget(plannedTarget),
   });
-  const aceX402Payment = preflightGate.proceed
-    ? await paymentRouter.executeAceX402({
-        auditJobId,
-        allowPaid: args.allowPaid,
-        service: "ace_data_cloud_order",
-      })
-    : undefined;
-  const payments = aceX402Payment ? [payment, aceX402Payment] : [payment];
   const probeResult = preflightGate.proceed
     ? await runProbe(auditJobId, target, plannedTarget, payment)
     : buildBlockedProbeResult(auditJobId, target, plannedTarget, preflightGate);
-  const aceAnalysis = preflightGate.proceed
-    ? buildSkippedAceAnalysis(
-        auditJobId,
-        "Ace API-key integrations are disabled. x402-only mode is active; enable a future x402-native Ace adapter instead.",
-      )
-    : buildSkippedAceAnalysis(auditJobId, `Skipped: Sentinel preflight blocked execution (${preflightGate.reasons.join("; ")})`);
+  const aceAnalysis =
+    preflightGate.proceed && args.useAce
+      ? await runAceAnalysis(auditJobId, target, plannedTarget, sentinelCheck, payment, probeResult, config)
+      : buildSkippedAceAnalysis(
+          auditJobId,
+          preflightGate.proceed ? "Ace analysis was skipped with --no-ace." : `Skipped: Sentinel preflight blocked execution (${preflightGate.reasons.join("; ")})`,
+        );
+  const payments = [payment, ...acePaymentReceiptsFromAnalysis(auditJobId, aceAnalysis)];
 
   const riskFlags = mergeRiskFlags(sentinelCheck, payment, probeResult, aceAnalysis);
   const scores = scoreExecution({
@@ -384,6 +378,45 @@ function toPaymentTarget(target: PlannedTarget): {
   };
 }
 
+function acePaymentReceiptsFromAnalysis(auditJobId: string, aceAnalysis: AceAnalysisResult): PaymentReceipt[] {
+  const raw = isRecord(aceAnalysis.raw) ? aceAnalysis.raw : {};
+  const x402Payments = Array.isArray(raw.x402Payments) ? raw.x402Payments : [];
+
+  return x402Payments.filter(isRecord).map((item, index) => {
+    const status = item.status === "settled" ? "settled" : item.status === "failed" ? "failed" : "pending";
+    const transactionHash = typeof item.transactionHash === "string" ? item.transactionHash : undefined;
+    const createdAt = new Date().toISOString();
+    return {
+      paymentId: `pay_ace_${auditJobId}_${index + 1}`,
+      auditJobId,
+      provider: "ace_data_cloud",
+      method: "x402",
+      amount: typeof item.amount === "string" ? item.amount : "0",
+      currency: "USDC",
+      ...(typeof item.payTo === "string" && item.payTo.length > 0 ? { recipient: item.payTo } : {}),
+      service: typeof item.service === "string" ? item.service : "ace_data_cloud_api",
+      status,
+      receipt: JSON.stringify(
+        trimLargePayload({
+          endpoint: item.endpoint,
+          network: item.network,
+          scheme: item.scheme,
+          asset: item.asset,
+          atomicAmount: item.atomicAmount,
+          transactionHash,
+          note:
+            status === "pending"
+              ? "Ace x402 quote captured in dry-run mode; no X-Payment signature was sent."
+              : "Ace x402 per-request payment captured from API call.",
+        }),
+      ),
+      ...(transactionHash ? { transactionHash } : {}),
+      createdAt,
+      ...(status === "settled" ? { confirmedAt: createdAt } : {}),
+    } satisfies PaymentReceipt;
+  });
+}
+
 async function runPreflight(
   target: PlannedTarget,
   sentinelAgentId: string,
@@ -549,15 +582,19 @@ async function runAceAnalysis(
   config: ReturnType<typeof loadConfig>,
 ): Promise<AceAnalysisResult> {
   const createdAt = new Date().toISOString();
-  if (!config.aceApiKey) {
+  if (!config.aceApiKey && !config.aceX402WalletKey) {
     return buildSkippedAceAnalysis(
       auditJobId,
-      "ACE_API_KEY is not configured. Ace API-key integrations are disabled in x402-only mode.",
+      "Ace analysis requires either ACE_X402_WALLET_KEY for per-request x402 payment or ACE_API_KEY for legacy API-key mode.",
     );
   }
 
   const client = new AceDataCloudClient({
-    apiKey: config.aceApiKey,
+    ...(config.aceApiKey ? { apiKey: config.aceApiKey } : {}),
+    ...(config.aceX402WalletKey ? { x402WalletKey: config.aceX402WalletKey } : {}),
+    x402PaymentMode: process.env.PAYMENT_MODE === "send" && process.env.PAYMENT_CONFIRM_SPEND === "true" ? "send" : "dry-run",
+    x402PreferScheme: "exact",
+    maxSpendPerRequestUsdc: config.limits.maxSpendPerAuditUsdc,
     ...(process.env.ACE_CHAT_MODEL ? { chatModel: process.env.ACE_CHAT_MODEL } : {}),
     ...(process.env.ACE_IMAGE_MODEL ? { imageModel: process.env.ACE_IMAGE_MODEL } : {}),
     timeoutMs: Number(process.env.ACE_TIMEOUT_MS ?? 180000),
@@ -659,7 +696,9 @@ async function runAceAnalysis(
           status: call.status,
           latencyMs: call.latencyMs,
           error: call.error,
+          x402: call.x402,
         })),
+        x402Payments: calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : [])),
         artifacts,
         note: "servicesUsed contains only successful Ace Data Cloud service calls.",
       },
@@ -689,7 +728,9 @@ async function runAceAnalysis(
           status: call.status,
           latencyMs: call.latencyMs,
           error: call.error,
+          x402: call.x402,
         })),
+        x402Payments: calls.flatMap((call) => (call.x402 ? [{ service: call.service, endpoint: call.endpoint, ...call.x402 }] : [])),
         artifacts,
       },
       createdAt,

@@ -8,10 +8,8 @@ export interface ProoflineConfig {
   sapKeypairPath: string;
   sentinelAgentId: string;
   aceApiKey: string | undefined;
-  acePlatformToken: string | undefined;
   aceX402WalletKey: string | undefined;
   aceX402FacilitatorUrl: string | undefined;
-  aceX402OrderId: string | undefined;
   publicBaseUrl: string;
   prooflineAgentUri: string | undefined;
   prooflineX402Endpoint: string | undefined;
@@ -49,10 +47,8 @@ export function loadConfig(): ProoflineConfig {
     sapKeypairPath: env("SAP_KEYPAIR_PATH"),
     sentinelAgentId: env("SENTINEL_AGENT_ID"),
     aceApiKey: optionalEnv("ACE_API_KEY"),
-    acePlatformToken: optionalEnv("ACE_PLATFORM_TOKEN"),
     aceX402WalletKey: optionalEnv("ACE_X402_WALLET_KEY"),
     aceX402FacilitatorUrl: optionalEnv("ACE_X402_FACILITATOR_URL"),
-    aceX402OrderId: optionalEnv("ACE_X402_ORDER_ID"),
     publicBaseUrl: env("PROOFLINE_PUBLIC_BASE_URL"),
     prooflineAgentUri: optionalEnv("PROOFLINE_AGENT_URI"),
     prooflineX402Endpoint: optionalEnv("PROOFLINE_X402_ENDPOINT"),
@@ -81,10 +77,8 @@ export function safeConfigSummary(config: ProoflineConfig): Record<string, unkno
     sapKeypairPath: config.sapKeypairPath,
     sentinelAgentId: config.sentinelAgentId,
     aceApiKey: maskSecret(config.aceApiKey),
-    acePlatformToken: maskSecret(config.acePlatformToken),
     aceX402WalletKey: maskSecret(config.aceX402WalletKey),
     aceX402FacilitatorUrl: config.aceX402FacilitatorUrl ? maskUrl(config.aceX402FacilitatorUrl) : undefined,
-    aceX402OrderId: config.aceX402OrderId ? "[set]" : "[missing]",
     publicBaseUrl: config.publicBaseUrl,
     prooflineAgentUri: config.prooflineAgentUri,
     prooflineX402Endpoint: config.prooflineX402Endpoint ? maskUrl(config.prooflineX402Endpoint) : undefined,

@@ -12,6 +12,7 @@
     "sap:discover": "tsx apps/agent/src/sap-discover.ts",
     "sap:payment-plan": "tsx apps/agent/src/sap-payment-plan.ts",
     "sentinel:check": "tsx apps/agent/src/sentinel-check.ts",
+    "ace:x402:smoke": "tsx apps/agent/src/ace-x402-smoke.ts",
     "audit:once": "tsx apps/agent/src/audit-once.ts",
     "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
     "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",
@@ -23,6 +24,7 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@acedatacloud/x402-client": "^2026.531.5",
     "@oobe-protocol-labs/synapse-sap-sdk": "^0.18.0",
     "@solana/web3.js": "^1.98.4",
     "dotenv": "^16.4.7",
