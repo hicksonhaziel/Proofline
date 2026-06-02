@@ -1,28 +1,9 @@
 {
-  "generatedAt": "2026-05-31T01:19:58.420Z",
-  "totalJobs": 10,
+  "generatedAt": "2026-06-01T15:18:37.526Z",
+  "totalJobs": 11,
   "jobs": [
     {
-      "auditJobId": "job_e30f9955-f007-4753-9088-9a8737c8aa6c",
-      "target": {
-        "agentId": "ACfZDYE1dXXAA9HSXuPGwcPQwp6YmZrZTHofYaZAovHj",
-        "name": "antigravity_agent",
-        "toolId": "clawdmint-launch",
-        "toolName": "clawdmint-launch",
-        "description": "Antigravity AI Assistant agent for deploying Solana NFT collections.",
-        "category": "sap_agent",
-        "price": "0.000001 SOL",
-        "currency": "SOL",
-        "paymentMethod": "x402",
-        "endpoint": "https://clawdmint.xyz/api/x402/pricing",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
-    },
-    {
-      "auditJobId": "job_beff1296-a1f3-4a80-9c46-9537c3fecfba",
+      "auditJobId": "job_83dc10d6-8d27-4328-890f-4b8ec4795483",
       "target": {
         "agentId": "7WES6mSvsw3YnMBBvFQotK2GczLMgUCCiKxJFgRXUbYh",
         "name": "chainbard",
@@ -37,11 +18,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_696b14fe-4637-4558-aa05-c2c41db004b7",
+      "auditJobId": "job_bf2d8cb5-0d17-49f6-aea5-01cbff6e2eb0",
       "target": {
         "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
         "name": "Hatch",
@@ -56,30 +37,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_e851e076-d5ef-46d3-bfd3-4f8ce0d15d02",
-      "target": {
-        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
-        "name": "hyre",
-        "toolId": "basic",
-        "toolName": "basic",
-        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
-        "category": "sap_agent",
-        "price": "0.001 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
-    },
-    {
-      "auditJobId": "job_7c484df2-31b4-4967-a6fc-d1dd19be7801",
+      "auditJobId": "job_25f96203-f25f-447e-b539-2fc06eb1997f",
       "target": {
         "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
         "name": "hyre",
@@ -94,11 +56,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_017b56c3-2af0-45a6-b2d1-f749fa04ed93",
+      "auditJobId": "job_f7172097-6c11-4ce1-9d8d-eeb180bd540c",
       "target": {
         "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
         "name": "hyre",
@@ -113,11 +75,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_f840e4e5-53b3-42e1-adbd-ba88cbb9f14f",
+      "auditJobId": "job_c8b00f1c-57c6-455d-affe-5d7c76c7b44a",
       "target": {
         "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
         "name": "Ocean",
@@ -132,11 +94,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_e683f44e-e43d-46ae-a6fd-dae2638010d1",
+      "auditJobId": "job_9afe5d7c-2af2-4bae-9684-fb4f90783de6",
       "target": {
         "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
         "name": "Ocean",
@@ -151,11 +113,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_8c8cfb67-cbeb-4e94-b77a-2608f60bdb78",
+      "auditJobId": "job_5e15132a-8e38-4ee6-a06e-74cdb813102c",
       "target": {
         "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
         "name": "Ocean",
@@ -170,11 +132,30 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_6721a4c7-020e-4021-a89a-1494665c5b1b",
+      "auditJobId": "job_e7f9909e-1430-4990-a726-88b368ce0e8c",
+      "target": {
+        "agentId": "C63dGSLZvT3kyEv4Fp3VMnKR7PHWf2BjLTV8yB3au5PY",
+        "name": "Sol Agent — OOBE x Ace Data Cloud",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "Autonomous research agent. Discovers tools via SAP, calls Ace Data Cloud search + DeepSeek-V3 + nano-banana via x402 USDC settlements on Solana, and pings Synapse Sentinel as a final agent-to-agent step.",
+        "category": "sap_agent",
+        "price": "0.1 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://github.com/dymchenko/sol-agent",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
+    },
+    {
+      "auditJobId": "job_160611bc-e6e7-4970-86a4-8781c33eb3e2",
       "target": {
         "agentId": "DDfMoM3P1gmDrVdCVoQ1gDeUr41haqCUh3Q1Q2rbGQ4t",
         "name": "SolanaIntelAgent",
@@ -189,8 +170,46 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-05-31T01:19:58.420Z",
-      "maxSpendUsdc": 0.03
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
+    },
+    {
+      "auditJobId": "job_03fe4e70-e13a-4e51-a2ed-3477d0ec0e78",
+      "target": {
+        "agentId": "3xjV4yuGDcX5mLes1aCnZsvEjn56rtYtwzvM4Vw214aF",
+        "name": "Toly Agent",
+        "toolId": "standard",
+        "toolName": "standard",
+        "description": "toly agent",
+        "category": "sap_agent",
+        "price": "0.1255 USDC",
+        "currency": "USDC",
+        "paymentMethod": "x402",
+        "endpoint": "https://api.orbit-agents.com/x402/toly-agent/.well-known/x402",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
+    },
+    {
+      "auditJobId": "job_eb72ddbd-255a-40ee-9ef7-58b4958d246a",
+      "target": {
+        "agentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+        "name": "Pablito Settlement Sentinel",
+        "toolId": "demo",
+        "toolName": "demo",
+        "description": "Autonomous workflow sentinel: discovers workflow-analysis tools, executes a bounded AI classification task, and produces x402/SAP settlement proof. Demo-safe; no private data.",
+        "category": "sap_agent",
+        "price": "0.000001 SOL",
+        "currency": "SOL",
+        "paymentMethod": "x402",
+        "endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+        "source": "sap_discovery"
+      },
+      "status": "queued",
+      "createdAt": "2026-06-01T15:18:37.526Z",
+      "maxSpendUsdc": 0.35
     }
   ]
 }

@@ -1358,10 +1358,7 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
 
   const latestJsonPath = resolve(publicDir, "latest.json");
   const proofJsonPath = resolve(publicDir, `${packet.proofPacketId}.json`);
-  const latestHtmlPath = resolve(publicDir, "latest.html");
-  const proofHtmlPath = resolve(publicDir, `${packet.proofPacketId}.html`);
   const ledgerJsonPath = resolve(publicDir, "ledger.json");
-  const ledgerHtmlPath = resolve(publicDir, "index.html");
   const latestCardPath = resolve(publicDir, "latest-card.png");
   const proofCardPath = resolve(publicDir, `${packet.proofPacketId}-card.png`);
   const latestSvgCardPath = resolve(publicDir, "latest-card.svg");
@@ -1396,19 +1393,15 @@ async function publishPublicProofPacket(packet: ExecutionProofPacket): Promise<R
     publicCardUrl = `/proofs/${packet.proofPacketId}-card.svg`;
   }
 
-  const html = buildProofPageHtml(packet, publicCardUrl);
-  await writeFile(latestHtmlPath, html, "utf8");
-  await writeFile(proofHtmlPath, html, "utf8");
-  const ledger = await updateProofLedger(ledgerJsonPath, packet, publicCardUrl);
-  await writeFile(ledgerHtmlPath, buildLedgerPageHtml(ledger), "utf8");
+  await updateProofLedger(ledgerJsonPath, packet, publicCardUrl);
 
   return {
-    ledger: "/proofs/",
+    ledger: "/proofs",
     ledgerJson: "/proofs/ledger.json",
     latestJson: "/proofs/latest.json",
     proofJson: `/proofs/${packet.proofPacketId}.json`,
-    latestHtml: "/proofs/latest.html",
-    proofHtml: `/proofs/${packet.proofPacketId}.html`,
+    latestHtml: "/live",
+    proofHtml: `/proofs/${packet.proofPacketId}`,
     latestCard: publicCardUrl,
     proofCard: publicCardUrl,
   };
@@ -1424,6 +1417,7 @@ async function localizePacketProofCard(packet: ExecutionProofPacket): Promise<Ex
   await mkdir(publicDir, { recursive: true });
   const localCardPath = resolve(publicDir, `${packet.proofPacketId}-card.png`);
   const publicCardUrl = await pinRemoteProofCard(proofCardPath, resolve(publicDir, "latest-card.png"), localCardPath);
+  await preservePinnedProofCard(packet.auditJob.auditJobId, localCardPath, publicCardUrl);
 
   return {
     ...packet,
@@ -1432,6 +1426,20 @@ async function localizePacketProofCard(packet: ExecutionProofPacket): Promise<Ex
       proofCardPath: publicCardUrl,
     },
   };
+}
+
+async function preservePinnedProofCard(auditJobId: string, localCardPath: string, publicCardUrl: string): Promise<void> {
+  if (!publicCardUrl.startsWith("/proofs/")) {
+    return;
+  }
+
+  try {
+    const artifactCardPath = resolve("data/artifacts", auditJobId, "proof-card.png");
+    await mkdir(dirname(artifactCardPath), { recursive: true });
+    await copyFile(localCardPath, artifactCardPath);
+  } catch {
+    // Public proof publishing is the source of truth; artifact copy failure should not fail the audit.
+  }
 }
 
 async function pinRemoteProofCard(url: string, latestCardPath: string, proofCardPath: string): Promise<string> {
@@ -1594,7 +1602,7 @@ async function updateProofLedger(
     ...(paymentSummary.acePaymentTotalUsdc > 0 ? { acePaymentTotalUsdc: paymentSummary.acePaymentTotalUsdc } : {}),
     createdAt: packet.createdAt,
     packetHash: packet.signature?.packetHash ?? null,
-    proofHtml: `/proofs/${packet.proofPacketId}.html`,
+    proofHtml: `/proofs/${packet.proofPacketId}`,
     proofJson: `/proofs/${packet.proofPacketId}.json`,
     proofCard: cardUrl,
   };

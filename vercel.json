@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run web:build",
+  "outputDirectory": "apps/web/dist",
   "rewrites": [
     {
       "source": "/x402",
@@ -7,6 +9,30 @@
     {
       "source": "/x402/:path*",
       "destination": "/api/x402"
+    },
+    {
+      "source": "/live/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proofs",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proofs/:proofId(proof_[^\\.]+)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/payments",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ace",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/health",
+      "destination": "/index.html"
     }
   ],
   "headers": [

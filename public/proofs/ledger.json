@@ -1,5 +1,37 @@
 [
   {
+    "proofPacketId": "proof_3f83da6078095ec8",
+    "targetName": "Ocean",
+    "targetAgentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
+    "toolName": "basic",
+    "category": "sap_agent",
+    "auditStatus": "completed",
+    "verdict": "failed",
+    "overallScore": 49,
+    "riskFlags": [
+      "SENTINEL_WARNING",
+      "PRICE_TOO_HIGH",
+      "PAYMENT_FAILED",
+      "TOOL_ENDPOINT_UNREACHABLE"
+    ],
+    "riskLevel": "high",
+    "aceServicesUsed": [
+      "ace_serp_google_search",
+      "ace_openai_chat_completions",
+      "ace_localization_translate",
+      "ace_openai_images_edits"
+    ],
+    "paymentStatus": "failed",
+    "paymentMethod": "unknown:x402,ace_data_cloud:x402",
+    "paymentIntegrity": "target_payment_failed",
+    "acePaymentTotalUsdc": 0.15995,
+    "createdAt": "2026-06-01T15:53:57.230Z",
+    "packetHash": "0c5c81f043d9de0e3f2e7f45408db7db3ea07453af60cd80223a7f7bf309ad82",
+    "proofHtml": "/proofs/proof_3f83da6078095ec8",
+    "proofJson": "/proofs/proof_3f83da6078095ec8.json",
+    "proofCard": "/proofs/proof_3f83da6078095ec8-card.png"
+  },
+  {
     "proofPacketId": "proof_d7220b3d56267955",
     "targetName": "hyre",
     "targetAgentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
@@ -27,7 +59,7 @@
     "acePaymentTotalUsdc": 0.136147,
     "createdAt": "2026-06-01T08:21:11.447Z",
     "packetHash": "bd8fe38b6830bb6dbf1007b576f8abae1543d66ddec8cad1859cc3afc0aa238f",
-    "proofHtml": "/proofs/proof_d7220b3d56267955.html",
+    "proofHtml": "/proofs/proof_d7220b3d56267955",
     "proofJson": "/proofs/proof_d7220b3d56267955.json",
     "proofCard": "/proofs/proof_d7220b3d56267955-card.svg"
   },
@@ -51,7 +83,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T08:21:18.129Z",
     "packetHash": "b931310b92ac7a03d4347d4a6537512fc8fa40da34eaa4b7cce4064a6b813ae0",
-    "proofHtml": "/proofs/proof_47fa29ae90cbf211.html",
+    "proofHtml": "/proofs/proof_47fa29ae90cbf211",
     "proofJson": "/proofs/proof_47fa29ae90cbf211.json",
     "proofCard": "/proofs/proof_47fa29ae90cbf211-card.svg"
   },
@@ -72,7 +104,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T08:21:04.897Z",
     "packetHash": "c8f5b60230047c653dea5c502b8ce0f16b47b116499c421a77c4b1a62ac4ac66",
-    "proofHtml": "/proofs/proof_6daea3a28389da80.html",
+    "proofHtml": "/proofs/proof_6daea3a28389da80",
     "proofJson": "/proofs/proof_6daea3a28389da80.json",
     "proofCard": "/proofs/proof_6daea3a28389da80-card.svg"
   },
@@ -93,7 +125,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T02:20:26.502Z",
     "packetHash": "7811f3ffdc6e7f70ac64295b40186581a688f6c50b896e3c74732ad9c80592aa",
-    "proofHtml": "/proofs/proof_0525a0ba832b6ea6.html",
+    "proofHtml": "/proofs/proof_0525a0ba832b6ea6",
     "proofJson": "/proofs/proof_0525a0ba832b6ea6.json",
     "proofCard": "/proofs/proof_0525a0ba832b6ea6-card.svg"
   },
@@ -114,7 +146,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T02:19:15.345Z",
     "packetHash": "994509c1fe41fb21d0c3a2efab0f51a135d34fdd29912d40d89f2d69af608aa6",
-    "proofHtml": "/proofs/proof_95d6718e10307ccc.html",
+    "proofHtml": "/proofs/proof_95d6718e10307ccc",
     "proofJson": "/proofs/proof_95d6718e10307ccc.json",
     "proofCard": "/proofs/proof_95d6718e10307ccc-card.svg"
   },
@@ -138,7 +170,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:19:14.593Z",
     "packetHash": "05bc480a14a607f6249e5cd3a8e4af48f9fbb538243914b3435384048b26a37f",
-    "proofHtml": "/proofs/proof_8e88b639e02698b8.html",
+    "proofHtml": "/proofs/proof_8e88b639e02698b8",
     "proofJson": "/proofs/proof_8e88b639e02698b8.json",
     "proofCard": "/proofs/proof_8e88b639e02698b8-card.svg"
   },
@@ -162,7 +194,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:17:39.656Z",
     "packetHash": "6fb0cc68bb12e96420da1b9adff6e4a2bbb89a88d3eac9a4166407bb7346a035",
-    "proofHtml": "/proofs/proof_719c785fe838086a.html",
+    "proofHtml": "/proofs/proof_719c785fe838086a",
     "proofJson": "/proofs/proof_719c785fe838086a.json",
     "proofCard": "/proofs/proof_719c785fe838086a-card.svg"
   },
@@ -186,7 +218,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:16:38.637Z",
     "packetHash": "70349f71bbf56be57f1b2819f17e5fa32d711aae9c8bd121c2c2b62da0aec591",
-    "proofHtml": "/proofs/proof_3a0f2bd9eaeee53c.html",
+    "proofHtml": "/proofs/proof_3a0f2bd9eaeee53c",
     "proofJson": "/proofs/proof_3a0f2bd9eaeee53c.json",
     "proofCard": "/proofs/proof_3a0f2bd9eaeee53c-card.svg"
   },
@@ -210,7 +242,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:16:38.336Z",
     "packetHash": "a4d6e570df3f8ddb3a043274240b2d55c0fd66b40453016e60e17a496cc25118",
-    "proofHtml": "/proofs/proof_bdcd4ff4e01d6ef9.html",
+    "proofHtml": "/proofs/proof_bdcd4ff4e01d6ef9",
     "proofJson": "/proofs/proof_bdcd4ff4e01d6ef9.json",
     "proofCard": "/proofs/proof_bdcd4ff4e01d6ef9-card.svg"
   },
@@ -234,7 +266,7 @@
     "paymentIntegrity": "target_payment_failed",
     "createdAt": "2026-05-31T02:06:59.996Z",
     "packetHash": "398cba17ff6e22377c761e650df2cacc6bc05575bb827f0fb984ba11af1e7ca5",
-    "proofHtml": "/proofs/proof_4ea03e9f60c70be9.html",
+    "proofHtml": "/proofs/proof_4ea03e9f60c70be9",
     "proofJson": "/proofs/proof_4ea03e9f60c70be9.json",
     "proofCard": "/proofs/proof_4ea03e9f60c70be9-card.svg"
   },
@@ -255,7 +287,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:41.712Z",
     "packetHash": "1ac888a83262f86a6541586b01c60c400d4abf8f2cdf236982401f4d14b46fd8",
-    "proofHtml": "/proofs/proof_d11283d6a9ae30ee.html",
+    "proofHtml": "/proofs/proof_d11283d6a9ae30ee",
     "proofJson": "/proofs/proof_d11283d6a9ae30ee.json",
     "proofCard": "/proofs/proof_d11283d6a9ae30ee-card.svg"
   },
@@ -278,7 +310,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:39.686Z",
     "packetHash": "23cb774ead07149e6a7cd0402d1ec77e9f655bef2dfaf858a3222971466bce43",
-    "proofHtml": "/proofs/proof_1e1165203bbc4d30.html",
+    "proofHtml": "/proofs/proof_1e1165203bbc4d30",
     "proofJson": "/proofs/proof_1e1165203bbc4d30.json",
     "proofCard": "/proofs/proof_1e1165203bbc4d30-card.svg"
   },
@@ -299,7 +331,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:27:03.489Z",
     "packetHash": "1acba10cf1950dd1380fdda5a3e3a57368c72e92c8f0d0406c8494f96f74e4b9",
-    "proofHtml": "/proofs/proof_3afd482eab143c6c.html",
+    "proofHtml": "/proofs/proof_3afd482eab143c6c",
     "proofJson": "/proofs/proof_3afd482eab143c6c.json",
     "proofCard": "/proofs/proof_3afd482eab143c6c-card.svg"
   },
@@ -320,7 +352,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-31T01:13:37.161Z",
     "packetHash": "038c23582c45125e68e526f3519a44ac4f7e0d2e2e3f077ba9bd171ee20d4fb7",
-    "proofHtml": "/proofs/proof_2aaecf54b119a7da.html",
+    "proofHtml": "/proofs/proof_2aaecf54b119a7da",
     "proofJson": "/proofs/proof_2aaecf54b119a7da.json",
     "proofCard": "/proofs/proof_2aaecf54b119a7da-card.svg"
   },
@@ -350,7 +382,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-27T12:21:47.213Z",
     "packetHash": "f3617ecc7731f3f5d64a1dd28bbafb84f51fb09ac16312d2729fc3e9fa989977",
-    "proofHtml": "/proofs/proof_37fbcd99e9872fc3.html",
+    "proofHtml": "/proofs/proof_37fbcd99e9872fc3",
     "proofJson": "/proofs/proof_37fbcd99e9872fc3.json",
     "proofCard": "/proofs/proof_37fbcd99e9872fc3-card.png"
   },
@@ -380,7 +412,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:07:32.972Z",
     "packetHash": "5d9c43c0535ce19061e47959a6d36c50169d6dc0794b3f393d4f51a8fb496ae9",
-    "proofHtml": "/proofs/proof_84854b9e4cf2caa6.html",
+    "proofHtml": "/proofs/proof_84854b9e4cf2caa6",
     "proofJson": "/proofs/proof_84854b9e4cf2caa6.json",
     "proofCard": "/proofs/proof_84854b9e4cf2caa6-card.png"
   },
@@ -410,7 +442,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T17:02:03.735Z",
     "packetHash": "75482bf01d03c0f9da490e0ff0747d2cbae455824f9d03b3af94a2cd68637717",
-    "proofHtml": "/proofs/proof_dcb99f46c41be44f.html",
+    "proofHtml": "/proofs/proof_dcb99f46c41be44f",
     "proofJson": "/proofs/proof_dcb99f46c41be44f.json",
     "proofCard": "/proofs/proof_dcb99f46c41be44f-card.png"
   },
@@ -438,7 +470,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-26T16:56:25.526Z",
     "packetHash": "c647388e77b62d1f5b5eb8d1b831fcc43f01f10037d9d51d7328dbbb1e4a317e",
-    "proofHtml": "/proofs/proof_e363bee0d7e54936.html",
+    "proofHtml": "/proofs/proof_e363bee0d7e54936",
     "proofJson": "/proofs/proof_e363bee0d7e54936.json",
     "proofCard": "/proofs/proof_e363bee0d7e54936-card.svg"
   },
@@ -466,7 +498,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:25:14.508Z",
     "packetHash": "acd74a0d719192e8e72a1a819d2b025691491a50ce30616bca206c287ae4da9b",
-    "proofHtml": "/proofs/proof_4e8a2fcd361ca7a0.html",
+    "proofHtml": "/proofs/proof_4e8a2fcd361ca7a0",
     "proofJson": "/proofs/proof_4e8a2fcd361ca7a0.json",
     "proofCard": "/proofs/proof_4e8a2fcd361ca7a0-card.png"
   },
@@ -496,7 +528,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:22:33.784Z",
     "packetHash": "007521adbb9f6af7029a6b74959f6f8ddcb478efe92e29139b7f152d150340f6",
-    "proofHtml": "/proofs/proof_994d20739021467f.html",
+    "proofHtml": "/proofs/proof_994d20739021467f",
     "proofJson": "/proofs/proof_994d20739021467f.json",
     "proofCard": "/proofs/proof_994d20739021467f-card.png"
   },
@@ -526,7 +558,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:20:08.083Z",
     "packetHash": "45b4acdfae0f40bab235e165140156386a9a96223af7aadb3c4b9fc00b17a259",
-    "proofHtml": "/proofs/proof_dc6c8b1975ac9c88.html",
+    "proofHtml": "/proofs/proof_dc6c8b1975ac9c88",
     "proofJson": "/proofs/proof_dc6c8b1975ac9c88.json",
     "proofCard": "/proofs/proof_dc6c8b1975ac9c88-card.svg"
   },
@@ -554,7 +586,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T17:18:14.150Z",
     "packetHash": "52d6c0a8303b631756302806e224d9cbc1085364a0f7472573f7fb4d5024b903",
-    "proofHtml": "/proofs/proof_fc8fcdb996c6225b.html",
+    "proofHtml": "/proofs/proof_fc8fcdb996c6225b",
     "proofJson": "/proofs/proof_fc8fcdb996c6225b.json",
     "proofCard": "/proofs/proof_fc8fcdb996c6225b-card.svg"
   },
@@ -575,7 +607,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:44:12.560Z",
     "packetHash": "7e7eb8645cd05cafc16f13ee667ffeeab0ed352bcdf33a347902939c1132b9e8",
-    "proofHtml": "/proofs/proof_fbf379635ce3331f.html",
+    "proofHtml": "/proofs/proof_fbf379635ce3331f",
     "proofJson": "/proofs/proof_fbf379635ce3331f.json",
     "proofCard": "/proofs/proof_fbf379635ce3331f-card.svg"
   },
@@ -598,7 +630,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:43:25.658Z",
     "packetHash": "e0da5ebb1885b4340b0a8de28f17454102cfd3ed49612c426dfbec7644388cd5",
-    "proofHtml": "/proofs/proof_012800eeedda85b7.html",
+    "proofHtml": "/proofs/proof_012800eeedda85b7",
     "proofJson": "/proofs/proof_012800eeedda85b7.json",
     "proofCard": "/proofs/proof_012800eeedda85b7-card.svg"
   },
@@ -621,7 +653,7 @@
     "paymentIntegrity": "skipped_no_spend",
     "createdAt": "2026-05-24T12:42:27.098Z",
     "packetHash": "26f17cdaf3a49379c9390fa271611b6e701dc57388397cedab8d92cf0391a49f",
-    "proofHtml": "/proofs/proof_8beba150bb717391.html",
+    "proofHtml": "/proofs/proof_8beba150bb717391",
     "proofJson": "/proofs/proof_8beba150bb717391.json",
     "proofCard": "/proofs/proof_8beba150bb717391-card.svg"
   }

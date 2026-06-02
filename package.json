@@ -17,7 +17,11 @@
     "audit:once": "tsx apps/agent/src/audit-once.ts",
     "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
     "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",
-    "build": "tsc --noEmit",
+    "web:dev": "vite --config apps/web/vite.config.ts",
+    "web:build": "vite build --config apps/web/vite.config.ts",
+    "web:preview": "vite preview --config apps/web/vite.config.ts",
+    "web:check": "tsc --project apps/web/tsconfig.json --noEmit",
+    "build": "tsc --noEmit && npm run web:check && npm run web:build",
     "check": "tsc --noEmit",
     "typecheck": "tsc --noEmit"
   },
@@ -29,11 +33,20 @@
     "@oobe-protocol-labs/synapse-sap-sdk": "^0.18.0",
     "@solana/web3.js": "^1.98.4",
     "dotenv": "^16.4.7",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "viem": "^2.51.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.17",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite": "^8.0.16"
   }
 }
