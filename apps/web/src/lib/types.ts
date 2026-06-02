@@ -33,6 +33,7 @@ export interface PaymentReceipt {
   status?: string;
   receipt?: string;
   txHash?: string;
+  transactionHash?: string;
   createdAt?: string;
   confirmedAt?: string;
 }
@@ -70,8 +71,16 @@ export interface ProofPacket {
   probeResult?: {
     status?: string;
     deliveryStatus?: string;
+    request?: {
+      method?: string;
+      url?: string;
+      paid?: boolean;
+      purpose?: string;
+      probeTypes?: string[];
+    };
     outputPreview?: unknown;
     raw?: unknown;
+    error?: string;
     completedAt?: string;
   };
   aceAnalysis?: {
