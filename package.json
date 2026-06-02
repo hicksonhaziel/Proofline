@@ -6,6 +6,8 @@
   "description": "Autonomous paid execution auditor for SAP agents.",
   "scripts": {
     "agent": "tsx apps/agent/src/index.ts",
+    "agent:once": "tsx apps/agent/src/index.ts --once",
+    "agent:once:no-ace": "tsx apps/agent/src/index.ts --once --no-ace",
     "rpc:check": "tsx apps/agent/src/rpc-check.ts",
     "sap:register": "tsx apps/agent/src/sap-register.ts",
     "sap:publish-tools": "tsx apps/agent/src/sap-publish-tools.ts",

@@ -1,4 +1,4 @@
-import type { LedgerEntry, PaymentReceipt, ProofPacket } from "./types";
+import type { LedgerEntry, PaymentReceipt, ProofPacket, SchedulerHealth } from "./types";
 
 export async function loadLedger(): Promise<LedgerEntry[]> {
   const response = await fetch(`/proofs/ledger.json?ts=${Date.now()}`, { cache: "no-store" });
@@ -24,6 +24,13 @@ export async function loadProof(proofPacketId: string): Promise<ProofPacket> {
 export async function loadProofs(entries: LedgerEntry[]): Promise<ProofPacket[]> {
   const proofs = await Promise.allSettled(entries.map((entry) => loadProof(entry.proofPacketId)));
   return proofs.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []));
+}
+
+export async function loadSchedulerHealth(): Promise<SchedulerHealth | null> {
+  const response = await fetch(`/automation/health.json?ts=${Date.now()}`, { cache: "no-store" });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Unable to load scheduler health: ${response.status}`);
+  return (await response.json()) as SchedulerHealth;
 }
 
 export function parseReceipt(receipt?: string): Record<string, unknown> | null {

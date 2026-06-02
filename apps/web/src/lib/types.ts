@@ -137,3 +137,51 @@ export interface X402Summary {
     transactionHash?: string;
   }>;
 }
+
+export interface SchedulerHealth {
+  schedulerRunId?: string;
+  status?: string;
+  mode?: string;
+  updatedAt?: string;
+  startedAt?: string;
+  stoppedAt?: string;
+  currentCycle?: number;
+  intervalMinutes?: number;
+  paymentMode?: string;
+  allowPaid?: boolean;
+  queue?: {
+    total?: number;
+    eligible?: number;
+    skipped?: number;
+  };
+  budgets?: {
+    maxSpendPerAuditUsdc?: number;
+    maxSpendPerHourUsdc?: number;
+    maxSpendPerDayUsdc?: number;
+    spentLastHourUsdc?: number;
+    spentLastDayUsdc?: number;
+  };
+  retryPolicy?: {
+    maxFailedPaymentRetries?: number;
+    failedPaymentRetryWindowHours?: number;
+  };
+  lastDiscovery?: {
+    ok?: boolean;
+    completedAt?: string;
+    error?: string;
+  };
+  lastAudit?: {
+    ok?: boolean;
+    targetName?: string;
+    completedAt?: string;
+    error?: string;
+  };
+  decisions?: Array<{
+    targetName?: string;
+    targetAgentId?: string;
+    status?: string;
+    reason?: string;
+    auditJobId?: string;
+  }>;
+  shutdownReason?: string;
+}

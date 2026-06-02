@@ -1,56 +1,56 @@
 {
-  "proofPacketId": "proof_ac6b462bddcb50e7",
+  "proofPacketId": "proof_cb71919a5e37377a",
   "version": "0.1",
   "auditStatus": "skipped",
   "targetAgent": {
-    "agentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
-    "name": "Solana Newsroom Autonomous Agent",
-    "toolId": "default-x402",
-    "toolName": "default-x402",
+    "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+    "name": "Hatch",
+    "toolId": "standard",
+    "toolName": "standard",
     "description": "active, priced, endpoint present, and within budget",
     "category": "sap_agent",
-    "price": "0.1 USDC",
+    "price": "0.001 USDC",
     "currency": "USDC",
-    "paymentMethod": "x402",
-    "endpoint": "https://api.acedata.cloud",
+    "paymentMethod": "sap_escrow",
+    "endpoint": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
     "source": "sap_discovery"
   },
   "auditJob": {
-    "auditJobId": "audit_9d2e5a6b-72fc-49a1-b655-3fb211cf378d",
+    "auditJobId": "audit_b8e80d08-d7bd-4b5f-b85f-516a194df029",
     "target": {
-      "agentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
-      "name": "Solana Newsroom Autonomous Agent",
-      "toolId": "default-x402",
-      "toolName": "default-x402",
+      "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+      "name": "Hatch",
+      "toolId": "standard",
+      "toolName": "standard",
       "description": "active, priced, endpoint present, and within budget",
       "category": "sap_agent",
-      "price": "0.1 USDC",
+      "price": "0.001 USDC",
       "currency": "USDC",
-      "paymentMethod": "x402",
-      "endpoint": "https://api.acedata.cloud",
+      "paymentMethod": "sap_escrow",
+      "endpoint": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
       "source": "sap_discovery"
     },
     "status": "skipped",
-    "createdAt": "2026-06-02T13:20:18.017Z",
-    "startedAt": "2026-06-02T13:20:18.017Z",
-    "completedAt": "2026-06-02T13:20:30.880Z",
+    "createdAt": "2026-06-02T13:18:31.972Z",
+    "startedAt": "2026-06-02T13:18:31.972Z",
+    "completedAt": "2026-06-02T13:18:41.081Z",
     "maxSpendUsdc": 0.35
   },
   "sentinelCheck": {
     "status": "warning",
     "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
-    "checkedAt": "2026-06-02T13:20:18.154Z",
+    "checkedAt": "2026-06-02T13:18:32.125Z",
     "raw": {
       "mode": "synapse_sentinel_preflight",
       "target": {
-        "agentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
-        "name": "Solana Newsroom Autonomous Agent",
-        "endpoint": "https://api.acedata.cloud",
-        "agentUri": null,
-        "pricePerCall": "100000",
-        "pricePerCallDisplay": "0.1 USDC",
+        "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+        "name": "Hatch",
+        "endpoint": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
+        "agentUri": "https://api.hatcher.host/agents/cmp2dohkb00jtlsvsq1m5hriq/solana-metadata.json",
+        "pricePerCall": "1000",
+        "pricePerCallDisplay": "0.001 USDC",
         "token": "USDC",
-        "route": "x402"
+        "route": "sap_escrow"
       },
       "selectedTool": "spl-token_getBalance",
       "calls": {
@@ -63,7 +63,7 @@
             "connection": "keep-alive",
             "content-length": "148",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:18 GMT",
+            "date": "Tue, 02 Jun 2026 13:18:32 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -76,7 +76,7 @@
             "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
             "usdcMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
           },
-          "latencyMs": 808,
+          "latencyMs": 732,
           "attempts": 1
         },
         "profile": {
@@ -88,7 +88,7 @@
             "connection": "keep-alive",
             "content-length": "417",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:19 GMT",
+            "date": "Tue, 02 Jun 2026 13:18:33 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -111,7 +111,7 @@
               "depositorHeader": "x-sap-depositor"
             }
           },
-          "latencyMs": 564,
+          "latencyMs": 597,
           "attempts": 1
         },
         "tools": {
@@ -123,7 +123,7 @@
             "connection": "keep-alive",
             "content-length": "22792",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:19 GMT",
+            "date": "Tue, 02 Jun 2026 13:18:33 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -209,7 +209,7 @@
             ],
             "note": "trimmed 102 tools from Sentinel response"
           },
-          "latencyMs": 463,
+          "latencyMs": 351,
           "attempts": 1
         },
         "unpaidToolCall": {
@@ -221,7 +221,7 @@
             "connection": "keep-alive",
             "content-length": "415",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:20 GMT",
+            "date": "Tue, 02 Jun 2026 13:18:33 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -242,7 +242,7 @@
             "minEscrowDeposit": 10000000,
             "hint": "POST /payment/quote with {\"depositor\":\"<pubkey>\"} for an escrow plan, then retry with header \"x-sap-depositor: <pubkey>\""
           },
-          "latencyMs": 203,
+          "latencyMs": 218,
           "attempts": 1
         },
         "depositorToolCall": {
@@ -254,7 +254,7 @@
             "connection": "keep-alive",
             "content-length": "369",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:24 GMT",
+            "date": "Tue, 02 Jun 2026 13:18:38 GMT",
             "referrer-policy": "strict-origin-when-cross-origin",
             "server": "nginx/1.24.0 (Ubuntu)",
             "strict-transport-security": "max-age=31536000; includeSubDomains",
@@ -269,30 +269,119 @@
             "minEscrowDeposit": 10000000,
             "hint": "Open or top-up an escrow with client.escrowV2.create(merchantWallet, { escrowNonce: BN(<next free integer>), ... }) or escrowV2.deposit — the server scans nonces 0..16 automatically."
           },
-          "latencyMs": 4128,
+          "latencyMs": 4638,
           "attempts": 1
         },
         "endpointHead": {
-          "url": "https://api.acedata.cloud",
+          "url": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
           "method": "HEAD",
           "status": 404,
           "ok": false,
           "headers": {
-            "access-control-allow-origin": "*",
+            "access-control-allow-credentials": "true",
+            "access-control-allow-origin": "https://hatcher.host",
+            "access-control-expose-headers": "X-Request-ID, X-Response-Time, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset",
+            "alt-svc": "h3=\":443\"; ma=86400",
+            "cf-cache-status": "DYNAMIC",
+            "cf-ray": "a056becd2ef6413c-LHR",
             "connection": "close",
-            "content-length": "48",
+            "content-encoding": "br",
             "content-type": "application/json; charset=utf-8",
-            "date": "Tue, 02 Jun 2026 13:20:30 GMT",
-            "server": "kong/2.5.1",
-            "vary": "Origin",
-            "x-kong-response-latency": "0"
+            "cross-origin-opener-policy": "same-origin",
+            "cross-origin-resource-policy": "same-origin",
+            "date": "Tue, 02 Jun 2026 13:18:40 GMT",
+            "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+            "origin-agent-cluster": "?1",
+            "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(self)",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=na7VVpouNBjZ%2BaAsP1QUnToxnnWzUB91mgpAuU1MIxW0BIC4Q4hM9a10tzwRITorCPmL94WyaJawXN5IbLKMyy7iClI%2BBACKyLbhLkgmAjHp6X%2BIzaGeqjWnEgR7SpxXWmD%2F\"}]}",
+            "server": "cloudflare",
+            "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-download-options": "noopen",
+            "x-frame-options": "DENY",
+            "x-permitted-cross-domain-policies": "none",
+            "x-request-id": "8793bf1d-6a1f-4617-b611-6d13a3e9ca28",
+            "x-response-time": "0.21ms",
+            "x-xss-protection": "0"
           },
           "body": {},
-          "latencyMs": 6543,
+          "latencyMs": 1746,
           "attempts": 1
         },
         "endpointGet": null,
-        "agentUriGet": null
+        "agentUriGet": {
+          "url": "https://api.hatcher.host/agents/cmp2dohkb00jtlsvsq1m5hriq/solana-metadata.json",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "access-control-allow-credentials": "true",
+            "access-control-allow-origin": "https://hatcher.host",
+            "access-control-expose-headers": "X-Request-ID, X-Response-Time, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset",
+            "alt-svc": "h3=\":443\"; ma=86400",
+            "cache-control": "public, max-age=300",
+            "cf-cache-status": "DYNAMIC",
+            "cf-ray": "a056bed13c2f001a-LHR",
+            "connection": "keep-alive",
+            "content-encoding": "gzip",
+            "content-type": "application/json; charset=utf-8",
+            "cross-origin-opener-policy": "same-origin",
+            "cross-origin-resource-policy": "same-origin",
+            "date": "Tue, 02 Jun 2026 13:18:40 GMT",
+            "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+            "origin-agent-cluster": "?1",
+            "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(self)",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=gtSXZsUIIGcvYMO3iEI9Qp%2Fx7Fm1xtaBDIaTNI3cxq%2Fb0zpFQyWLjgDYVSXVspTARN6UGBj9Fmyhj0VN25erP4waDrjvEBi%2BCx%2F9x8BTsft%2BSt%2B5gpuXzJJJZYKOfV4kdqJ9\"}]}",
+            "server": "cloudflare",
+            "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+            "transfer-encoding": "chunked",
+            "vary": "Accept-Encoding",
+            "x-content-type-options": "nosniff",
+            "x-dns-prefetch-control": "off",
+            "x-download-options": "noopen",
+            "x-frame-options": "DENY",
+            "x-permitted-cross-domain-policies": "none",
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "59",
+            "x-ratelimit-reset": "60",
+            "x-request-id": "baad99b4-e11b-4531-877e-dfdb773d74a6",
+            "x-response-time": "2.63ms",
+            "x-xss-protection": "0"
+          },
+          "body": {
+            "name": "Hatch",
+            "slug": "hatch-9o4u",
+            "description": "Official Hatcher assistant for product questions, CLI/docs help, agent troubleshooting, and community support.",
+            "framework": "openclaw",
+            "avatarUrl": null,
+            "capabilities": [
+              "openclaw",
+              "chat",
+              "tool-use",
+              "solana"
+            ],
+            "version": "1.0.0",
+            "owner": "cmn00szes0002r9vs48ast51v",
+            "createdAt": "2026-05-12T08:37:58.379Z",
+            "platform": "hatcher.host",
+            "links": {
+              "profile": "https://hatcher.host/agent/hatch-9o4u",
+              "room": "https://hatcher.host/agent/hatch-9o4u/room",
+              "passport": "https://api.hatcher.host/agents/hatch-9o4u/passport.json"
+            },
+            "identity": {
+              "solanaWalletAddress": "2dofAQVDPuf4YgMEENM8NFMMkNanqRwGTd1U5nh1PXCt",
+              "solanaAgentId": null,
+              "registryProgram": "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+              "metadataUri": "https://api.hatcher.host/agents/cmp2dohkb00jtlsvsq1m5hriq/solana-metadata.json"
+            }
+          },
+          "latencyMs": 657,
+          "attempts": 1
+        }
       },
       "signals": {
         "serviceReachable": true,
@@ -300,7 +389,7 @@
         "paymentRequired": true,
         "metadataComplete": true,
         "endpointReachable": false,
-        "metadataReachable": false,
+        "metadataReachable": true,
         "spendWithinBudget": true,
         "sentinelMalformed": false,
         "minEscrowDepositLamports": 10000000,
@@ -313,6 +402,7 @@
           "target endpoint unreachable during preflight"
         ],
         "warnings": [
+          "metadata endpoint responded but execution endpoint did not",
           "sentinel confirms payment is required before tool execution"
         ]
       },
@@ -322,27 +412,27 @@
   },
   "payments": [
     {
-      "paymentId": "pay_babf17c7-3104-4b80-baf9-21d068768bdb",
-      "auditJobId": "audit_9d2e5a6b-72fc-49a1-b655-3fb211cf378d",
+      "paymentId": "pay_a7e4790a-90cb-41e4-bd68-77dcf0f70dbd",
+      "auditJobId": "audit_b8e80d08-d7bd-4b5f-b85f-516a194df029",
       "provider": "unknown",
-      "method": "x402",
-      "amount": "0.1",
+      "method": "sap_escrow",
+      "amount": "0.001",
       "currency": "USDC",
-      "service": "Solana Newsroom Autonomous Agent",
-      "createdAt": "2026-06-02T13:20:30.870Z",
-      "recipient": "CN5KEkSrn89TW79uuPvkgnUYRDTZNHNJ4j2rmwhGWsBR",
+      "service": "Hatch",
+      "createdAt": "2026-06-02T13:18:41.070Z",
+      "recipient": "2dofAQVDPuf4YgMEENM8NFMMkNanqRwGTd1U5nh1PXCt",
       "status": "skipped",
       "receipt": "Sentinel preflight blocked payment flow."
     }
   ],
   "probeResult": {
-    "probeId": "probe_e5faec28-e171-47e2-ba42-3ddbcb48fcd2",
-    "auditJobId": "audit_9d2e5a6b-72fc-49a1-b655-3fb211cf378d",
-    "targetAgentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
-    "targetToolId": "default-x402",
+    "probeId": "probe_34e8faeb-b38b-4e9c-96c9-1ea1207fccf3",
+    "auditJobId": "audit_b8e80d08-d7bd-4b5f-b85f-516a194df029",
+    "targetAgentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+    "targetToolId": "standard",
     "request": {
       "method": "GET",
-      "url": "https://api.acedata.cloud",
+      "url": "https://api.hatcher.host/webhooks/oobe/agents/cmp2dohkb00jtlsvsq1m5hriq/x402",
       "paid": false,
       "purpose": "Probe skipped by Sentinel preflight gate"
     },
@@ -354,43 +444,44 @@
           "target endpoint unreachable during preflight"
         ],
         "warnings": [
+          "metadata endpoint responded but execution endpoint did not",
           "sentinel confirms payment is required before tool execution"
         ]
       },
       "targetMetadata": {
-        "pricingTier": "default-x402",
-        "route": "x402",
+        "pricingTier": "standard",
+        "route": "sap_escrow",
         "token": "USDC",
-        "pricePerCallDisplay": "0.1 USDC"
+        "pricePerCallDisplay": "0.001 USDC"
       }
     },
     "status": "not_run",
     "error": "Skipped: target endpoint unreachable during preflight",
-    "startedAt": "2026-06-02T13:20:30.877Z",
-    "completedAt": "2026-06-02T13:20:30.877Z"
+    "startedAt": "2026-06-02T13:18:41.078Z",
+    "completedAt": "2026-06-02T13:18:41.078Z"
   },
   "aceAnalysis": {
-    "analysisId": "ace_15046b6e-6e6e-4b50-91ea-9c17810825b7",
-    "auditJobId": "audit_9d2e5a6b-72fc-49a1-b655-3fb211cf378d",
+    "analysisId": "ace_1c770961-9de7-450c-bd19-448596130f14",
+    "auditJobId": "audit_b8e80d08-d7bd-4b5f-b85f-516a194df029",
     "servicesUsed": [],
     "riskFlags": [],
     "summary": "Ace analysis was skipped with --no-ace.",
-    "createdAt": "2026-06-02T13:20:30.878Z"
+    "createdAt": "2026-06-02T13:18:41.078Z"
   },
   "scores": {
     "reliability": 20,
     "capabilityMatch": 25,
     "paymentIntegrity": 25,
-    "publicFootprint": 70,
+    "publicFootprint": 100,
     "safety": 60,
-    "overall": 34,
+    "overall": 37,
     "verdict": "warning"
   },
   "riskFlags": [
     "SENTINEL_WARNING"
   ],
   "artifacts": {},
-  "createdAt": "2026-06-02T13:20:30.880Z",
+  "createdAt": "2026-06-02T13:18:41.081Z",
   "auditorAgent": {
     "name": "Proofline",
     "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
@@ -398,9 +489,9 @@
   "signature": {
     "algorithm": "ed25519",
     "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
-    "packetHash": "26257b55e187892c8c3e85b225686869e6fc5f6440d149b68641d8608e22a8df",
-    "signedPayload": "sha256:26257b55e187892c8c3e85b225686869e6fc5f6440d149b68641d8608e22a8df",
-    "signatureBase64": "+qn07Nn3EFz5wjrs2qrXi/YBY8Rg6ks0TrH8ScdOcH8xCeCxpBhKhsNrfZSGztNWcXpDxTAsCYxHnYC08CI3Bw==",
-    "signedAt": "2026-06-02T13:20:30.927Z"
+    "packetHash": "65362d8599501bc6b33c8026af7cf86c97c15ce231bbf70030fb1a4b8a54cf41",
+    "signedPayload": "sha256:65362d8599501bc6b33c8026af7cf86c97c15ce231bbf70030fb1a4b8a54cf41",
+    "signatureBase64": "LtpAB7yFJYftFwRZyO08gSmTgfcUT+8qbnQkxvQCYAWU22xuR4GxUZCK3YTGpmeBrYjlmp8Qrda/mxuMD1gjDQ==",
+    "signedAt": "2026-06-02T13:18:41.121Z"
   }
 }

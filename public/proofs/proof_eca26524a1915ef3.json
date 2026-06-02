@@ -1,0 +1,1307 @@
+{
+  "proofPacketId": "proof_eca26524a1915ef3",
+  "version": "0.1",
+  "auditStatus": "completed",
+  "targetAgent": {
+    "agentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+    "name": "Pablito Settlement Sentinel",
+    "toolId": "demo",
+    "toolName": "demo",
+    "description": "active, priced, endpoint present, and within budget",
+    "category": "sap_agent",
+    "price": "0.000001 SOL",
+    "currency": "SOL",
+    "paymentMethod": "x402",
+    "endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+    "source": "sap_discovery"
+  },
+  "auditJob": {
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "target": {
+      "agentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+      "name": "Pablito Settlement Sentinel",
+      "toolId": "demo",
+      "toolName": "demo",
+      "description": "active, priced, endpoint present, and within budget",
+      "category": "sap_agent",
+      "price": "0.000001 SOL",
+      "currency": "SOL",
+      "paymentMethod": "x402",
+      "endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+      "source": "sap_discovery"
+    },
+    "status": "completed",
+    "createdAt": "2026-06-02T13:00:43.546Z",
+    "startedAt": "2026-06-02T13:00:43.546Z",
+    "completedAt": "2026-06-02T13:01:25.643Z",
+    "maxSpendUsdc": 0.35
+  },
+  "sentinelCheck": {
+    "status": "healthy",
+    "sentinelAgentId": "Ccr2yK3hLALU4p8oNRqrh4dGuvPJTth5KCLMio8cE1ph",
+    "checkedAt": "2026-06-02T13:00:43.707Z",
+    "raw": {
+      "mode": "synapse_sentinel_preflight",
+      "target": {
+        "agentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+        "name": "Pablito Settlement Sentinel",
+        "endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+        "agentUri": "https://wiselyenterprisesllc.com/oobe-ace/pablito-settlement-sentinel.metadata.json",
+        "pricePerCall": "1000",
+        "pricePerCallDisplay": "0.000001 SOL",
+        "token": "SOL",
+        "route": "x402"
+      },
+      "selectedTool": "spl-token_getBalance",
+      "calls": {
+        "health": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/health",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "148",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Tue, 02 Jun 2026 13:00:44 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "status": "ok",
+            "network": "mainnet",
+            "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "usdcMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+          },
+          "latencyMs": 967,
+          "attempts": 1
+        },
+        "profile": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/agent",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "417",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Tue, 02 Jun 2026 13:00:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "name": "Synapse Sentinel",
+            "description": "Pay-per-call gateway exposing 110 SynapseAgentKit tools via SAP x402",
+            "network": "mainnet",
+            "sapNetwork": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "acceptedTokens": [
+              "SOL",
+              "USDC:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+            ],
+            "minEscrowDeposit": 10000000,
+            "x402": {
+              "endpoint": "https://agent.sentinel.oobeprotocol.ai/tools/:name",
+              "method": "POST",
+              "depositorHeader": "x-sap-depositor"
+            }
+          },
+          "latencyMs": 647,
+          "attempts": 1
+        },
+        "tools": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "22792",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Tue, 02 Jun 2026 13:00:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "count": 110,
+            "total": 110,
+            "tools": [
+              {
+                "name": "spl-token_deployToken",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Deploy a new SPL token with Metaplex metadata. Returns the mint address and an unsigned transaction.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_transfer",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Transfer SPL tokens between wallets. Optionally creates the recipient ATA.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_transferSol",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Transfer native SOL between wallets via SystemProgram.transfer.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_getBalance",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Get token or SOL balance for a wallet. If mint is omitted, returns native SOL balance.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_getTokenAccounts",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "List all SPL token accounts for a wallet with balances and metadata.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_mintTo",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Mint additional tokens to a destination wallet (requires mint authority).",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_burn",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Burn SPL tokens from the owner's token account.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              },
+              {
+                "name": "spl-token_freezeAccount",
+                "plugin": "token",
+                "category": "Payment",
+                "protocol": "spl-token",
+                "description": "Freeze a token account (prevents all transfers). Requires freeze authority.",
+                "pricePerCall": 1000,
+                "currency": "lamports"
+              }
+            ],
+            "note": "trimmed 102 tools from Sentinel response"
+          },
+          "latencyMs": 401,
+          "attempts": 1
+        },
+        "unpaidToolCall": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": 402,
+          "ok": false,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "415",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Tue, 02 Jun 2026 13:00:45 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "error": "payment_required",
+            "protocol": "sap-x402",
+            "tool": "spl-token_getBalance",
+            "pricePerCall": 1000,
+            "currency": "lamports",
+            "acceptedTokens": [
+              "SOL",
+              "USDC:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+            ],
+            "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+            "minEscrowDeposit": 10000000,
+            "hint": "POST /payment/quote with {\"depositor\":\"<pubkey>\"} for an escrow plan, then retry with header \"x-sap-depositor: <pubkey>\""
+          },
+          "latencyMs": 219,
+          "attempts": 1
+        },
+        "depositorToolCall": {
+          "url": "https://agent.sentinel.oobeprotocol.ai/tools/spl-token_getBalance",
+          "method": "POST",
+          "status": 402,
+          "ok": false,
+          "headers": {
+            "connection": "keep-alive",
+            "content-length": "369",
+            "content-type": "application/json; charset=utf-8",
+            "date": "Tue, 02 Jun 2026 13:00:49 GMT",
+            "referrer-policy": "strict-origin-when-cross-origin",
+            "server": "nginx/1.24.0 (Ubuntu)",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "SAMEORIGIN"
+          },
+          "body": {
+            "error": "escrow_not_funded",
+            "reason": "no v2 escrow found for this depositor at any nonce 0..64",
+            "tool": "spl-token_getBalance",
+            "pricePerCall": 1000,
+            "minEscrowDeposit": 10000000,
+            "hint": "Open or top-up an escrow with client.escrowV2.create(merchantWallet, { escrowNonce: BN(<next free integer>), ... }) or escrowV2.deposit — the server scans nonces 0..16 automatically."
+          },
+          "latencyMs": 4154,
+          "attempts": 1
+        },
+        "endpointHead": {
+          "url": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+          "method": "HEAD",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "accept-ranges": "bytes",
+            "connection": "close",
+            "content-length": "1691",
+            "content-type": "application/json",
+            "date": "Tue, 02 Jun 2026 13:00:55 GMT",
+            "etag": "\"6a0cd766-69b\"",
+            "last-modified": "Tue, 19 May 2026 21:34:30 GMT",
+            "permissions-policy": "camera=(), microphone=(), geolocation=()",
+            "referrer-policy": "no-referrer",
+            "server": "nginx",
+            "strict-transport-security": "max-age=63072000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "DENY"
+          },
+          "body": {},
+          "latencyMs": 6044,
+          "attempts": 1
+        },
+        "endpointGet": null,
+        "agentUriGet": {
+          "url": "https://wiselyenterprisesllc.com/oobe-ace/pablito-settlement-sentinel.metadata.json",
+          "method": "GET",
+          "status": 200,
+          "ok": true,
+          "headers": {
+            "accept-ranges": "bytes",
+            "connection": "keep-alive",
+            "content-length": "2687",
+            "content-type": "application/json",
+            "date": "Tue, 02 Jun 2026 13:00:56 GMT",
+            "etag": "\"6a0ce6b7-a7f\"",
+            "last-modified": "Tue, 19 May 2026 22:39:51 GMT",
+            "permissions-policy": "camera=(), microphone=(), geolocation=()",
+            "referrer-policy": "no-referrer",
+            "server": "nginx",
+            "strict-transport-security": "max-age=63072000; includeSubDomains",
+            "x-content-type-options": "nosniff",
+            "x-frame-options": "DENY"
+          },
+          "body": {
+            "status": "draft-only-not-live",
+            "warning": "Public-safe metadata draft only. This is not SAP mainnet registration evidence and not a completed bounty submission.",
+            "generatedAt": "2026-05-19T22:25:50.189Z",
+            "agent": {
+              "name": "Pablito Settlement Sentinel",
+              "description": "Autonomous workflow sentinel: discovers workflow-analysis tools, executes a bounded AI classification task, and produces x402/SAP settlement proof. Demo-safe; no private data.",
+              "agentId": "did:sap:pablito-settlement-sentinel",
+              "candidateWallet": "HE9MYDzoLAgnwbRXbiWRGGvoE2QE9LqKdQGJhNLPxtVj",
+              "network": "solana:mainnet-beta",
+              "protocols": [
+                "SAP",
+                "x402"
+              ],
+              "capabilities": [
+                {
+                  "id": "workflow:classify",
+                  "protocolId": "sap",
+                  "version": "0.1.0",
+                  "description": "Classify a small business workflow bottleneck and return one automation-ready next step."
+                },
+                {
+                  "id": "x402:settlement-proof",
+                  "protocolId": "x402",
+                  "version": "0.1.0",
+                  "description": "Create a public-safe settlement proof object for a completed agent workflow."
+                }
+              ],
+              "pricing": [
+                {
+                  "tierId": "demo",
+                  "pricePerCall": 1000,
+                  "rateLimit": 60,
+                  "tokenType": "sol",
+                  "settlementMode": "x402"
+                }
+              ]
+            },
+            "endpoints": {
+              "agentUri": "https://wiselyenterprisesllc.com/oobe-ace/pablito-settlement-sentinel.metadata.json",
+              "x402Endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+              "note": "These URLs can be publicly hosted as static proof metadata. They are not proof of SAP mainnet registration by themselves."
+            },
+            "proofBoundary": {
+              "dryRunProof": "proof/dry-run-proof.latest.json",
+              "liveEvidence": {
+                "status": "captured-live-ace-x402-payment",
+                "orderState": "Finished",
+                "payWay": "X402",
+                "payer": "0x122c67ad0DD3bA27bfCaCcCD9aFd9c3fd99216Fa",
+                "network": "base",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "amountAtomic": "950000",
+                "transaction": "0x456b10aaec7e5242c3210dc8d190c388547395629f27224b19a31b0cb73329f0",
+                "proofFile": "proof/ace-x402-live-payment.latest.json",
+                "orderApiEvidenceFile": "proof/ace-order-evidence.latest.json",
+                "orderApiEvidenceStatus": "captured-ace-order-api-evidence",
+                "orderApiEvidenceHttpStatus": 500
+              },
+              "superteamSubmission": null,
+              "xWalkthrough": null
+            },
+            "publicSafety": {
+              "containsSecrets": false,
+              "containsPrivateData": false,
+              "claimsLiveRegistration": false,
+              "claimsPaymentSettlement": true,
+              "claimsBountyCompletion": false
+            }
+          },
+          "latencyMs": 991,
+          "attempts": 1
+        }
+      },
+      "signals": {
+        "serviceReachable": true,
+        "realToolReached": true,
+        "paymentRequired": true,
+        "metadataComplete": true,
+        "endpointReachable": true,
+        "metadataReachable": true,
+        "spendWithinBudget": true,
+        "sentinelMalformed": false,
+        "minEscrowDepositLamports": 10000000,
+        "minEscrowDepositSol": 0.01,
+        "pricePerCallLamports": 1000
+      },
+      "gate": {
+        "proceed": true,
+        "reasons": [],
+        "warnings": [
+          "sentinel confirms payment is required before tool execution"
+        ]
+      },
+      "note": "Sentinel preflight verifies Sentinel liveness/payment path plus target endpoint reachability before audit execution."
+    },
+    "message": "Sentinel preflight passed and target is eligible for audit."
+  },
+  "payments": [
+    {
+      "paymentId": "pay_7d001257-7f80-492a-aaae-311d3845a47f",
+      "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+      "provider": "sap",
+      "method": "x402",
+      "amount": "0.000001",
+      "currency": "SOL",
+      "recipient": "HE9MYDzoLAgnwbRXbiWRGGvoE2QE9LqKdQGJhNLPxtVj",
+      "service": "Pablito Settlement Sentinel",
+      "status": "pending",
+      "receipt": "Dry-run: SAP V1 SOL escrow simulation passed; no transaction sent.",
+      "createdAt": "2026-06-02T13:01:14.744Z"
+    },
+    {
+      "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_1",
+      "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+      "provider": "ace_data_cloud",
+      "method": "x402",
+      "amount": "0.000952",
+      "currency": "USDC",
+      "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+      "service": "ace_serp_google_search",
+      "status": "pending",
+      "receipt": "{\"endpoint\":\"https://api.acedata.cloud/serp/google\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"952\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+      "createdAt": "2026-06-02T13:01:25.625Z"
+    },
+    {
+      "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_2",
+      "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+      "provider": "ace_data_cloud",
+      "method": "x402",
+      "amount": "0.03998",
+      "currency": "USDC",
+      "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+      "service": "ace_openai_chat_completions",
+      "status": "pending",
+      "receipt": "{\"endpoint\":\"https://api.acedata.cloud/openai/chat/completions\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"39980\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+      "createdAt": "2026-06-02T13:01:25.626Z"
+    },
+    {
+      "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_3",
+      "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+      "provider": "ace_data_cloud",
+      "method": "x402",
+      "amount": "0.095215",
+      "currency": "USDC",
+      "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+      "service": "ace_localization_translate",
+      "status": "pending",
+      "receipt": "{\"endpoint\":\"https://api.acedata.cloud/localization/translate\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"95215\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+      "createdAt": "2026-06-02T13:01:25.626Z"
+    },
+    {
+      "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_4",
+      "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+      "provider": "ace_data_cloud",
+      "method": "x402",
+      "amount": "0.023803",
+      "currency": "USDC",
+      "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+      "service": "ace_openai_images_edits",
+      "status": "pending",
+      "receipt": "{\"endpoint\":\"https://api.acedata.cloud/openai/images/edits\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"23803\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+      "createdAt": "2026-06-02T13:01:25.626Z"
+    }
+  ],
+  "probeResult": {
+    "probeId": "probe_8fd4eb45-297e-4aba-afcd-7162456f0038",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "targetAgentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
+    "targetToolId": "demo",
+    "request": {
+      "method": "HEAD+GET",
+      "url": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+      "paid": false,
+      "purpose": "Proofline one-shot audit probe",
+      "probeTypes": [
+        "liveness",
+        "capability_match",
+        "delivery_after_payment"
+      ]
+    },
+    "response": {
+      "probeTypeResults": [
+        {
+          "type": "liveness",
+          "ok": true,
+          "status": 200,
+          "latencyMs": 990
+        },
+        {
+          "type": "capability_match",
+          "ok": true,
+          "status": 200,
+          "evidence": {
+            "hasUsableOutput": true,
+            "reason": "endpoint returned structured output",
+            "preview": {
+              "status": "draft-only-not-live",
+              "protocol": "SAP-x402",
+              "network": "solana:mainnet-beta",
+              "service": {
+                "id": "workflow:classify",
+                "name": "Pablito workflow leak classifier",
+                "description": "Classify a public-safe workflow bottleneck and return one automation-ready next step."
+              },
+              "payment": {
+                "tokenType": "sol",
+                "pricePerCallSmallestUnit": "1000",
+                "settlementMode": "x402",
+                "escrowVersion": "V2 preferred after approval"
+              },
+              "headersExpectedAfterLiveEscrow": [
+                "X-Payment-Protocol",
+                "X-Payment-Escrow",
+                "X-Payment-Agent",
+                "X-Payment-Depositor",
+                "X-Payment-MaxCalls",
+                "X-Payment-PricePerCall",
+                "X-Payment-Program",
+                "X-Payment-Network"
+              ],
+              "proofBoundary": {
+                "currentSettlementTxSignature": "0x237b13bd45979444d1952325e1d5729362ece25e115929c3bd472a17a2b37243",
+                "currentEscrowPda": null,
+                "currentAgentPda": null,
+                "currentAceX402Proof": {
+                  "status": "captured-live-ace-x402-payment",
+                  "orderState": "Finished",
+                  "payWay": "X402",
+                  "payer": "0x122c67ad0DD3bA27bfCaCcCD9aFd9c3fd99216Fa",
+                  "network": "base",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "amountAtomic": "1330000",
+                  "transaction": "0x237b13bd45979444d1952325e1d5729362ece25e115929c3bd472a17a2b37243",
+                  "proofFile": "proof/ace-x402-live-payment.latest.json",
+                  "orderApiEvidenceFile": "proof/ace-order-evidence.latest.json",
+                  "orderApiEvidenceStatus": "captured-ace-order-api-evidence",
+                  "orderApiEvidenceHttpStatus": 500
+                },
+                "note": "Ace x402 payment evidence exists; SAP escrow/registration values remain null until approved SAP live proof exists."
+              }
+            }
+          }
+        },
+        {
+          "type": "delivery_after_payment",
+          "ok": false,
+          "status": 200,
+          "paymentStatus": "pending",
+          "note": "Target payment was not settled, so delivery-after-payment is not claimed."
+        }
+      ],
+      "observations": {
+        "liveness": {
+          "url": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+          "method": "HEAD",
+          "ok": true,
+          "status": 200,
+          "statusText": "OK",
+          "contentType": "application/json",
+          "latencyMs": 990
+        },
+        "execution": {
+          "url": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
+          "method": "GET",
+          "ok": true,
+          "status": 200,
+          "statusText": "OK",
+          "contentType": "application/json",
+          "latencyMs": 971,
+          "bodyPreview": {
+            "status": "draft-only-not-live",
+            "protocol": "SAP-x402",
+            "network": "solana:mainnet-beta",
+            "service": {
+              "id": "workflow:classify",
+              "name": "Pablito workflow leak classifier",
+              "description": "Classify a public-safe workflow bottleneck and return one automation-ready next step."
+            },
+            "payment": {
+              "tokenType": "sol",
+              "pricePerCallSmallestUnit": "1000",
+              "settlementMode": "x402",
+              "escrowVersion": "V2 preferred after approval"
+            },
+            "headersExpectedAfterLiveEscrow": [
+              "X-Payment-Protocol",
+              "X-Payment-Escrow",
+              "X-Payment-Agent",
+              "X-Payment-Depositor",
+              "X-Payment-MaxCalls",
+              "X-Payment-PricePerCall",
+              "X-Payment-Program",
+              "X-Payment-Network"
+            ],
+            "proofBoundary": {
+              "currentSettlementTxSignature": "0x237b13bd45979444d1952325e1d5729362ece25e115929c3bd472a17a2b37243",
+              "currentEscrowPda": null,
+              "currentAgentPda": null,
+              "currentAceX402Proof": {
+                "status": "captured-live-ace-x402-payment",
+                "orderState": "Finished",
+                "payWay": "X402",
+                "payer": "0x122c67ad0DD3bA27bfCaCcCD9aFd9c3fd99216Fa",
+                "network": "base",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "amountAtomic": "1330000",
+                "transaction": "0x237b13bd45979444d1952325e1d5729362ece25e115929c3bd472a17a2b37243",
+                "proofFile": "proof/ace-x402-live-payment.latest.json",
+                "orderApiEvidenceFile": "proof/ace-order-evidence.latest.json",
+                "orderApiEvidenceStatus": "captured-ace-order-api-evidence",
+                "orderApiEvidenceHttpStatus": 500
+              },
+              "note": "Ace x402 payment evidence exists; SAP escrow/registration values remain null until approved SAP live proof exists."
+            }
+          }
+        }
+      },
+      "targetMetadata": {
+        "pricingTier": "demo",
+        "route": "x402",
+        "token": "SOL",
+        "pricePerCallDisplay": "0.000001 SOL",
+        "protocolIds": [
+          "SAP",
+          "x402"
+        ],
+        "agentUri": "https://wiselyenterprisesllc.com/oobe-ace/pablito-settlement-sentinel.metadata.json"
+      }
+    },
+    "status": "success",
+    "latencyMs": 1961,
+    "startedAt": "2026-06-02T13:01:14.755Z",
+    "completedAt": "2026-06-02T13:01:16.718Z"
+  },
+  "aceAnalysis": {
+    "analysisId": "ace_3e061239-de4b-4a61-bb89-c5d93326f1a4",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "servicesUsed": [],
+    "summary": "Ace returned an unstructured analysis response. Ace services used successfully: none. Failed Ace services: ace_serp_google_search HTTP 402, ace_openai_chat_completions HTTP 402, ace_localization_translate HTTP 402, ace_openai_images_edits HTTP 402.",
+    "riskFlags": [
+      "GENERIC_RESPONSE",
+      "MISSING_PUBLIC_FOOTPRINT"
+    ],
+    "raw": {
+      "mode": "ace_full_pipeline",
+      "servicesAttempted": [
+        {
+          "service": "ace_serp_google_search",
+          "endpoint": "https://api.acedata.cloud/serp/google",
+          "ok": false,
+          "status": 402,
+          "latencyMs": 2863,
+          "error": "Ace service returned HTTP 402",
+          "x402": {
+            "status": "quoted",
+            "network": "base",
+            "scheme": "exact",
+            "amount": "0.000952",
+            "atomicAmount": "952",
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+            "paymentRequired": {
+              "x402Version": 2,
+              "accepts": [
+                {
+                  "scheme": "exact",
+                  "network": "base",
+                  "maxAmountRequired": "952",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/serp/google",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "extra": {
+                    "name": "USD Coin",
+                    "version": "2",
+                    "chainId": 8453,
+                    "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                  }
+                },
+                {
+                  "scheme": "exact",
+                  "network": "solana",
+                  "maxAmountRequired": "952",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/serp/google",
+                  "description": "AceDataCloud API call",
+                  "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                  "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                },
+                {
+                  "scheme": "exact",
+                  "network": "skale",
+                  "maxAmountRequired": "952",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/serp/google",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                  "extra": {
+                    "name": "Bridged USDC (SKALE Bridge)",
+                    "version": "2",
+                    "chainId": 1187947933,
+                    "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                  }
+                }
+              ],
+              "error": "Payment Required"
+            }
+          }
+        },
+        {
+          "service": "ace_openai_chat_completions",
+          "endpoint": "https://api.acedata.cloud/openai/chat/completions",
+          "ok": false,
+          "status": 402,
+          "latencyMs": 1164,
+          "error": "Ace service returned HTTP 402",
+          "x402": {
+            "status": "quoted",
+            "network": "base",
+            "scheme": "exact",
+            "amount": "0.03998",
+            "atomicAmount": "39980",
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+            "paymentRequired": {
+              "x402Version": 2,
+              "accepts": [
+                {
+                  "scheme": "exact",
+                  "network": "base",
+                  "maxAmountRequired": "39980",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/chat/completions",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "extra": {
+                    "name": "USD Coin",
+                    "version": "2",
+                    "chainId": 8453,
+                    "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                  }
+                },
+                {
+                  "scheme": "exact",
+                  "network": "solana",
+                  "maxAmountRequired": "39980",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/chat/completions",
+                  "description": "AceDataCloud API call",
+                  "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                  "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                },
+                {
+                  "scheme": "exact",
+                  "network": "skale",
+                  "maxAmountRequired": "39980",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/chat/completions",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                  "extra": {
+                    "name": "Bridged USDC (SKALE Bridge)",
+                    "version": "2",
+                    "chainId": 1187947933,
+                    "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                  }
+                }
+              ],
+              "error": "Payment Required"
+            }
+          }
+        },
+        {
+          "service": "ace_localization_translate",
+          "endpoint": "https://api.acedata.cloud/localization/translate",
+          "ok": false,
+          "status": 402,
+          "latencyMs": 420,
+          "error": "Ace service returned HTTP 402",
+          "x402": {
+            "status": "quoted",
+            "network": "base",
+            "scheme": "exact",
+            "amount": "0.095215",
+            "atomicAmount": "95215",
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+            "paymentRequired": {
+              "x402Version": 2,
+              "accepts": [
+                {
+                  "scheme": "exact",
+                  "network": "base",
+                  "maxAmountRequired": "95215",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/localization/translate",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "extra": {
+                    "name": "USD Coin",
+                    "version": "2",
+                    "chainId": 8453,
+                    "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                  }
+                },
+                {
+                  "scheme": "upto",
+                  "network": "base",
+                  "maxAmountRequired": "95215",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/localization/translate",
+                  "description": "AceDataCloud API call (metered)",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "extra": {
+                    "name": "Permit2",
+                    "chainId": 8453,
+                    "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                    "permit2Address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                    "proxyAddress": "0x4020A4f3b7b90ccA423B9fabCc0CE57C6C240002",
+                    "facilitatorAddress": "0xd019238EAA8a9Ca13C5792Ca10B4029D6ce25708"
+                  }
+                },
+                {
+                  "scheme": "exact",
+                  "network": "solana",
+                  "maxAmountRequired": "95215",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/localization/translate",
+                  "description": "AceDataCloud API call",
+                  "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                  "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                },
+                {
+                  "scheme": "exact",
+                  "network": "skale",
+                  "maxAmountRequired": "95215",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/localization/translate",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                  "extra": {
+                    "name": "Bridged USDC (SKALE Bridge)",
+                    "version": "2",
+                    "chainId": 1187947933,
+                    "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                  }
+                },
+                {
+                  "scheme": "upto",
+                  "network": "skale",
+                  "maxAmountRequired": "95215",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/localization/translate",
+                  "description": "AceDataCloud API call (metered)",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                  "extra": {
+                    "name": "Permit2",
+                    "chainId": 1187947933,
+                    "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                    "permit2Address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                    "proxyAddress": "0x4020A4f3b7b90ccA423B9fabCc0CE57C6C240002",
+                    "facilitatorAddress": "0xd0479FA9FD8C678303d477433d24C15e3723CC1C"
+                  }
+                }
+              ],
+              "error": "Payment Required"
+            }
+          }
+        },
+        {
+          "service": "ace_openai_images_edits",
+          "endpoint": "https://api.acedata.cloud/openai/images/edits",
+          "ok": false,
+          "status": 402,
+          "latencyMs": 4335,
+          "error": "Ace service returned HTTP 402",
+          "x402": {
+            "status": "quoted",
+            "network": "base",
+            "scheme": "exact",
+            "amount": "0.023803",
+            "atomicAmount": "23803",
+            "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+            "paymentRequired": {
+              "x402Version": 2,
+              "accepts": [
+                {
+                  "scheme": "exact",
+                  "network": "base",
+                  "maxAmountRequired": "23803",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/images/edits",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                  "extra": {
+                    "name": "USD Coin",
+                    "version": "2",
+                    "chainId": 8453,
+                    "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                  }
+                },
+                {
+                  "scheme": "exact",
+                  "network": "solana",
+                  "maxAmountRequired": "23803",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/images/edits",
+                  "description": "AceDataCloud API call",
+                  "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                  "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+                },
+                {
+                  "scheme": "exact",
+                  "network": "skale",
+                  "maxAmountRequired": "23803",
+                  "maxTimeoutSeconds": 3600,
+                  "resource": "/openai/images/edits",
+                  "description": "AceDataCloud API call",
+                  "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                  "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                  "extra": {
+                    "name": "Bridged USDC (SKALE Bridge)",
+                    "version": "2",
+                    "chainId": 1187947933,
+                    "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                  }
+                }
+              ],
+              "error": "Payment Required"
+            }
+          }
+        }
+      ],
+      "x402Payments": [
+        {
+          "service": "ace_serp_google_search",
+          "endpoint": "https://api.acedata.cloud/serp/google",
+          "status": "quoted",
+          "network": "base",
+          "scheme": "exact",
+          "amount": "0.000952",
+          "atomicAmount": "952",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+          "paymentRequired": {
+            "x402Version": 2,
+            "accepts": [
+              {
+                "scheme": "exact",
+                "network": "base",
+                "maxAmountRequired": "952",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/serp/google",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "extra": {
+                  "name": "USD Coin",
+                  "version": "2",
+                  "chainId": 8453,
+                  "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                }
+              },
+              {
+                "scheme": "exact",
+                "network": "solana",
+                "maxAmountRequired": "952",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/serp/google",
+                "description": "AceDataCloud API call",
+                "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+              },
+              {
+                "scheme": "exact",
+                "network": "skale",
+                "maxAmountRequired": "952",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/serp/google",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                "extra": {
+                  "name": "Bridged USDC (SKALE Bridge)",
+                  "version": "2",
+                  "chainId": 1187947933,
+                  "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                }
+              }
+            ],
+            "error": "Payment Required"
+          }
+        },
+        {
+          "service": "ace_openai_chat_completions",
+          "endpoint": "https://api.acedata.cloud/openai/chat/completions",
+          "status": "quoted",
+          "network": "base",
+          "scheme": "exact",
+          "amount": "0.03998",
+          "atomicAmount": "39980",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+          "paymentRequired": {
+            "x402Version": 2,
+            "accepts": [
+              {
+                "scheme": "exact",
+                "network": "base",
+                "maxAmountRequired": "39980",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/chat/completions",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "extra": {
+                  "name": "USD Coin",
+                  "version": "2",
+                  "chainId": 8453,
+                  "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                }
+              },
+              {
+                "scheme": "exact",
+                "network": "solana",
+                "maxAmountRequired": "39980",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/chat/completions",
+                "description": "AceDataCloud API call",
+                "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+              },
+              {
+                "scheme": "exact",
+                "network": "skale",
+                "maxAmountRequired": "39980",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/chat/completions",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                "extra": {
+                  "name": "Bridged USDC (SKALE Bridge)",
+                  "version": "2",
+                  "chainId": 1187947933,
+                  "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                }
+              }
+            ],
+            "error": "Payment Required"
+          }
+        },
+        {
+          "service": "ace_localization_translate",
+          "endpoint": "https://api.acedata.cloud/localization/translate",
+          "status": "quoted",
+          "network": "base",
+          "scheme": "exact",
+          "amount": "0.095215",
+          "atomicAmount": "95215",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+          "paymentRequired": {
+            "x402Version": 2,
+            "accepts": [
+              {
+                "scheme": "exact",
+                "network": "base",
+                "maxAmountRequired": "95215",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/localization/translate",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "extra": {
+                  "name": "USD Coin",
+                  "version": "2",
+                  "chainId": 8453,
+                  "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                }
+              },
+              {
+                "scheme": "upto",
+                "network": "base",
+                "maxAmountRequired": "95215",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/localization/translate",
+                "description": "AceDataCloud API call (metered)",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "extra": {
+                  "name": "Permit2",
+                  "chainId": 8453,
+                  "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                  "permit2Address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                  "proxyAddress": "0x4020A4f3b7b90ccA423B9fabCc0CE57C6C240002",
+                  "facilitatorAddress": "0xd019238EAA8a9Ca13C5792Ca10B4029D6ce25708"
+                }
+              },
+              {
+                "scheme": "exact",
+                "network": "solana",
+                "maxAmountRequired": "95215",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/localization/translate",
+                "description": "AceDataCloud API call",
+                "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+              },
+              {
+                "scheme": "exact",
+                "network": "skale",
+                "maxAmountRequired": "95215",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/localization/translate",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                "extra": {
+                  "name": "Bridged USDC (SKALE Bridge)",
+                  "version": "2",
+                  "chainId": 1187947933,
+                  "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                }
+              },
+              {
+                "scheme": "upto",
+                "network": "skale",
+                "maxAmountRequired": "95215",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/localization/translate",
+                "description": "AceDataCloud API call (metered)",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                "extra": {
+                  "name": "Permit2",
+                  "chainId": 1187947933,
+                  "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                  "permit2Address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+                  "proxyAddress": "0x4020A4f3b7b90ccA423B9fabCc0CE57C6C240002",
+                  "facilitatorAddress": "0xd0479FA9FD8C678303d477433d24C15e3723CC1C"
+                }
+              }
+            ],
+            "error": "Payment Required"
+          }
+        },
+        {
+          "service": "ace_openai_images_edits",
+          "endpoint": "https://api.acedata.cloud/openai/images/edits",
+          "status": "quoted",
+          "network": "base",
+          "scheme": "exact",
+          "amount": "0.023803",
+          "atomicAmount": "23803",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+          "paymentRequired": {
+            "x402Version": 2,
+            "accepts": [
+              {
+                "scheme": "exact",
+                "network": "base",
+                "maxAmountRequired": "23803",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/images/edits",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                "extra": {
+                  "name": "USD Coin",
+                  "version": "2",
+                  "chainId": 8453,
+                  "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+                }
+              },
+              {
+                "scheme": "exact",
+                "network": "solana",
+                "maxAmountRequired": "23803",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/images/edits",
+                "description": "AceDataCloud API call",
+                "payTo": "5iVXFrYaYWX2GUTbkQj8mDBoBhAX8bneYigS2LJTia43",
+                "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+              },
+              {
+                "scheme": "exact",
+                "network": "skale",
+                "maxAmountRequired": "23803",
+                "maxTimeoutSeconds": 3600,
+                "resource": "/openai/images/edits",
+                "description": "AceDataCloud API call",
+                "payTo": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+                "asset": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20",
+                "extra": {
+                  "name": "Bridged USDC (SKALE Bridge)",
+                  "version": "2",
+                  "chainId": 1187947933,
+                  "verifyingContract": "0x85889c8c714505E0c94b30fcfcF64fE3Ac8FCb20"
+                }
+              }
+            ],
+            "error": "Payment Required"
+          }
+        }
+      ],
+      "x402Summary": {
+        "totalPayments": 4,
+        "settled": 0,
+        "quoted": 4,
+        "failed": 0,
+        "totalSettledUsdc": 0,
+        "services": [
+          {
+            "service": "ace_serp_google_search",
+            "status": "quoted",
+            "amount": "0.000952"
+          },
+          {
+            "service": "ace_openai_chat_completions",
+            "status": "quoted",
+            "amount": "0.03998"
+          },
+          {
+            "service": "ace_localization_translate",
+            "status": "quoted",
+            "amount": "0.095215"
+          },
+          {
+            "service": "ace_openai_images_edits",
+            "status": "quoted",
+            "amount": "0.023803"
+          }
+        ]
+      },
+      "artifacts": {
+        "directory": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+        "searchPath": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2/ace-serp-search.json",
+        "summaryPath": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2/ace-analysis.json",
+        "translationPath": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2/ace-translation-zh-CN.json",
+        "imageResponsePath": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2/ace-proof-card-response.json"
+      },
+      "note": "servicesUsed contains only successful Ace Data Cloud service calls."
+    },
+    "createdAt": "2026-06-02T13:01:16.719Z"
+  },
+  "scores": {
+    "reliability": 60,
+    "capabilityMatch": 60,
+    "paymentIntegrity": 40,
+    "publicFootprint": 100,
+    "safety": 90,
+    "overall": 64,
+    "verdict": "warning"
+  },
+  "riskFlags": [
+    "GENERIC_RESPONSE",
+    "MISSING_PUBLIC_FOOTPRINT"
+  ],
+  "artifacts": {
+    "proofCardPath": "/home/hickson/Proofline/data/artifacts/audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2/ace-proof-card-response.json"
+  },
+  "createdAt": "2026-06-02T13:01:25.643Z",
+  "auditorAgent": {
+    "name": "Proofline",
+    "sapAgentId": "GGN3y79CAejSM1xhNgBdQNatKQv7WegJBvo5aaAYYKzL"
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "publicKey": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
+    "packetHash": "315453b15c794acf6ca7181772c562e6da0bc4ffa71025ad9b79850863e48153",
+    "signedPayload": "sha256:315453b15c794acf6ca7181772c562e6da0bc4ffa71025ad9b79850863e48153",
+    "signatureBase64": "6ulnPb2glEo568a1RpP0yGU8L5vCq+yx9Gf3aKLcgGYs7lElQSXSnO8tGXhFg5tQ98jrlFj64B8+Zsf0AdaKAQ==",
+    "signedAt": "2026-06-02T13:01:25.688Z"
+  }
+}

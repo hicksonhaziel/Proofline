@@ -43,6 +43,7 @@ export interface SapClientLike {
     publishTool(ctx: Record<string, unknown>): Promise<unknown>;
   };
   escrow: {
+    createEscrow(ctx: Record<string, unknown>): Promise<unknown>;
     createEscrowV2(ctx: Record<string, unknown>): Promise<unknown>;
   };
   buildTransaction(instructions: unknown[], payer: unknown): Promise<{

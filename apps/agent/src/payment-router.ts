@@ -257,10 +257,9 @@ class SapEscrowPaymentProvider implements PaymentProvider {
     const initialDeposit = pricePerCall.mul(maxCalls);
     const agentPda = new PublicKey(context.target.agentId);
 
-    const [agentStakePda] = derivePda(["sap_stake", agentPda], String(sdk.PROGRAM_ID));
     const [agentStatsPda] = derivePda(["sap_stats", agentPda], String(sdk.PROGRAM_ID));
     const [pricingMenuPda] = derivePda(["sap_pricing", agentPda], String(sdk.PROGRAM_ID));
-    const [escrowPda] = derivePda(["sap_escrow_v2", agentPda, wallet, u64Le(context.escrowNonce)], String(sdk.PROGRAM_ID));
+    const [escrowPda] = derivePda(["sap_escrow", agentPda, wallet], String(sdk.PROGRAM_ID));
 
     const existingEscrow = await safeGetAccountInfo(client, escrowPda, context.logger);
     if (existingEscrow) {
@@ -275,15 +274,13 @@ class SapEscrowPaymentProvider implements PaymentProvider {
       );
     }
 
-    const instruction = await client.escrow.createEscrowV2({
+    const instruction = await client.escrow.createEscrow({
       signer: keypair,
       depositor: wallet,
       agent: agentPda,
-      agentStake: agentStakePda,
       agentStats: agentStatsPda,
       pricingMenu: pricingMenuPda,
       escrow: escrowPda,
-      escrowNonce: new BN(context.escrowNonce),
       pricePerCall,
       maxCalls,
       initialDeposit,
@@ -291,10 +288,6 @@ class SapEscrowPaymentProvider implements PaymentProvider {
       volumeCurve: [],
       tokenMint: null,
       tokenDecimals: 9,
-      settlementSecurity: 2,
-      disputeWindowSlots: new BN(150),
-      coSigner: null,
-      arbiter: wallet,
     });
 
     const tx = await client.buildTransaction([instruction], wallet);
@@ -306,7 +299,7 @@ class SapEscrowPaymentProvider implements PaymentProvider {
         context,
         "sap",
         "failed",
-        `SAP escrow simulation failed: ${JSON.stringify(simulation.value.err)}`,
+        `SAP V1 SOL escrow simulation failed: ${JSON.stringify(simulation.value.err)}`,
       );
     }
 
@@ -315,7 +308,7 @@ class SapEscrowPaymentProvider implements PaymentProvider {
         context,
         "sap",
         "pending",
-        "Dry-run: SAP escrow simulation passed; no transaction sent.",
+        "Dry-run: SAP V1 SOL escrow simulation passed; no transaction sent.",
       );
     }
 
@@ -337,7 +330,7 @@ class SapEscrowPaymentProvider implements PaymentProvider {
       context,
       "sap",
       "pending",
-      "SAP escrow transaction submitted; awaiting confirmation.",
+      "SAP V1 SOL escrow transaction submitted; awaiting confirmation.",
       {
         transactionHash: signature,
       },
@@ -567,13 +560,6 @@ function derivePda(seeds: Array<string | PublicKey | Uint8Array>, programId: str
   });
 
   return PublicKey.findProgramAddressSync(buffers, new PublicKey(programId));
-}
-
-function u64Le(value: number): Uint8Array {
-  const out = new Uint8Array(8);
-  const view = new DataView(out.buffer);
-  view.setBigUint64(0, BigInt(value), true);
-  return out;
 }
 
 async function safeGetAccountInfo(

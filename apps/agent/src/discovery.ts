@@ -349,8 +349,13 @@ function classifySapTier(
     return buildTarget(base, tier, token, route, "unsupported_settlement", reasons, pricePerCallDisplay);
   }
 
-  if (route === "x402" && !base.endpoint?.startsWith("https://")) {
+  if (route === "x402" && (!base.endpoint?.startsWith("https://") || hasEndpointTemplatePlaceholder(base.endpoint))) {
     reasons.push("x402 tier but endpoint is not usable");
+    return buildTarget(base, tier, token, route, "missing_endpoint", reasons, pricePerCallDisplay);
+  }
+
+  if (route === "x402" && isLikelyX402MetadataEndpoint(base.endpoint)) {
+    reasons.push("x402 endpoint appears to be metadata/pricing rather than a payable resource");
     return buildTarget(base, tier, token, route, "missing_endpoint", reasons, pricePerCallDisplay);
   }
 
@@ -778,6 +783,29 @@ function isPublicEndpoint(endpoint: string | null): boolean {
   } catch {
     return false;
   }
+}
+
+function isLikelyX402MetadataEndpoint(endpoint: string | null): boolean {
+  if (!endpoint) return false;
+
+  try {
+    const url = new URL(endpoint);
+    const normalized = `${url.pathname}${url.hash}`.toLowerCase();
+    return (
+      url.hostname.toLowerCase() === "github.com" ||
+      normalized.includes("/.well-known/x402") ||
+      normalized.endsWith("/pricing") ||
+      normalized.endsWith("/manifest") ||
+      normalized.includes("/manifest/") ||
+      normalized.includes("/openapi")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function hasEndpointTemplatePlaceholder(endpoint: string | null): boolean {
+  return Boolean(endpoint?.includes("/:") || endpoint?.includes(":name"));
 }
 
 function hasAiCapability(

@@ -1,0 +1,15 @@
+[
+  {
+    "paymentId": "pay_babf17c7-3104-4b80-baf9-21d068768bdb",
+    "auditJobId": "audit_9d2e5a6b-72fc-49a1-b655-3fb211cf378d",
+    "provider": "unknown",
+    "method": "x402",
+    "amount": "0.1",
+    "currency": "USDC",
+    "service": "Solana Newsroom Autonomous Agent",
+    "createdAt": "2026-06-02T13:20:30.870Z",
+    "recipient": "CN5KEkSrn89TW79uuPvkgnUYRDTZNHNJ4j2rmwhGWsBR",
+    "status": "skipped",
+    "receipt": "Sentinel preflight blocked payment flow."
+  }
+]

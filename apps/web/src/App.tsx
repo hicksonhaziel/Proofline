@@ -7,6 +7,7 @@ import {
   loadLatestProof,
   loadProof,
   loadProofs,
+  loadSchedulerHealth,
   parseReceipt,
   proofCardPath,
   shortId,
@@ -14,6 +15,7 @@ import {
   summarizePayments,
 } from "./lib/proofs";
 import type { LedgerEntry, PaymentReceipt, ProofPacket } from "./lib/types";
+import type { SchedulerHealth } from "./lib/types";
 
 type Route = "live" | "ledger" | "proof" | "payments" | "ace" | "health";
 type Filter = "all" | "delivered" | "warning" | "failed" | "reaudit-needed" | "payment-skipped" | "high-risk";
@@ -32,6 +34,7 @@ interface AppState {
   latest: ProofPacket | null;
   selectedProof: ProofPacket | null;
   proofs: ProofPacket[];
+  schedulerHealth: SchedulerHealth | null;
   loading: boolean;
   error: string | null;
 }
@@ -41,6 +44,7 @@ const initialState: AppState = {
   latest: null,
   selectedProof: null,
   proofs: [],
+  schedulerHealth: null,
   loading: true,
   error: null,
 };
@@ -68,9 +72,9 @@ export function App(): ReactElement {
         const latest = await loadLatestProof();
         const selectedId = route.proofId ?? latest.proofPacketId;
         const selectedProof = selectedId === latest.proofPacketId ? latest : await loadProof(selectedId);
-        const proofs = await loadProofs(ledger);
+        const [proofs, schedulerHealth] = await Promise.all([loadProofs(ledger), loadSchedulerHealth()]);
         if (!cancelled) {
-          setState({ ledger, latest, selectedProof, proofs, loading: false, error: null });
+          setState({ ledger, latest, selectedProof, proofs, schedulerHealth, loading: false, error: null });
         }
       } catch (error) {
         if (!cancelled) {
@@ -118,7 +122,7 @@ export function App(): ReactElement {
             ) : route.name === "ace" ? (
               <AceUsageView ledger={state.ledger} proofs={state.proofs} navigate={navigate} />
             ) : route.name === "health" ? (
-              <HealthView ledger={state.ledger} proofs={state.proofs} latest={state.latest} />
+              <HealthView ledger={state.ledger} proofs={state.proofs} latest={state.latest} schedulerHealth={state.schedulerHealth} />
             ) : state.selectedProof ? (
               <ProofDetailView proof={state.selectedProof} ledgerEntry={selectedLedgerEntry} navigate={navigate} />
             ) : null}
@@ -639,12 +643,25 @@ function AceUsageView({
   );
 }
 
-function HealthView({ ledger, proofs, latest }: { ledger: LedgerEntry[]; proofs: ProofPacket[]; latest: ProofPacket }): ReactElement {
+function HealthView({
+  ledger,
+  proofs,
+  latest,
+  schedulerHealth,
+}: {
+  ledger: LedgerEntry[];
+  proofs: ProofPacket[];
+  latest: ProofPacket;
+  schedulerHealth: SchedulerHealth | null;
+}): ReactElement {
   const lastAudit = ledger[0]?.createdAt;
   const failed = ledger.filter((entry) => entry.verdict === "failed").length;
-  const queueSignal = proofs.some((proof) => proof.auditStatus === "running") ? "running" : "idle";
+  const queueSignal = schedulerHealth?.status ?? (proofs.some((proof) => proof.auditStatus === "running") ? "running" : "idle");
   const latestPayments = summarizePayments(latest.payments);
-  const activeJobs = proofs.filter((proof) => proof.auditStatus === "running").length;
+  const activeJobs = schedulerHealth?.queue?.eligible ?? proofs.filter((proof) => proof.auditStatus === "running").length;
+  const schedulerStatus = schedulerHealth?.status ?? "not published";
+  const lastSchedulerRun = schedulerHealth?.updatedAt ?? lastAudit;
+  const decisions = schedulerHealth?.decisions ?? [];
 
   return (
     <>
@@ -653,8 +670,8 @@ function HealthView({ ledger, proofs, latest }: { ledger: LedgerEntry[]; proofs:
         <p className="font-body-lg text-body-lg text-on-surface-variant">Runtime state derived from published Proofline artifacts. No fake balances or credits are shown.</p>
       </section>
       <section className="grid grid-cols-1 gap-gutter md:grid-cols-4">
-        <StatCard icon="monitor_heart" label="Proofline Status" value="publishing" tone="settled" />
-        <StatCard icon="schedule" label="Last Scheduler Run" value={formatDateTime(lastAudit)} />
+        <StatCard icon="monitor_heart" label="Scheduler Status" value={schedulerStatus} tone={schedulerStatus} />
+        <StatCard icon="schedule" label="Last Scheduler Run" value={formatDateTime(lastSchedulerRun)} />
         <StatCard icon="queue" label="Queue Length" value={String(activeJobs)} tone={queueSignal} />
         <StatCard icon="error" label="Failed Proofs" value={String(failed)} tone={failed > 0 ? "failed" : "settled"} />
       </section>
@@ -666,19 +683,50 @@ function HealthView({ ledger, proofs, latest }: { ledger: LedgerEntry[]; proofs:
             <Field label="Audit Job" value={latest.auditJob?.auditJobId} />
             <Field label="Sentinel" value={latest.sentinelCheck?.status} tone={latest.sentinelCheck?.status} />
             <Field label="Ace Settled" value={`${latestPayments.aceTotal.toFixed(6)} USDC`} tone="settled" />
-            <Field label="Available Credits" value="not published" />
-            <Field label="Wallet Balance" value="not published" />
+            <Field label="Payment Mode" value={schedulerHealth?.paymentMode ?? "not published"} />
+            <Field label="Scheduler Mode" value={schedulerHealth?.mode ?? "not published"} />
           </div>
         </div>
         <div className="panel p-stack-md">
-          <h2 className="mb-stack-md border-b border-outline-variant pb-stack-sm font-headline-sm text-headline-sm">Artifact Sources</h2>
+          <h2 className="mb-stack-md border-b border-outline-variant pb-stack-sm font-headline-sm text-headline-sm">Automation Controls</h2>
           <div className="grid grid-cols-1 gap-stack-md sm:grid-cols-2">
-            <Field label="Ledger" value="/proofs/ledger.json" />
-            <Field label="Latest Proof" value="/proofs/latest.json" />
-            <Field label="Proof Cards" value="/proofs/*-card.png/svg" />
-            <Field label="SAP Agent" value="/agent.json" />
+            <Field label="Per Audit Cap" value={`${schedulerHealth?.budgets?.maxSpendPerAuditUsdc ?? "not published"} USDC`} />
+            <Field label="Hourly Spend" value={`${(schedulerHealth?.budgets?.spentLastHourUsdc ?? 0).toFixed(6)} USDC`} />
+            <Field label="Daily Spend" value={`${(schedulerHealth?.budgets?.spentLastDayUsdc ?? 0).toFixed(6)} USDC`} />
+            <Field label="Allow Paid" value={schedulerHealth?.allowPaid === undefined ? "not published" : schedulerHealth.allowPaid ? "yes" : "no"} />
+            <Field label="Failed Retry Cap" value={schedulerHealth?.retryPolicy?.maxFailedPaymentRetries === undefined ? "not published" : String(schedulerHealth.retryPolicy.maxFailedPaymentRetries)} />
+            <Field label="Retry Window" value={schedulerHealth?.retryPolicy?.failedPaymentRetryWindowHours === undefined ? "not published" : `${schedulerHealth.retryPolicy.failedPaymentRetryWindowHours}h`} />
           </div>
         </div>
+      </section>
+      <section className="panel p-stack-md">
+        <h2 className="mb-stack-md border-b border-outline-variant pb-stack-sm font-headline-sm text-headline-sm">Scheduler Decisions</h2>
+        {decisions.length === 0 ? (
+          <div className="data text-on-surface-variant">No scheduler decisions published.</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] border-collapse text-left font-body-md text-body-md">
+              <thead>
+                <tr className="border-b border-outline-variant text-on-surface-variant">
+                  <th className="px-4 py-3 font-mono-label text-mono-label uppercase">Target</th>
+                  <th className="px-4 py-3 font-mono-label text-mono-label uppercase">Status</th>
+                  <th className="px-4 py-3 font-mono-label text-mono-label uppercase">Reason</th>
+                  <th className="px-4 py-3 font-mono-label text-mono-label uppercase">Job</th>
+                </tr>
+              </thead>
+              <tbody>
+                {decisions.map((decision, index) => (
+                  <tr key={`${decision.auditJobId ?? decision.targetAgentId ?? "decision"}-${index}`} className="border-b border-outline-variant">
+                    <td className="px-4 py-3 text-on-surface">{decision.targetName ?? "unknown"}</td>
+                    <td className={`px-4 py-3 ${statusClass(decision.status)}`}>{decision.status ?? "unknown"}</td>
+                    <td className="px-4 py-3 text-on-surface-variant">{decision.reason ?? "unknown"}</td>
+                    <td className="px-4 py-3 font-mono-label text-mono-label text-primary-container">{shortId(decision.auditJobId)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </>
   );

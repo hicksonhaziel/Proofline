@@ -1,0 +1,52 @@
+{
+  "schedulerRunId": "scheduler_cdee0620-2fe2-46aa-8541-9ee549715a7c",
+  "status": "idle",
+  "mode": "demo",
+  "updatedAt": "2026-06-02T13:22:40.226Z",
+  "startedAt": "2026-06-02T13:22:40.197Z",
+  "stoppedAt": "2026-06-02T13:22:40.226Z",
+  "currentCycle": 1,
+  "intervalMinutes": 15,
+  "queue": {
+    "total": 3,
+    "eligible": 0,
+    "skipped": 3
+  },
+  "budgets": {
+    "maxSpendPerAuditUsdc": 0.35,
+    "maxSpendPerHourUsdc": 2,
+    "maxSpendPerDayUsdc": 10,
+    "spentLastHourUsdc": 0,
+    "spentLastDayUsdc": 0.15994999999999998
+  },
+  "retryPolicy": {
+    "maxFailedPaymentRetries": 1,
+    "failedPaymentRetryWindowHours": 24
+  },
+  "decisions": [
+    {
+      "targetName": "chainbard",
+      "targetAgentId": "7WES6mSvsw3YnMBBvFQotK2GczLMgUCCiKxJFgRXUbYh",
+      "status": "skipped",
+      "reason": "target audited inside configured re-audit window",
+      "auditJobId": "job_59a13414-a8fd-44f3-80ea-d938a315cb48"
+    },
+    {
+      "targetName": "Hatch",
+      "targetAgentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
+      "status": "skipped",
+      "reason": "target audited inside configured re-audit window",
+      "auditJobId": "job_f65a1799-8f74-454c-a36f-06c441e0c004"
+    },
+    {
+      "targetName": "Solana Newsroom Autonomous Agent",
+      "targetAgentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
+      "status": "skipped",
+      "reason": "target audited inside configured re-audit window",
+      "auditJobId": "job_4d088a71-8184-406c-84b5-7a3844516934"
+    }
+  ],
+  "shutdownReason": "once_completed",
+  "paymentMode": "dry-run",
+  "allowPaid": true
+}

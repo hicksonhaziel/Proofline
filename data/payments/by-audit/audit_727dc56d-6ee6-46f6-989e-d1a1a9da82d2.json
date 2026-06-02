@@ -1,0 +1,67 @@
+[
+  {
+    "paymentId": "pay_7d001257-7f80-492a-aaae-311d3845a47f",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "provider": "sap",
+    "method": "x402",
+    "amount": "0.000001",
+    "currency": "SOL",
+    "recipient": "HE9MYDzoLAgnwbRXbiWRGGvoE2QE9LqKdQGJhNLPxtVj",
+    "service": "Pablito Settlement Sentinel",
+    "status": "pending",
+    "receipt": "Dry-run: SAP V1 SOL escrow simulation passed; no transaction sent.",
+    "createdAt": "2026-06-02T13:01:14.744Z"
+  },
+  {
+    "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_1",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "provider": "ace_data_cloud",
+    "method": "x402",
+    "amount": "0.000952",
+    "currency": "USDC",
+    "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+    "service": "ace_serp_google_search",
+    "status": "pending",
+    "receipt": "{\"endpoint\":\"https://api.acedata.cloud/serp/google\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"952\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+    "createdAt": "2026-06-02T13:01:25.625Z"
+  },
+  {
+    "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_2",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "provider": "ace_data_cloud",
+    "method": "x402",
+    "amount": "0.03998",
+    "currency": "USDC",
+    "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+    "service": "ace_openai_chat_completions",
+    "status": "pending",
+    "receipt": "{\"endpoint\":\"https://api.acedata.cloud/openai/chat/completions\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"39980\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+    "createdAt": "2026-06-02T13:01:25.626Z"
+  },
+  {
+    "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_3",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "provider": "ace_data_cloud",
+    "method": "x402",
+    "amount": "0.095215",
+    "currency": "USDC",
+    "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+    "service": "ace_localization_translate",
+    "status": "pending",
+    "receipt": "{\"endpoint\":\"https://api.acedata.cloud/localization/translate\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"95215\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+    "createdAt": "2026-06-02T13:01:25.626Z"
+  },
+  {
+    "paymentId": "pay_ace_audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2_4",
+    "auditJobId": "audit_727dc56d-6ee6-46f6-989e-d1a1a9da82d2",
+    "provider": "ace_data_cloud",
+    "method": "x402",
+    "amount": "0.023803",
+    "currency": "USDC",
+    "recipient": "0x4F0E2D3477a1B94CF33d16E442CEe4733dadCeE7",
+    "service": "ace_openai_images_edits",
+    "status": "pending",
+    "receipt": "{\"endpoint\":\"https://api.acedata.cloud/openai/images/edits\",\"network\":\"base\",\"scheme\":\"exact\",\"asset\":\"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"atomicAmount\":\"23803\",\"note\":\"Ace x402 quote captured in dry-run mode; no X-Payment signature was sent.\"}",
+    "createdAt": "2026-06-02T13:01:25.626Z"
+  }
+]

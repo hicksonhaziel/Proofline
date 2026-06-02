@@ -1,0 +1,15 @@
+[
+  {
+    "paymentId": "pay_524beb40-9a67-4533-9242-69c3f1a3035a",
+    "auditJobId": "audit_fd2f3529-6057-4c15-b22c-adc30f2d8f08",
+    "provider": "unknown",
+    "method": "x402",
+    "amount": "0.01",
+    "currency": "USDC",
+    "recipient": "9cssRtj1tpo8juYMKVw4BLonEXnSH2e6bfc9Qp88fN48",
+    "service": "chainbard",
+    "status": "pending",
+    "receipt": "Dry-run x402 quote status 404. Manual settlement required for this endpoint type. payload={\"quoteUrl\":\"https://chainbard.vercel.app/payment/quote\",\"quoteStatus\":404,\"quoteBody\":\"<!DOCTYPE html><html lang=\\\"en\\\" class=\\\"fraunces_c29f612-module__JQ4iGa__variable ibm_plex_mono_46139293-module__ZgHWIW__variable h-full antialiased\\\" data-scroll-behavior=\\\"smooth\\\"><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"stylesheet\\\" href=\\\"/_next/static/chunks/0h9ec18nhc5ks.css\\\" data-precedence=\\\"next\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/0t1et0tty8o9s.js\\\"/><script src=\\\"/_next/static/chunks...[trimmed 13183 chars]\"}",
+    "createdAt": "2026-06-02T13:18:09.251Z"
+  }
+]

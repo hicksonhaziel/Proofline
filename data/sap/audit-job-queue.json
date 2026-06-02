@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-01T15:18:37.526Z",
-  "totalJobs": 11,
+  "generatedAt": "2026-06-02T13:17:50.502Z",
+  "totalJobs": 3,
   "jobs": [
     {
-      "auditJobId": "job_83dc10d6-8d27-4328-890f-4b8ec4795483",
+      "auditJobId": "job_59a13414-a8fd-44f3-80ea-d938a315cb48",
       "target": {
         "agentId": "7WES6mSvsw3YnMBBvFQotK2GczLMgUCCiKxJFgRXUbYh",
         "name": "chainbard",
@@ -18,11 +18,11 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
+      "createdAt": "2026-06-02T13:17:50.502Z",
       "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_bf2d8cb5-0d17-49f6-aea5-01cbff6e2eb0",
+      "auditJobId": "job_f65a1799-8f74-454c-a36f-06c441e0c004",
       "target": {
         "agentId": "FYWc5gaxvzDGk5fnQHg5ibfCtYdX68fkynxBH83ZdVs6",
         "name": "Hatch",
@@ -37,178 +37,26 @@
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
+      "createdAt": "2026-06-02T13:17:50.502Z",
       "maxSpendUsdc": 0.35
     },
     {
-      "auditJobId": "job_25f96203-f25f-447e-b539-2fc06eb1997f",
+      "auditJobId": "job_4d088a71-8184-406c-84b5-7a3844516934",
       "target": {
-        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
-        "name": "hyre",
-        "toolId": "standard",
-        "toolName": "standard",
-        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
-        "category": "sap_agent",
-        "price": "0.008 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_f7172097-6c11-4ce1-9d8d-eeb180bd540c",
-      "target": {
-        "agentId": "HJ9PtvCqK5Ma8BXayd7n6p4rBWbx736DptwNy1fgZcek",
-        "name": "hyre",
-        "toolId": "premium",
-        "toolName": "premium",
-        "description": "Hyre Agent is a DeFi intelligence API that turns raw on-chain data into actionable signals all accessible via pay-per-call using x402 + MPP.",
-        "category": "sap_agent",
-        "price": "0.025 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://me.hyreagent.fun/manifest/hyre",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_c8b00f1c-57c6-455d-affe-5d7c76c7b44a",
-      "target": {
-        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
-        "name": "Ocean",
-        "toolId": "basic",
-        "toolName": "basic",
-        "description": "Ocean agent",
-        "category": "sap_agent",
-        "price": "0.001 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_9afe5d7c-2af2-4bae-9684-fb4f90783de6",
-      "target": {
-        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
-        "name": "Ocean",
-        "toolId": "standard",
-        "toolName": "standard",
-        "description": "Ocean agent",
-        "category": "sap_agent",
-        "price": "0.008 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_5e15132a-8e38-4ee6-a06e-74cdb813102c",
-      "target": {
-        "agentId": "AVB7WVqgH5YvcddA6EcqKALDGAxbmmzZGHFtvCrFsxrX",
-        "name": "Ocean",
-        "toolId": "premium",
-        "toolName": "premium",
-        "description": "Ocean agent",
-        "category": "sap_agent",
-        "price": "0.025 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://mpp.hyreagent.fun/agents/ocean",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_e7f9909e-1430-4990-a726-88b368ce0e8c",
-      "target": {
-        "agentId": "C63dGSLZvT3kyEv4Fp3VMnKR7PHWf2BjLTV8yB3au5PY",
-        "name": "Sol Agent — OOBE x Ace Data Cloud",
-        "toolId": "standard",
-        "toolName": "standard",
-        "description": "Autonomous research agent. Discovers tools via SAP, calls Ace Data Cloud search + DeepSeek-V3 + nano-banana via x402 USDC settlements on Solana, and pings Synapse Sentinel as a final agent-to-agent step.",
+        "agentId": "FDFUWf9YHkKuPKLnwf9koKGU4aYPBiSz3LTQUtfprxXZ",
+        "name": "Solana Newsroom Autonomous Agent",
+        "toolId": "default-x402",
+        "toolName": "default-x402",
+        "description": "An autonomous agent that scrapes Web3 news, summarizes updates using LLMs, and generates visual art.",
         "category": "sap_agent",
         "price": "0.1 USDC",
         "currency": "USDC",
         "paymentMethod": "x402",
-        "endpoint": "https://github.com/dymchenko/sol-agent",
+        "endpoint": "https://api.acedata.cloud",
         "source": "sap_discovery"
       },
       "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_160611bc-e6e7-4970-86a4-8781c33eb3e2",
-      "target": {
-        "agentId": "DDfMoM3P1gmDrVdCVoQ1gDeUr41haqCUh3Q1Q2rbGQ4t",
-        "name": "SolanaIntelAgent",
-        "toolId": "standard",
-        "toolName": "standard",
-        "description": "Fully autonomous on-chain intelligence agent. Analyzes Solana ecosystem every 10 minutes using Ace Data Cloud AI services (LLM, image, audio). Settles all payments via x402 EscrowV2. Zero human input after startup.",
-        "category": "sap_agent",
-        "price": "0.000005 SOL",
-        "currency": "SOL",
-        "paymentMethod": "x402",
-        "endpoint": "https://github.com/yourusername/solana-intel-agent#x402",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_03fe4e70-e13a-4e51-a2ed-3477d0ec0e78",
-      "target": {
-        "agentId": "3xjV4yuGDcX5mLes1aCnZsvEjn56rtYtwzvM4Vw214aF",
-        "name": "Toly Agent",
-        "toolId": "standard",
-        "toolName": "standard",
-        "description": "toly agent",
-        "category": "sap_agent",
-        "price": "0.1255 USDC",
-        "currency": "USDC",
-        "paymentMethod": "x402",
-        "endpoint": "https://api.orbit-agents.com/x402/toly-agent/.well-known/x402",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
-      "maxSpendUsdc": 0.35
-    },
-    {
-      "auditJobId": "job_eb72ddbd-255a-40ee-9ef7-58b4958d246a",
-      "target": {
-        "agentId": "Ayq45yjQA8atLZVQ3o8BJQwSopxa3EFzFVsMxRP75WJV",
-        "name": "Pablito Settlement Sentinel",
-        "toolId": "demo",
-        "toolName": "demo",
-        "description": "Autonomous workflow sentinel: discovers workflow-analysis tools, executes a bounded AI classification task, and produces x402/SAP settlement proof. Demo-safe; no private data.",
-        "category": "sap_agent",
-        "price": "0.000001 SOL",
-        "currency": "SOL",
-        "paymentMethod": "x402",
-        "endpoint": "https://wiselyenterprisesllc.com/.well-known/x402/pablito-settlement-sentinel.json",
-        "source": "sap_discovery"
-      },
-      "status": "queued",
-      "createdAt": "2026-06-01T15:18:37.526Z",
+      "createdAt": "2026-06-02T13:17:50.502Z",
       "maxSpendUsdc": 0.35
     }
   ]

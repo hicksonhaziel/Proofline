@@ -1,0 +1,15 @@
+[
+  {
+    "paymentId": "pay_a7e4790a-90cb-41e4-bd68-77dcf0f70dbd",
+    "auditJobId": "audit_b8e80d08-d7bd-4b5f-b85f-516a194df029",
+    "provider": "unknown",
+    "method": "sap_escrow",
+    "amount": "0.001",
+    "currency": "USDC",
+    "service": "Hatch",
+    "createdAt": "2026-06-02T13:18:41.070Z",
+    "recipient": "2dofAQVDPuf4YgMEENM8NFMMkNanqRwGTd1U5nh1PXCt",
+    "status": "skipped",
+    "receipt": "Sentinel preflight blocked payment flow."
+  }
+]

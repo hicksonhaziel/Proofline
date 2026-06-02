@@ -45,7 +45,7 @@ interface PaymentPlanRecord {
   escrow: {
     escrowNonce: number;
     agentPda: string;
-    agentStakePda: string;
+    agentStakePda?: string;
     agentStatsPda: string;
     pricingMenuPda: string;
     escrowPda: string;
@@ -55,8 +55,8 @@ interface PaymentPlanRecord {
     estimatedCostPerCallIfFullyUsed?: string;
     token: string;
     tokenDecimals: number;
-    settlementSecurity: "dispute_window";
-    disputeWindowSlots: string;
+    escrowVersion: "v1_legacy";
+    settlementSecurity: "legacy_v1";
   };
   x402Headers: Record<string, string>;
   simulation?: {
@@ -77,7 +77,6 @@ const OUTPUT_PATH = "data/sap/payment-plan.json";
 const DEFAULT_NONCE = 0;
 const DEFAULT_MAX_CALLS = 1;
 const { BN } = anchor;
-const DEFAULT_DISPUTE_WINDOW_SLOTS = new BN(150);
 const MAX_SEND_PRICE_LAMPORTS = 10_000;
 const MAX_SEND_CALLS = 25;
 
@@ -125,10 +124,9 @@ async function main(): Promise<void> {
   }
 
   const agentPda = new PublicKey(target.pda);
-  const [agentStakePda] = derivePda(["sap_stake", agentPda], String(sdk.PROGRAM_ID));
   const [agentStatsPda] = derivePda(["sap_stats", agentPda], String(sdk.PROGRAM_ID));
   const [pricingMenuPda] = derivePda(["sap_pricing", agentPda], String(sdk.PROGRAM_ID));
-  const [escrowPda] = derivePda(["sap_escrow_v2", agentPda, wallet, u64Le(args.nonce)], String(sdk.PROGRAM_ID));
+  const [escrowPda] = derivePda(["sap_escrow", agentPda, wallet], String(sdk.PROGRAM_ID));
   const existingEscrow = await safeGetAccountInfo(client, escrowPda, logger);
   const maxCalls = new BN(args.maxCalls);
   const initialDeposit = pricePerCall.mul(maxCalls);
@@ -143,7 +141,6 @@ async function main(): Promise<void> {
     escrow: {
       escrowNonce: args.nonce,
       agentPda: agentPda.toBase58(),
-      agentStakePda: agentStakePda.toBase58(),
       agentStatsPda: agentStatsPda.toBase58(),
       pricingMenuPda: pricingMenuPda.toBase58(),
       escrowPda: escrowPda.toBase58(),
@@ -152,8 +149,8 @@ async function main(): Promise<void> {
       initialDeposit: initialDeposit.toString(),
       token: "SOL",
       tokenDecimals: 9,
-      settlementSecurity: "dispute_window",
-      disputeWindowSlots: DEFAULT_DISPUTE_WINDOW_SLOTS.toString(),
+      escrowVersion: "v1_legacy",
+      settlementSecurity: "legacy_v1",
     },
     x402Headers: {
       "X-Payment-Protocol": "SAP-x402",
@@ -170,8 +167,9 @@ async function main(): Promise<void> {
       "Dry-run simulation does not spend SOL.",
       "Opening an escrow spends transaction fee plus rent for the escrow account, even when the per-call price is tiny.",
       "An escrow is not meant to be opened per call. Reuse the same target/depositor/nonce escrow until its funded calls are used.",
-      "The agent, agent stake, pricing menu, and escrow PDAs are derived from the SAP program ID and target agent PDA.",
-      "For the Phase 4B dry-run, Proofline uses its own wallet as the dispute-window arbiter.",
+      "This uses SAP legacy V1 SOL escrow because V2 USDC escrow did not pass simulation with the currently installed SDK/account layout.",
+      "V1 escrow has no dispute-window arbiter; settlement security is simpler than escrow V2.",
+      "The agent, agent stats, pricing menu, and escrow PDAs are derived from the SAP program ID and target agent PDA.",
     ],
   };
 
@@ -188,15 +186,13 @@ async function main(): Promise<void> {
     return;
   }
 
-  const instruction = await client.escrow.createEscrowV2({
+  const instruction = await client.escrow.createEscrow({
     signer: keypair,
     depositor: wallet,
     agent: agentPda,
-    agentStake: agentStakePda,
     agentStats: agentStatsPda,
     pricingMenu: pricingMenuPda,
     escrow: escrowPda,
-    escrowNonce: new BN(args.nonce),
     pricePerCall,
     maxCalls,
     initialDeposit,
@@ -204,10 +200,6 @@ async function main(): Promise<void> {
     volumeCurve: [],
     tokenMint: null,
     tokenDecimals: 9,
-    settlementSecurity: 2,
-    disputeWindowSlots: DEFAULT_DISPUTE_WINDOW_SLOTS,
-    coSigner: null,
-    arbiter: wallet,
   });
   const tx = await client.buildTransaction([instruction], wallet);
   tx.sign([keypair]);
@@ -391,7 +383,6 @@ function buildUnsupportedRecord(
     escrow: {
       escrowNonce: nonce,
       agentPda: target.pda,
-      agentStakePda: placeholder,
       agentStatsPda: placeholder,
       pricingMenuPda: placeholder,
       escrowPda: placeholder,
@@ -400,8 +391,8 @@ function buildUnsupportedRecord(
       initialDeposit: "0",
       token: target.token,
       tokenDecimals: target.token === "SOL" ? 9 : 6,
-      settlementSecurity: "dispute_window",
-      disputeWindowSlots: DEFAULT_DISPUTE_WINDOW_SLOTS.toString(),
+      escrowVersion: "v1_legacy",
+      settlementSecurity: "legacy_v1",
     },
     x402Headers: {},
     notes: [
@@ -420,12 +411,6 @@ function derivePda(seeds: Array<string | PublicKey | Buffer>, programId: string)
     }),
     new PublicKey(programId),
   );
-}
-
-function u64Le(value: number): Buffer {
-  const buffer = Buffer.alloc(8);
-  buffer.writeBigUInt64LE(BigInt(value));
-  return buffer;
 }
 
 async function writeJson(path: string, value: unknown): Promise<string> {
