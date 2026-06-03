@@ -128,3 +128,27 @@ create index if not exists payment_receipts_created_at_idx on public.payment_rec
 create index if not exists proof_packets_created_at_idx on public.proof_packets (created_at desc);
 create index if not exists scheduler_runs_updated_at_idx on public.scheduler_runs (updated_at desc);
 create index if not exists commerce_sales_created_at_idx on public.commerce_sales (created_at desc);
+
+do $$
+declare
+  realtime_table text;
+begin
+  foreach realtime_table in array array[
+    'scheduler_runs',
+    'audit_jobs',
+    'payment_receipts',
+    'proof_packets',
+    'audit_runs'
+  ]
+  loop
+    if not exists (
+      select 1
+      from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = realtime_table
+    ) then
+      execute format('alter publication supabase_realtime add table public.%I', realtime_table);
+    end if;
+  end loop;
+end $$;

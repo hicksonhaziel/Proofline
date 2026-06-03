@@ -1,5 +1,5 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { CommerceSale, LedgerEntry, PaymentReceipt, ProofPacket, SchedulerHealth } from "./types";
+import { createClient, type RealtimeChannel, type SupabaseClient } from "@supabase/supabase-js";
+import type { CommerceSale, LedgerEntry, LiveChangeEvent, PaymentReceipt, ProofPacket, SchedulerHealth } from "./types";
 
 export async function loadLedger(): Promise<LedgerEntry[]> {
   const supabase = supabaseClient();
@@ -75,7 +75,7 @@ export async function loadCommerceSales(): Promise<CommerceSale[]> {
   return (data ?? []) as CommerceSale[];
 }
 
-function supabaseClient(): SupabaseClient | null {
+export function supabaseClient(): SupabaseClient | null {
   const env = import.meta.env as Record<string, string | undefined>;
   const url = env.VITE_SUPABASE_URL;
   const anonKey = env.VITE_SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -86,6 +86,57 @@ function supabaseClient(): SupabaseClient | null {
       autoRefreshToken: false,
     },
   });
+}
+
+export function subscribeToLiveChanges(onChange: (event: LiveChangeEvent) => void): (() => void) | null {
+  const supabase = supabaseClient();
+  if (!supabase) return null;
+
+  const tables = ["scheduler_runs", "audit_jobs", "payment_receipts", "proof_packets", "audit_runs"];
+  const channel = supabase.channel("proofline-live-dashboard");
+
+  for (const table of tables) {
+    channel.on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table,
+      },
+      (payload) => {
+        onChange({
+          table,
+          eventType: payload.eventType as LiveChangeEvent["eventType"],
+          receivedAt: new Date().toISOString(),
+        });
+      },
+    );
+  }
+
+  channel.subscribe((status) => {
+    if (status === "SUBSCRIBED") {
+      onChange({
+        table: "realtime",
+        eventType: "*",
+        receivedAt: new Date().toISOString(),
+      });
+    }
+    if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+      onChange({
+        table: "realtime",
+        eventType: "*",
+        receivedAt: new Date().toISOString(),
+      });
+    }
+  });
+
+  return () => {
+    void removeLiveChannel(supabase, channel);
+  };
+}
+
+async function removeLiveChannel(supabase: SupabaseClient, channel: RealtimeChannel): Promise<void> {
+  await supabase.removeChannel(channel);
 }
 
 function ledgerEntryFromPacket(packet: ProofPacket, proofCard?: string): LedgerEntry {

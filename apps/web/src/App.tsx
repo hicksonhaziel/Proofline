@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactElement } from "react";
+import { motion } from "framer-motion";
 import {
   formatDate,
   formatDateTime,
@@ -13,9 +14,10 @@ import {
   proofCardPath,
   shortId,
   statusTone,
+  subscribeToLiveChanges,
   summarizePayments,
 } from "./lib/proofs";
-import type { CommerceSale, LedgerEntry, PaymentReceipt, ProofPacket } from "./lib/types";
+import type { CommerceSale, LedgerEntry, LiveChangeEvent, PaymentReceipt, ProofPacket } from "./lib/types";
 import type { SchedulerHealth } from "./lib/types";
 
 type Route = "live" | "ledger" | "proof" | "payments" | "ace" | "health" | "commerce";
@@ -41,6 +43,13 @@ interface AppState {
   error: string | null;
 }
 
+interface LiveSignal {
+  status: "connecting" | "live" | "polling" | "idle";
+  transport: "supabase_realtime" | "polling";
+  lastEventAt?: string;
+  lastEventLabel: string;
+}
+
 const initialState: AppState = {
   ledger: [],
   latest: null,
@@ -57,6 +66,12 @@ export function App(): ReactElement {
   const [path, setPath] = useState(window.location.pathname);
   const [filter, setFilter] = useState<Filter>("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [liveSignal, setLiveSignal] = useState<LiveSignal>({
+    status: "connecting",
+    transport: "polling",
+    lastEventLabel: "Connecting to live audit feed",
+  });
+  const refreshTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onPopState = (): void => setPath(window.location.pathname);
@@ -66,34 +81,85 @@ export function App(): ReactElement {
 
   const route = useMemo(() => getRoute(path), [path]);
 
-  useEffect(() => {
-    let cancelled = false;
-    async function run(): Promise<void> {
+  const refreshDashboard = useCallback(
+    async ({ showLoading = true }: { showLoading?: boolean } = {}): Promise<void> => {
       try {
-        setState((current) => ({ ...current, loading: true, error: null }));
+        if (showLoading) setState((current) => ({ ...current, loading: true, error: null }));
         const ledger = await loadLedger();
         const latest = await loadLatestProof();
         const selectedId = route.proofId ?? latest.proofPacketId;
         const selectedProof = selectedId === latest.proofPacketId ? latest : await loadProof(selectedId);
         const [proofs, schedulerHealth, commerceSales] = await Promise.all([loadProofs(ledger), loadSchedulerHealth(), loadCommerceSales()]);
-        if (!cancelled) {
-          setState({ ledger, latest, selectedProof, proofs, schedulerHealth, commerceSales, loading: false, error: null });
-        }
+        setState({ ledger, latest, selectedProof, proofs, schedulerHealth, commerceSales, loading: false, error: null });
       } catch (error) {
-        if (!cancelled) {
-          setState((current) => ({
-            ...current,
-            loading: false,
-            error: error instanceof Error ? error.message : "Unable to load dashboard data",
-          }));
-        }
+        setState((current) => ({
+          ...current,
+          loading: false,
+          error: error instanceof Error ? error.message : "Unable to load dashboard data",
+        }));
       }
+    },
+    [route.proofId],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    async function run(): Promise<void> {
+      await refreshDashboard();
+      if (cancelled) return;
     }
     void run();
     return () => {
       cancelled = true;
     };
-  }, [route.proofId]);
+  }, [refreshDashboard]);
+
+  useEffect(() => {
+    if (route.name !== "live") return undefined;
+
+    let disposed = false;
+    const scheduleRefresh = (event: LiveChangeEvent | null, transport: LiveSignal["transport"]): void => {
+      if (disposed) return;
+      if (refreshTimerRef.current) window.clearTimeout(refreshTimerRef.current);
+      const receivedAt = event?.receivedAt ?? new Date().toISOString();
+      setLiveSignal({
+        status: event ? "live" : "polling",
+        transport,
+        lastEventAt: receivedAt,
+        lastEventLabel: event ? liveEventLabel(event) : "Polling for latest Proofline activity",
+      });
+      refreshTimerRef.current = window.setTimeout(() => {
+        void refreshDashboard({ showLoading: false });
+      }, 350);
+    };
+
+    setLiveSignal((current) => ({
+      ...current,
+      status: "connecting",
+      lastEventLabel: "Watching Supabase for new audit events",
+    }));
+
+    const unsubscribe = subscribeToLiveChanges((event) => scheduleRefresh(event, "supabase_realtime"));
+    if (!unsubscribe) {
+      setLiveSignal({
+        status: "polling",
+        transport: "polling",
+        lastEventAt: new Date().toISOString(),
+        lastEventLabel: "Realtime unavailable; polling for latest activity",
+      });
+    }
+
+    const pollingInterval = window.setInterval(() => {
+      scheduleRefresh(null, unsubscribe ? "supabase_realtime" : "polling");
+    }, 15000);
+
+    return () => {
+      disposed = true;
+      if (refreshTimerRef.current) window.clearTimeout(refreshTimerRef.current);
+      window.clearInterval(pollingInterval);
+      unsubscribe?.();
+    };
+  }, [route.name, refreshDashboard]);
 
   const selectedLedgerEntry = state.ledger.find((entry) => entry.proofPacketId === state.selectedProof?.proofPacketId);
   const navigate = (href: string): void => {
@@ -110,7 +176,7 @@ export function App(): ReactElement {
         {!state.loading && state.latest ? (
           <>
             {route.name === "live" ? (
-              <LiveView ledger={state.ledger} latest={state.latest} navigate={navigate} />
+              <LiveView ledger={state.ledger} latest={state.latest} schedulerHealth={state.schedulerHealth} liveSignal={liveSignal} navigate={navigate} />
             ) : route.name === "ledger" ? (
               <LedgerView
                 ledger={state.ledger}
@@ -224,15 +290,20 @@ function Header({ route, navigate }: { route: Route; navigate: (href: string) =>
 function LiveView({
   ledger,
   latest,
+  schedulerHealth,
+  liveSignal,
   navigate,
 }: {
   ledger: LedgerEntry[];
   latest: ProofPacket;
+  schedulerHealth: SchedulerHealth | null;
+  liveSignal: LiveSignal;
   navigate: (href: string) => void;
 }): ReactElement {
   const latestEntry = ledger.find((entry) => entry.proofPacketId === latest.proofPacketId);
   const payments = summarizePayments(latest.payments);
   const timeline = buildTimeline(latest);
+  const activeDecision = schedulerHealth?.decisions?.find((decision) => decision.status === "selected") ?? schedulerHealth?.decisions?.[0];
 
   return (
     <>
@@ -240,6 +311,8 @@ function LiveView({
         <h1 className="font-display-lg text-display-lg text-on-surface">Proofline Live</h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant">Active paid execution evidence for SAP agents and Ace Data Cloud usage.</p>
       </section>
+
+      <LiveStatusStrip signal={liveSignal} schedulerHealth={schedulerHealth} latest={latest} activeDecision={activeDecision} />
 
       <section className="grid grid-cols-1 gap-gutter md:grid-cols-4">
         <StatCard icon="account_tree" label="Total Proofs" value={String(ledger.length)} />
@@ -277,6 +350,53 @@ function LiveView({
         </div>
       </section>
     </>
+  );
+}
+
+function LiveStatusStrip({
+  signal,
+  schedulerHealth,
+  latest,
+  activeDecision,
+}: {
+  signal: LiveSignal;
+  schedulerHealth: SchedulerHealth | null;
+  latest: ProofPacket;
+  activeDecision?: NonNullable<SchedulerHealth["decisions"]>[number];
+}): ReactElement {
+  const running = schedulerHealth?.status === "running";
+  const status = running ? "running" : signal.status === "live" ? "live" : signal.status;
+  const latestTarget = activeDecision?.targetName ?? schedulerHealth?.lastAudit?.targetName ?? latest.targetAgent?.name ?? "unknown";
+  const lastActivity = signal.lastEventAt ?? schedulerHealth?.updatedAt ?? latest.createdAt;
+  const statusLabel =
+    status === "running"
+      ? "Audit running"
+      : status === "live"
+        ? "Live update received"
+        : status === "connecting"
+          ? "Connecting"
+          : "Watching for activity";
+
+  return (
+    <section className="panel relative overflow-hidden p-stack-md">
+      <div className="absolute inset-x-0 top-0 h-px bg-primary-container" />
+      <div className="grid grid-cols-1 gap-stack-md lg:grid-cols-[1.2fr_1fr_1fr]">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${status === "running" || status === "live" ? "bg-[#55F08A]" : "bg-primary-container"}`} />
+          <div className="min-w-0">
+            <div className="font-headline-sm text-headline-sm text-on-surface">{statusLabel}</div>
+            <div className="mt-1 truncate font-body-sm text-body-sm text-on-surface-variant">{signal.lastEventLabel}</div>
+          </div>
+        </div>
+        <Field label="Latest Target" value={latestTarget} />
+        <Field label="Last Activity" value={formatDateTime(lastActivity)} tone={status === "running" || status === "live" ? "settled" : undefined} />
+      </div>
+      <div className="mt-stack-md grid grid-cols-1 gap-stack-sm sm:grid-cols-3">
+        <Field label="Transport" value={signal.transport === "supabase_realtime" ? "Supabase Realtime + polling fallback" : "Polling fallback"} />
+        <Field label="Scheduler" value={schedulerHealth?.status ?? "not published"} tone={schedulerHealth?.status} />
+        <Field label="Fallback View" value={`Last proof: ${shortId(latest.proofPacketId)}`} />
+      </div>
+    </section>
   );
 }
 
@@ -1211,6 +1331,17 @@ function buildTimeline(proof: ProofPacket): TimelineEvent[] {
   ];
 }
 
+function liveEventLabel(event: LiveChangeEvent): string {
+  const action = event.eventType === "INSERT" ? "new" : event.eventType === "UPDATE" ? "updated" : event.eventType.toLowerCase();
+  if (event.table === "scheduler_runs") return `Scheduler ${action} run state`;
+  if (event.table === "audit_jobs") return `Audit job ${action}`;
+  if (event.table === "payment_receipts") return `Payment receipt ${action}`;
+  if (event.table === "proof_packets") return `Proof packet ${action}`;
+  if (event.table === "audit_runs") return `Audit run ${action}`;
+  if (event.table === "realtime") return "Supabase Realtime connected";
+  return `Live event received from ${event.table}`;
+}
+
 function aceServicePurpose(service: string): string {
   if (service.includes("serp")) return "public footprint";
   if (service.includes("chat")) return "audit verdict";
@@ -1259,7 +1390,12 @@ function LoadingPanel(): ReactElement {
     <div className="panel p-stack-md">
       <div className="label">Loading Proofline Live</div>
       <div className="mt-2 h-unit w-full overflow-hidden rounded-full bg-surface-variant">
-        <div className="h-full w-1/3 animate-pulse bg-primary-container" />
+        <motion.div
+          className="h-full w-1/3 rounded-full bg-primary-container"
+          initial={{ x: "-100%" }}
+          animate={{ x: ["-100%", "320%"] }}
+          transition={{ duration: 1.25, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
     </div>
   );

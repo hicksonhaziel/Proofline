@@ -200,3 +200,9 @@ export interface CommerceSale {
   receipt?: Record<string, unknown> | null;
   output?: Record<string, unknown> | null;
 }
+
+export interface LiveChangeEvent {
+  table: string;
+  eventType: "INSERT" | "UPDATE" | "DELETE" | "*";
+  receivedAt: string;
+}

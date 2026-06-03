@@ -19,6 +19,8 @@
     "commerce:buyer-demo": "tsx apps/agent/src/proofline-buyer-demo.ts",
     "test:online": "tsx apps/agent/src/phase13-validate.ts",
     "phase13:validate": "tsx apps/agent/src/phase13-validate.ts",
+    "demo:dry-run": "PAYMENT_MODE=dry-run PAYMENT_CONFIRM_SPEND=false npm run sap:discover && PAYMENT_MODE=dry-run PAYMENT_CONFIRM_SPEND=false npm run agent:once && npm run test:online",
+    "demo:ace-paid": "PAYMENT_MODE=send PAYMENT_CONFIRM_SPEND=true npm run ace:x402:smoke",
     "audit:once": "tsx apps/agent/src/audit-once.ts",
     "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
     "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",
@@ -39,6 +41,7 @@
     "@solana/web3.js": "^1.98.4",
     "@supabase/supabase-js": "^2.107.0",
     "dotenv": "^16.4.7",
+    "framer-motion": "^12.40.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "viem": "^2.51.3"
