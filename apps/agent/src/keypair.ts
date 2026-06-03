@@ -3,7 +3,10 @@ import { resolve } from "node:path";
 import { Keypair } from "@solana/web3.js";
 
 export async function loadKeypairFromFile(path: string): Promise<Keypair> {
-  const raw = process.env.SAP_KEYPAIR_JSON ?? decodeBase64(process.env.SAP_KEYPAIR_BASE64) ?? (await readKeypairFile(path));
+  const raw = process.env.SAP_KEYPAIR_JSON ?? decodeBase64(process.env.SAP_KEYPAIR_BASE64) ?? (path ? await readKeypairFile(path) : null);
+  if (!raw) {
+    throw new Error("Missing Solana keypair. Set SAP_KEYPAIR_BASE64, SAP_KEYPAIR_JSON, or SAP_KEYPAIR_PATH.");
+  }
   const parsed: unknown = JSON.parse(raw);
 
   if (!Array.isArray(parsed)) {

@@ -50,7 +50,7 @@ export function loadConfig(): ProoflineConfig {
     supabaseServiceRoleKey: optionalEnv("SUPABASE_SERVICE_ROLE_KEY"),
     solanaRpcUrl: env("SOLANA_RPC_URL"),
     synapseRpcUrl: env("SYNAPSE_RPC_URL"),
-    sapKeypairPath: env("SAP_KEYPAIR_PATH"),
+    sapKeypairPath: optionalEnv("SAP_KEYPAIR_PATH") ?? "",
     sentinelAgentId: env("SENTINEL_AGENT_ID"),
     aceApiKey: optionalEnv("ACE_API_KEY"),
     aceX402WalletKey: optionalEnv("ACE_X402_WALLET_KEY"),
@@ -115,11 +115,13 @@ function requiredEnvNames(): string[] {
   const names = [
     "SOLANA_RPC_URL",
     "SYNAPSE_RPC_URL",
-    "SAP_KEYPAIR_PATH",
     "SENTINEL_AGENT_ID",
     "PROOFLINE_PUBLIC_BASE_URL",
     "TARGET_AGENT_LIST",
   ];
+  if (!process.env.SAP_KEYPAIR_PATH && !process.env.SAP_KEYPAIR_JSON && !process.env.SAP_KEYPAIR_BASE64) {
+    names.push("SAP_KEYPAIR_PATH");
+  }
   if (storageModeEnv() === "supabase") {
     names.push("SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY");
   }
