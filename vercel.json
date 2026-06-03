@@ -7,8 +7,20 @@
       "destination": "/api/x402"
     },
     {
-      "source": "/x402/:path*",
-      "destination": "/api/x402"
+      "source": "/x402/get_execution_verdict",
+      "destination": "/api/x402/get_execution_verdict"
+    },
+    {
+      "source": "/x402/get_execution_proof",
+      "destination": "/api/x402/get_execution_proof"
+    },
+    {
+      "source": "/x402/request_fresh_audit",
+      "destination": "/api/x402/request_fresh_audit"
+    },
+    {
+      "source": "/x402/list_recent_proofs",
+      "destination": "/api/x402/list_recent_proofs"
     },
     {
       "source": "/live/:path*",
@@ -32,6 +44,10 @@
     },
     {
       "source": "/health",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/commerce",
       "destination": "/index.html"
     }
   ],

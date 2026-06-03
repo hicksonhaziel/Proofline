@@ -185,3 +185,18 @@ export interface SchedulerHealth {
   }>;
   shutdownReason?: string;
 }
+
+export interface CommerceSale {
+  sale_id?: string;
+  created_at?: string;
+  buyer_wallet?: string | null;
+  tool_id?: string;
+  proof_packet_id?: string | null;
+  amount?: string;
+  currency?: string;
+  payment_method?: string;
+  payment_status?: string;
+  transaction_hash?: string | null;
+  receipt?: Record<string, unknown> | null;
+  output?: Record<string, unknown> | null;
+}

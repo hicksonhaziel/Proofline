@@ -1,0 +1,52 @@
+name: Proofline Agent Cron
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+concurrency:
+  group: proofline-agent-cron
+  cancel-in-progress: false
+
+jobs:
+  agent-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      STORAGE_MODE: supabase
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+      SYNAPSE_RPC_URL: ${{ secrets.SYNAPSE_RPC_URL }}
+      SAP_KEYPAIR_BASE64: ${{ secrets.SAP_KEYPAIR_BASE64 }}
+      SENTINEL_AGENT_ID: ${{ secrets.SENTINEL_AGENT_ID }}
+      ACE_API_KEY: ""
+      ACE_X402_WALLET_KEY: ${{ secrets.ACE_X402_WALLET_KEY }}
+      ACE_X402_FACILITATOR_URL: https://facilitator.acedata.cloud
+      PROOFLINE_PUBLIC_BASE_URL: https://proofline-hq.vercel.app
+      PROOFLINE_AGENT_URI: https://proofline-hq.vercel.app/agent.json
+      PROOFLINE_X402_ENDPOINT: https://proofline-hq.vercel.app/x402
+      AUDIT_INTERVAL_MINUTES: "30"
+      TARGET_AGENT_LIST: ./data/targets.seed.json
+      MAX_SPEND_PER_AUDIT_USDC: "0.35"
+      MAX_SPEND_PER_HOUR_USDC: "2.00"
+      MAX_SPEND_PER_DAY_USDC: "10.00"
+      MIN_REAUDIT_INTERVAL_HOURS: "24"
+      ENABLE_SAP_DISCOVERY: "true"
+      ENABLE_SAP_ESCROW: "false"
+      ENABLE_ACE_IMAGE: "true"
+      ENABLE_ACE_TRANSLATION: "true"
+      ENABLE_ACE_AUDIO: "false"
+      PAYMENT_MODE: ${{ vars.PAYMENT_MODE || 'dry-run' }}
+      PAYMENT_CONFIRM_SPEND: ${{ vars.PAYMENT_CONFIRM_SPEND || 'false' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run sap:discover
+      - run: npm run agent:once

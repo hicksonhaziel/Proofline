@@ -2,7 +2,7 @@
   "name": "Proofline",
   "agentId": "proofline",
   "version": "0.1.0",
-  "description": "Autonomous paid execution auditor for SAP agents. Proofline pays to test tools, checks Sentinel, analyzes outputs with Ace Data Cloud, and publishes Execution Proof Packets.",
+  "description": "Autonomous paid execution auditor and proof merchant for SAP agents. Proofline tests tools, analyzes outputs with Ace Data Cloud, and sells Execution Proof Packets and verdicts.",
   "image": "https://proofline-hq.vercel.app/proofline.png",
   "logo": "https://proofline-hq.vercel.app/proofline.png",
   "wallet": "E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM",
@@ -14,10 +14,10 @@
   "protocols": ["sap", "x402", "proofline", "execution-audit"],
   "capabilities": [
     {
-      "id": "proofline:audit_agent",
+      "id": "proofline:request_fresh_audit",
       "version": "0.1.0",
       "protocolId": "proofline",
-      "description": "Run a paid execution audit against an SAP agent tool."
+      "description": "Queue a fresh Proofline audit request for a target SAP agent."
     },
     {
       "id": "proofline:execution_proof",
@@ -34,10 +34,10 @@
   ],
   "tools": [
     {
-      "name": "audit_agent",
+      "name": "request_fresh_audit",
       "method": "POST",
-      "path": "/x402/audit_agent",
-      "description": "Request a paid execution audit for an SAP agent tool."
+      "path": "/x402/request_fresh_audit",
+      "description": "Request that Proofline queue a fresh audit for an SAP agent tool."
     },
     {
       "name": "get_execution_proof",

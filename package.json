@@ -16,6 +16,7 @@
     "sentinel:check": "tsx apps/agent/src/sentinel-check.ts",
     "ace:x402:smoke": "tsx apps/agent/src/ace-x402-smoke.ts",
     "ace:x402:reconcile": "tsx apps/agent/src/reconcile-ace-payments.ts",
+    "commerce:buyer-demo": "tsx apps/agent/src/proofline-buyer-demo.ts",
     "audit:once": "tsx apps/agent/src/audit-once.ts",
     "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
     "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",

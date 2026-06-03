@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import {
   formatDate,
   formatDateTime,
+  loadCommerceSales,
   loadLedger,
   loadLatestProof,
   loadProof,
@@ -14,10 +15,10 @@ import {
   statusTone,
   summarizePayments,
 } from "./lib/proofs";
-import type { LedgerEntry, PaymentReceipt, ProofPacket } from "./lib/types";
+import type { CommerceSale, LedgerEntry, PaymentReceipt, ProofPacket } from "./lib/types";
 import type { SchedulerHealth } from "./lib/types";
 
-type Route = "live" | "ledger" | "proof" | "payments" | "ace" | "health";
+type Route = "live" | "ledger" | "proof" | "payments" | "ace" | "health" | "commerce";
 type Filter = "all" | "delivered" | "warning" | "failed" | "reaudit-needed" | "payment-skipped" | "high-risk";
 
 interface TimelineEvent {
@@ -35,6 +36,7 @@ interface AppState {
   selectedProof: ProofPacket | null;
   proofs: ProofPacket[];
   schedulerHealth: SchedulerHealth | null;
+  commerceSales: CommerceSale[];
   loading: boolean;
   error: string | null;
 }
@@ -45,6 +47,7 @@ const initialState: AppState = {
   selectedProof: null,
   proofs: [],
   schedulerHealth: null,
+  commerceSales: [],
   loading: true,
   error: null,
 };
@@ -72,9 +75,9 @@ export function App(): ReactElement {
         const latest = await loadLatestProof();
         const selectedId = route.proofId ?? latest.proofPacketId;
         const selectedProof = selectedId === latest.proofPacketId ? latest : await loadProof(selectedId);
-        const [proofs, schedulerHealth] = await Promise.all([loadProofs(ledger), loadSchedulerHealth()]);
+        const [proofs, schedulerHealth, commerceSales] = await Promise.all([loadProofs(ledger), loadSchedulerHealth(), loadCommerceSales()]);
         if (!cancelled) {
-          setState({ ledger, latest, selectedProof, proofs, schedulerHealth, loading: false, error: null });
+          setState({ ledger, latest, selectedProof, proofs, schedulerHealth, commerceSales, loading: false, error: null });
         }
       } catch (error) {
         if (!cancelled) {
@@ -123,6 +126,8 @@ export function App(): ReactElement {
               <AceUsageView ledger={state.ledger} proofs={state.proofs} navigate={navigate} />
             ) : route.name === "health" ? (
               <HealthView ledger={state.ledger} proofs={state.proofs} latest={state.latest} schedulerHealth={state.schedulerHealth} />
+            ) : route.name === "commerce" ? (
+              <CommerceView sales={state.commerceSales} navigate={navigate} />
             ) : state.selectedProof ? (
               <ProofDetailView proof={state.selectedProof} ledgerEntry={selectedLedgerEntry} navigate={navigate} />
             ) : null}
@@ -138,6 +143,7 @@ function getRoute(pathname: string): { name: Route; proofId?: string } {
   if (pathname === "/payments" || pathname === "/payments/") return { name: "payments" };
   if (pathname === "/ace" || pathname === "/ace/") return { name: "ace" };
   if (pathname === "/health" || pathname === "/health/") return { name: "health" };
+  if (pathname === "/commerce" || pathname === "/commerce/") return { name: "commerce" };
   if (pathname === "/proofs" || pathname === "/proofs/") return { name: "ledger" };
   const proofMatch = pathname.match(/^\/proofs\/(proof_[a-zA-Z0-9_-]+)\/?$/);
   if (proofMatch?.[1]) return { name: "proof", proofId: proofMatch[1] };
@@ -150,6 +156,7 @@ function Header({ route, navigate }: { route: Route; navigate: (href: string) =>
     { href: "/proofs", label: "Evidence Ledger", route: "ledger" },
     { href: "/payments", label: "Payment Proof", route: "payments" },
     { href: "/ace", label: "Ace Usage", route: "ace" },
+    { href: "/commerce", label: "Commerce", route: "commerce" },
     { href: "/health", label: "System Health", route: "health" },
   ];
 
@@ -543,6 +550,65 @@ function PaymentsView({
               <div className="mt-2 font-mono-data text-mono-data text-on-surface-variant">{entry.paymentIntegrity ?? "unknown"}</div>
             </div>
           ))}
+        </div>
+      </section>
+    </>
+  );
+}
+
+function CommerceView({ sales, navigate }: { sales: CommerceSale[]; navigate: (href: string) => void }): ReactElement {
+  const total = sales.length;
+  const paid = sales.filter((sale) => sale.payment_status === "settled" || sale.payment_status === "pending").length;
+  const tools = new Set(sales.map((sale) => sale.tool_id).filter(Boolean)).size;
+  const latest = sales[0];
+
+  return (
+    <>
+      <section>
+        <h1 className="mb-2 font-display-lg text-display-lg">Agent Commerce</h1>
+        <p className="font-body-lg text-body-lg text-on-surface-variant">Proofline seller activity from purchasable proof and verdict tools.</p>
+      </section>
+      <section className="grid grid-cols-1 gap-gutter md:grid-cols-4">
+        <StatCard icon="point_of_sale" label="Sales Records" value={String(total)} />
+        <StatCard icon="payments" label="Payment Captures" value={String(paid)} tone={paid > 0 ? "settled" : "skipped"} />
+        <StatCard icon="handyman" label="Tools Sold" value={String(tools)} />
+        <StatCard icon="schedule" label="Latest Sale" value={latest ? formatDateTime(latest.created_at) : "none"} />
+      </section>
+      <section className="panel overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[920px] text-left">
+            <thead>
+              <tr className="border-b border-outline-variant bg-surface-container">
+                {["Sale", "Tool", "Buyer", "Proof", "Amount", "Payment", "Transaction", "Created"].map((heading) => (
+                  <th key={heading} className="px-4 py-3 font-mono-label text-mono-label font-normal uppercase text-on-surface-variant">
+                    {heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="font-mono-data text-mono-data">
+              {sales.map((sale) => (
+                <tr key={sale.sale_id} className="border-b border-outline-variant hover:bg-surface-container-high">
+                  <td className="px-4 py-3 text-primary-container">{shortId(sale.sale_id)}</td>
+                  <td className="px-4 py-3 text-on-surface">{sale.tool_id ?? "unknown"}</td>
+                  <td className="px-4 py-3 text-on-surface-variant">{sale.buyer_wallet ?? "unknown"}</td>
+                  <td className="px-4 py-3">
+                    {sale.proof_packet_id ? (
+                      <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${sale.proof_packet_id}`)} type="button">
+                        {shortId(sale.proof_packet_id)}
+                      </button>
+                    ) : (
+                      <span className="text-on-surface-variant">none</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-on-surface">{sale.amount ?? "0"} {sale.currency ?? ""}</td>
+                  <td className={`px-4 py-3 ${statusClass(sale.payment_status)}`}>{sale.payment_status ?? "unknown"}</td>
+                  <td className="max-w-[220px] truncate px-4 py-3 text-primary-container">{sale.transaction_hash ?? "none"}</td>
+                  <td className="px-4 py-3 text-on-surface-variant">{formatDateTime(sale.created_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
     </>

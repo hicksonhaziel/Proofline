@@ -47,6 +47,12 @@ export const prooflineAgentMetadata: ProoflineAgentMetadata = {
       protocolId: "proofline",
       version: "0.1.0",
     },
+    {
+      id: "proofline:request_fresh_audit",
+      description: "Queue a fresh Proofline audit request for a target SAP agent.",
+      protocolId: "proofline",
+      version: "0.1.0",
+    },
   ],
   tools: [
     {
@@ -75,6 +81,15 @@ export const prooflineAgentMetadata: ProoflineAgentMetadata = {
       httpMethod: "get",
       paramsCount: 2,
       requiredParams: 1,
+    },
+    {
+      name: "request_fresh_audit",
+      protocolId: "proofline",
+      description: "Queue a fresh execution audit request for a target SAP agent.",
+      category: "commerce",
+      httpMethod: "post",
+      paramsCount: 7,
+      requiredParams: 4,
     },
     {
       name: "list_recent_proofs",

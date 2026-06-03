@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { LedgerEntry, PaymentReceipt, ProofPacket, SchedulerHealth } from "./types";
+import type { CommerceSale, LedgerEntry, PaymentReceipt, ProofPacket, SchedulerHealth } from "./types";
 
 export async function loadLedger(): Promise<LedgerEntry[]> {
   const supabase = supabaseClient();
@@ -65,6 +65,14 @@ export async function loadSchedulerHealth(): Promise<SchedulerHealth | null> {
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`Unable to load scheduler health: ${response.status}`);
   return (await response.json()) as SchedulerHealth;
+}
+
+export async function loadCommerceSales(): Promise<CommerceSale[]> {
+  const supabase = supabaseClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from("commerce_sales").select("*").order("created_at", { ascending: false }).limit(100);
+  if (error) throw new Error(`Unable to load commerce sales: ${error.message}`);
+  return (data ?? []) as CommerceSale[];
 }
 
 function supabaseClient(): SupabaseClient | null {
