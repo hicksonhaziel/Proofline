@@ -1,164 +1,167 @@
 # Proofline
 
-Proofline is an autonomous execution auditor for Synapse Agent Protocol agents. It discovers SAP agents and tools, checks them with Synapse Sentinel, routes payments through supported x402 or SAP escrow paths, analyzes results with Ace Data Cloud, and publishes signed Execution Proof Packets backed by receipts, scores, and risk flags.
+**Autonomous paid execution auditor for SAP agents.**
 
-The project is built for the OOBE Protocol x Ace Data Cloud bounty, with the primary category focused on Ace Data Cloud usage through x402.
+[![Runtime](https://img.shields.io/badge/runtime-Node.js%2022-111827)](#)
+[![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Tailwind-2563eb)](#)
+[![Storage](https://img.shields.io/badge/storage-Supabase-16a34a)](#)
+[![Automation](https://img.shields.io/badge/automation-GitHub%20Actions-111827)](#)
+[![Payments](https://img.shields.io/badge/payments-x402%20%2B%20SAP%20escrow-f59e0b)](#)
+[![AI](https://img.shields.io/badge/AI-Ace%20Data%20Cloud-7c3aed)](#)
 
-## What Proofline Does
+Proofline discovers Synapse Agent Protocol agents, checks them with Synapse Sentinel, pays or quotes supported payment routes, probes tool delivery, analyzes outputs with Ace Data Cloud, and publishes signed Execution Proof Packets that make autonomous agent activity easier to verify.
 
-Autonomous agent marketplaces need proof that tools actually work after payment. Proofline creates that proof.
+Built for the OOBE Protocol x Ace Data Cloud bounty. Primary category: **Ace Data Cloud Usage**.
 
-Each audit cycle can:
+## Links
 
-1. Discover SAP agents and payment metadata.
-2. Filter unsafe, incomplete, expensive, or recently audited targets.
-3. Run Synapse Sentinel preflight checks.
-4. Attempt the supported payment route.
-5. Probe the target endpoint.
-6. Use Ace Data Cloud services for analysis.
-7. Score reliability, capability match, payment integrity, public footprint, and safety.
-8. Sign an Execution Proof Packet with the Proofline Solana keypair.
-9. Store all runtime records in Supabase.
-10. Display evidence on the Vercel dashboard.
+- Live dashboard: `https://proofline-hq.vercel.app`
+- SAP agent page: `https://proofline-hq.vercel.app/agent.json`
+- Demo video: `TODO`
+- Presentation / walkthrough: `TODO`
 
-## Live Architecture
 
-```text
-GitHub Actions cron
-  -> npm run sap:discover
-  -> npm run agent:once
-  -> writes discovery, jobs, payments, proofs, scheduler state
-  -> Supabase
+## Why Proofline Exists
 
-Vercel
-  -> React dashboard
-  -> /x402 seller metadata and proof-query routes
-  -> reads/writes Supabase where needed
+Autonomous agents can discover tools and spend money without a human in the loop. That creates a trust problem: before one agent pays another, it needs evidence that the target tool is real, reachable, priced clearly, and able to deliver useful output after payment.
 
-Supabase
-  -> source of truth for autonomous runtime data
-```
+Proofline solves that by acting as an autonomous audit runner for the SAP economy. It does not only list agents. It performs paid or payment-aware execution checks and produces replayable evidence.
 
-`/data` is no longer the production source of truth. It remains only for explicit `STORAGE_MODE=file` fallback, legacy local utilities, and debugging.
+## What It Produces
 
-## Main Components
-
-- `apps/agent`: autonomous discovery, scheduler, audit, payment, Ace analysis, validation, and buyer demo scripts.
-- `apps/web`: React + Tailwind dashboard.
-- `api/x402`: Vercel serverless routes for Proofline seller tools.
-- `packages/core`: shared scoring, proof packet, and metadata types.
-- `packages/db`: Supabase/file runtime storage layer.
-- `packages/integrations`: Ace, Sentinel, and SAP integration helpers.
-- `supabase/schema.sql`: production database schema.
-- `.github/workflows/agent-cron.yml`: online autonomous cron runner.
-
-## Execution Proof Packets
-
-An Execution Proof Packet is a signed JSON artifact describing one audit. It includes:
+Every audit produces an **Execution Proof Packet**: a signed JSON evidence record containing:
 
 - target agent and tool metadata
-- audit job state
-- Sentinel result
-- payment receipts
-- probe result
-- Ace analysis
+- Sentinel preflight result
+- payment receipts or x402 quotes
+- probe request and response evidence
+- Ace Data Cloud analysis
 - score breakdown
 - risk flags
 - artifact references
 - timestamp
 - Ed25519 signature from the Proofline Solana keypair
 
-Proof signatures can be checked with:
+These packets power the public dashboard and can be sold back to other agents through Proofline’s own proof-query tools.
 
-```bash
-npm run proofs:verify
-```
-
-## Dashboard
-
-The Vercel dashboard reads Supabase and exposes:
-
-- `/live`: latest audit
-- `/proofs`: evidence ledger
-- `/proofs/:proofId`: proof detail
-- `/payments`: payment receipt view
-- `/ace`: Ace usage summary
-- `/commerce`: Proofline seller activity
-- `/health`: scheduler and automation health
-- `/x402`: Proofline seller metadata
-
-## Phase 12 Commerce
-
-Proofline also exposes purchasable proof tools:
-
-- `get_execution_verdict`
-- `get_execution_proof`
-- `request_fresh_audit`
-- `list_recent_proofs`
-
-Routes:
+## System Flow
 
 ```text
-/x402/get_execution_verdict
-/x402/get_execution_proof
-/x402/request_fresh_audit
-/x402/list_recent_proofs
+                    ┌──────────────────────┐
+                    │ GitHub Actions Cron  │
+                    │ every 30 minutes     │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+┌──────────────────────────────────────────────────────────┐
+│                    Proofline Agent                       │
+│  discover -> filter -> Sentinel -> pay/quote -> probe    │
+│              -> Ace analysis -> score -> sign            │
+└──────────┬───────────────────────────────────────────────┘
+           │
+           ▼
+┌──────────────────────┐       ┌───────────────────────────┐
+│      Supabase        │◄──────│ Vercel x402 API Routes    │
+│ runtime source       │       │ proof/verdict commerce    │
+│ of truth             │       └───────────────────────────┘
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Vercel Dashboard     │
+│ live evidence UI     │
+└──────────────────────┘
 ```
 
-Commerce records are written to Supabase tables:
+## Core Capabilities
 
-- `commerce_sales`
-- `commerce_requests`
+- SAP agent discovery through Synapse/SAP metadata.
+- Target filtering for price, endpoint quality, missing metadata, repeated audits, and unsupported routes.
+- Synapse Sentinel preflight before tool execution.
+- x402 payment quote capture and Ace Data Cloud x402 signing in paid mode.
+- SAP escrow planning and guarded SOL escrow support where simulation is safe.
+- Ace Data Cloud analysis across search, chat, translation, and image proof-card generation.
+- Signed Execution Proof Packets stored in Supabase.
+- Public dashboard for proofs, payments, Ace usage, system health, and commerce activity.
+- Proofline seller tools for other agents to request proof/verdict data.
+- GitHub Actions cron for online autonomous operation.
 
-Important: inbound Proofline seller x402 settlement verification is not implemented yet. If a buyer sends an `X-PAYMENT` header, Proofline records it as `pending`, not `settled`, unless a real verified transaction hash exists in a future implementation.
+## Dashboard Routes
 
-## Ace Data Cloud x402
+```text
+/live        latest audit
+/proofs      evidence ledger
+/payments    payment receipts
+/ace         Ace Data Cloud usage
+/commerce    Proofline seller activity
+/health      scheduler and automation health
+/x402        Proofline tool metadata
+```
 
-Proofline uses Ace Data Cloud without an API key in bounty x402 mode:
+## Proofline x402 Tools
 
-1. The agent calls Ace API.
-2. Ace returns HTTP `402 Payment Required`.
-3. Proofline parses the quote.
-4. In dry-run mode, Proofline records the quote only.
-5. In send mode, Proofline signs `X-PAYMENT` using `ACE_X402_WALLET_KEY`.
-6. Proofline retries the same request.
-7. The Ace response and x402 receipt metadata are stored in the proof packet.
+Proofline exposes merchant-style proof tools:
 
-Supported Ace services currently used by the audit pipeline include:
+```text
+GET  /x402/get_execution_verdict
+GET  /x402/get_execution_proof
+POST /x402/request_fresh_audit
+GET  /x402/list_recent_proofs
+```
 
-- Google search via Ace SERP
-- OpenAI chat completions
-- localization/translation
-- image edit/generation for proof-card evidence
+Commerce calls are recorded in Supabase. Inbound buyer `X-PAYMENT` headers are currently recorded as `pending` unless a verified transaction hash exists. Proofline does not falsely mark seller-side payments as settled before facilitator verification is implemented.
 
-## Storage
+## Data Model
 
-Production storage mode:
+Supabase is the production source of truth.
+
+Main tables:
+
+```text
+sap_targets
+audit_jobs
+discovery_runs
+payment_receipts
+proof_packets
+audit_runs
+scheduler_runs
+commerce_sales
+commerce_requests
+```
+
+The schema lives in:
+
+```text
+supabase/schema.sql
+```
+
+## Automation
+
+The online runner lives in:
+
+```text
+.github/workflows/agent-cron.yml
+```
+
+It runs:
+
+```bash
+npm ci
+npm run build
+npm run sap:discover
+npm run agent:once
+```
+
+The workflow is intentionally controlled by GitHub variables:
 
 ```env
-STORAGE_MODE=supabase
+PAYMENT_MODE=dry-run
+PAYMENT_CONFIRM_SPEND=false
 ```
 
-Main Supabase tables:
+Paid mode must be enabled explicitly.
 
-- `sap_targets`
-- `audit_jobs`
-- `discovery_runs`
-- `payment_receipts`
-- `proof_packets`
-- `audit_runs`
-- `scheduler_runs`
-- `commerce_sales`
-- `commerce_requests`
-
-Run the schema before production use:
-
-```sql
--- Supabase SQL editor
--- paste and run supabase/schema.sql
-```
-
-## Running Locally
+## Quick Start
 
 Install:
 
@@ -178,42 +181,42 @@ Run the dashboard locally:
 npm run web:dev
 ```
 
-Run one safe autonomous cycle:
+Run discovery:
+
+```bash
+npm run sap:discover
+```
+
+Run one safe audit cycle:
 
 ```bash
 PAYMENT_MODE=dry-run PAYMENT_CONFIRM_SPEND=false npm run agent:once
 ```
 
-Run discovery only:
+Run validation:
 
 ```bash
-npm run sap:discover
+npm run test:online
 ```
 
-Run the online validation suite:
+Full deployment steps are in [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-```bash
-npm run phase13:validate
-```
-
-## Useful Scripts
+## Important Scripts
 
 ```bash
 npm run build
 npm run sap:discover
 npm run agent:once
-npm run agent:once:no-ace
 npm run audit:once -- --allow-paid --target "chainbard"
 npm run ace:x402:smoke
 npm run commerce:buyer-demo -- --tool get_execution_verdict
-npm run phase13:validate
+npm run commerce:buyer-demo -- --tool get_execution_proof
+npm run test:online
 ```
 
-## Required Environment Variables
+## Environment Overview
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for full setup.
-
-Core agent variables:
+Agent and cron secrets:
 
 ```env
 STORAGE_MODE=supabase
@@ -224,21 +227,26 @@ SYNAPSE_RPC_URL=
 SAP_KEYPAIR_BASE64=
 SENTINEL_AGENT_ID=
 ACE_X402_WALLET_KEY=
-PROOFLINE_PUBLIC_BASE_URL=
 ```
 
-Frontend variables:
+Vercel dashboard variables:
 
 ```env
 VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-Never expose `SUPABASE_SERVICE_ROLE_KEY`, `SAP_KEYPAIR_BASE64`, or `ACE_X402_WALLET_KEY` in frontend `VITE_` variables.
+Vercel server API variables:
 
-## Safety Defaults
+```env
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+PROOFLINE_PUBLIC_BASE_URL=
+```
 
-Proofline defaults to dry-run payment behavior unless explicitly configured otherwise.
+Never expose server secrets through `VITE_` variables.
+
+## Payment Safety
 
 Safe mode:
 
@@ -254,7 +262,7 @@ PAYMENT_MODE=send
 PAYMENT_CONFIRM_SPEND=true
 ```
 
-Keep budget caps low:
+Budget caps:
 
 ```env
 MAX_SPEND_PER_AUDIT_USDC=0.35
@@ -262,49 +270,35 @@ MAX_SPEND_PER_HOUR_USDC=2.00
 MAX_SPEND_PER_DAY_USDC=10.00
 ```
 
-## Validation Status
+Keep the payment wallet funded only with the amount you are comfortable spending.
 
-Phase 13 validation currently checks:
+## Validation
 
-- scoring formulas
+The validation script checks:
+
+- scoring behavior
 - proof packet validation
-- Supabase runtime readiness
-- Supabase table counts
-- latest proof signature verification
-- Vercel route availability
-- Phase 12 buyer verdict route
+- Supabase readiness
+- runtime table counts
+- latest proof packet signature
+- Vercel dashboard routes
+- Proofline buyer verdict route
 
 Run:
 
 ```bash
-npm run phase13:validate
+npm run test:online
 ```
 
-## Known Limitations
+## Current Limitations
 
-- Inbound Proofline seller x402 settlement verification is not implemented yet.
-- Buyer `X-PAYMENT` headers sent to Proofline seller routes are recorded as `pending`, not `settled`.
-- Generic non-Ace x402 send mode is intentionally blocked until a verified settlement path is added.
-- SAP escrow automation currently supports only safe SOL-priced targets.
-- USDC escrow targets that failed simulation remain skipped.
-- Real paid mode should be enabled only after dry-run cron, dashboard, Supabase writes, and validation pass.
+- Proofline’s own seller-side x402 routes record inbound payment headers but do not yet verify/settle them through a facilitator.
+- Generic non-Ace x402 send mode is blocked until a verified settlement path is added.
+- SAP escrow automation is guarded and only allowed for routes that pass simulation and safety checks.
+- Dry-run mode records Ace x402 quotes but does not spend USDC.
 
-## Bounty Demo Summary
+## Submission Positioning
 
-Proofline demonstrates a complete autonomous workflow:
+Proofline is not a passive agent directory. It is an autonomous proof-of-execution layer for SAP agents.
 
-```text
-GitHub Actions trigger
-  -> discover SAP targets
-  -> select target
-  -> Sentinel preflight
-  -> payment quote or supported payment path
-  -> probe execution
-  -> Ace x402 analysis
-  -> signed proof packet
-  -> Supabase persistence
-  -> Vercel dashboard update
-```
-
-Primary category: Ace Data Cloud Usage.
-
+It creates legitimate activity because every run has a clear audit purpose, a stored proof packet, and a public dashboard record.
