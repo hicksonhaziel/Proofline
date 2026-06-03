@@ -1,11 +1,10 @@
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { readdirSync, readFileSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
 import type { AuditJob, PaymentReceipt } from "../../../packages/core/src/index.js";
+import type { RuntimeStore } from "../../../packages/db/src/index.js";
 import type { ProoflineConfig } from "./config.js";
 import { createLogger, type Logger } from "./logger.js";
+import { createProoflineStore } from "./storage.js";
 
 type SchedulerMode = "demo" | "production";
 type SchedulerStatus = "idle" | "running" | "stopping" | "stopped" | "failed";
@@ -79,10 +78,7 @@ interface SchedulerState {
   shutdownReason?: string;
 }
 
-const QUEUE_PATH = "data/sap/audit-job-queue.json";
-const RECEIPTS_PATH = "data/payments/receipts.jsonl";
-const STATE_PATH = "data/automation/scheduler-state.json";
-const HEALTH_PATH = "public/automation/health.json";
+const QUEUE_PATH = "supabase:audit_jobs";
 const DEFAULT_DEMO_INTERVAL_MINUTES = 15;
 const DEFAULT_PRODUCTION_INTERVAL_MINUTES = 30;
 const MAX_FAILED_PAYMENT_RETRIES = 1;
@@ -91,6 +87,8 @@ const FAILED_PAYMENT_RETRY_WINDOW_HOURS = 24;
 export async function runScheduler(config: ProoflineConfig, options: SchedulerOptions): Promise<void> {
   const schedulerRunId = `scheduler_${randomUUID()}`;
   const logger = createLogger(schedulerRunId);
+  const store = createProoflineStore(config);
+  await store.ensureReady();
   let stopping = false;
   let state = initialState(schedulerRunId, config, options);
 
@@ -103,7 +101,7 @@ export async function runScheduler(config: ProoflineConfig, options: SchedulerOp
       shutdownReason: reason,
       updatedAt: new Date().toISOString(),
     };
-    await writeSchedulerState(state);
+    await writeSchedulerState(store, state);
     logger.warn("Scheduler stop requested", { reason });
   };
 
@@ -120,11 +118,11 @@ export async function runScheduler(config: ProoflineConfig, options: SchedulerOp
     paymentMode: paymentMode(),
     note: "Scheduler defaults to dry-run payments unless PAYMENT_MODE=send and PAYMENT_CONFIRM_SPEND=true are set.",
   });
-  await writeSchedulerState(state);
+  await writeSchedulerState(store, state);
 
   try {
     do {
-      state = await runCycle(state, config, options, logger);
+      state = await runCycle(state, config, options, logger, store);
       if (options.once) break;
       if (options.maxCycles !== null && state.currentCycle >= options.maxCycles) break;
       if (stopping) break;
@@ -138,7 +136,7 @@ export async function runScheduler(config: ProoflineConfig, options: SchedulerOp
       updatedAt: new Date().toISOString(),
       shutdownReason: state.shutdownReason ?? (options.once ? "once_completed" : "max_cycles_completed"),
     };
-    await writeSchedulerState(state);
+    await writeSchedulerState(store, state);
     logger.info("Proofline automation scheduler stopped", {
       currentCycle: state.currentCycle,
       shutdownReason: state.shutdownReason,
@@ -151,7 +149,7 @@ export async function runScheduler(config: ProoflineConfig, options: SchedulerOp
       updatedAt: new Date().toISOString(),
       shutdownReason: error instanceof Error ? error.message : String(error),
     };
-    await writeSchedulerState(state);
+    await writeSchedulerState(store, state);
     logger.error("Proofline automation scheduler failed", { error: state.shutdownReason });
     throw error;
   }
@@ -182,6 +180,7 @@ async function runCycle(
   config: ProoflineConfig,
   options: SchedulerOptions,
   logger: Logger,
+  store: RuntimeStore,
 ): Promise<SchedulerState> {
   const cycle = state.currentCycle + 1;
   let nextState: SchedulerState = {
@@ -191,7 +190,7 @@ async function runCycle(
     updatedAt: new Date().toISOString(),
     decisions: [],
   };
-  await writeSchedulerState(nextState);
+  await writeSchedulerState(store, nextState);
   logger.info("Scheduler cycle starting", { cycle });
 
   if (options.discover) {
@@ -205,13 +204,15 @@ async function runCycle(
       },
       updatedAt: new Date().toISOString(),
     };
-    await writeSchedulerState(nextState);
+    await writeSchedulerState(store, nextState);
   }
 
-  const queue = await readQueue();
-  const receipts = await readPaymentReceipts();
+  const jobs = await store.readAuditJobs();
+  const queue: QueuePayload = { jobs, totalJobs: jobs.length };
+  const receipts = await store.readPaymentReceipts();
   const spend = summarizeSpend(receipts);
-  const selected = selectJobs(queue.jobs ?? [], receipts, config, options, spend);
+  const auditedTargets = await recentlyAuditedTargets(store, config.limits.minReauditIntervalHours);
+  const selected = selectJobs(queue.jobs ?? [], receipts, config, options, spend, auditedTargets);
   const decisions = [...selected.decisions];
 
   nextState = {
@@ -229,7 +230,7 @@ async function runCycle(
     decisions,
     updatedAt: new Date().toISOString(),
   };
-  await writeSchedulerState(nextState);
+  await writeSchedulerState(store, nextState);
 
   for (const job of selected.jobs) {
     const targetName = job.target.name;
@@ -265,7 +266,7 @@ async function runCycle(
       decisions,
       updatedAt: completedAt,
     };
-    await writeSchedulerState(nextState);
+    await writeSchedulerState(store, nextState);
   }
 
   logger.info("Scheduler cycle complete", {
@@ -290,10 +291,10 @@ function selectJobs(
   config: ProoflineConfig,
   options: SchedulerOptions,
   spend: { lastHourUsdc: number; lastDayUsdc: number },
+  auditedTargets: Set<string>,
 ): { jobs: AuditJob[]; decisions: SchedulerDecision[] } {
   const selected: AuditJob[] = [];
   const decisions: SchedulerDecision[] = [];
-  const auditedTargets = recentlyAuditedTargets(config.limits.minReauditIntervalHours);
 
   for (const job of jobs) {
     const targetKey = `${job.target.agentId}::${job.target.toolId}`;
@@ -392,9 +393,8 @@ function initialState(schedulerRunId: string, config: ProoflineConfig, options: 
   };
 }
 
-async function writeSchedulerState(state: SchedulerState): Promise<void> {
-  await writeJson(STATE_PATH, state);
-  await writeJson(HEALTH_PATH, {
+async function writeSchedulerState(store: RuntimeStore, state: SchedulerState): Promise<void> {
+  const health = {
     schedulerRunId: state.schedulerRunId,
     status: state.status,
     mode: state.mode,
@@ -412,34 +412,18 @@ async function writeSchedulerState(state: SchedulerState): Promise<void> {
     shutdownReason: state.shutdownReason,
     paymentMode: state.paymentMode,
     allowPaid: state.allowPaid,
+  };
+  await store.saveSchedulerState({
+    schedulerRunId: state.schedulerRunId,
+    status: state.status,
+    mode: state.mode,
+    paymentMode: state.paymentMode,
+    currentCycle: state.currentCycle,
+    startedAt: state.startedAt,
+    updatedAt: state.updatedAt,
+    ...(state.stoppedAt ? { stoppedAt: state.stoppedAt } : {}),
+    payload: health,
   });
-}
-
-async function readQueue(): Promise<QueuePayload> {
-  try {
-    const raw = await readFile(QUEUE_PATH, "utf8");
-    return JSON.parse(raw) as QueuePayload;
-  } catch {
-    return { jobs: [] };
-  }
-}
-
-async function readPaymentReceipts(): Promise<PaymentReceipt[]> {
-  try {
-    const raw = await readFile(RECEIPTS_PATH, "utf8");
-    return raw
-      .split(/\r?\n/)
-      .filter(Boolean)
-      .flatMap((line) => {
-        try {
-          return [JSON.parse(line) as PaymentReceipt];
-        } catch {
-          return [];
-        }
-      });
-  } catch {
-    return [];
-  }
 }
 
 function summarizeSpend(receipts: PaymentReceipt[]): { lastHourUsdc: number; lastDayUsdc: number } {
@@ -463,22 +447,14 @@ function summarizeSpend(receipts: PaymentReceipt[]): { lastHourUsdc: number; las
   return { lastHourUsdc, lastDayUsdc };
 }
 
-function recentlyAuditedTargets(minReauditIntervalHours: number): Set<string> {
+async function recentlyAuditedTargets(store: RuntimeStore, minReauditIntervalHours: number): Promise<Set<string>> {
   const out = new Set<string>();
   const cutoff = Date.now() - minReauditIntervalHours * 60 * 60 * 1000;
-  try {
-    const files = readdirSyncSafe("data/proof-packets");
-    for (const file of files) {
-      if (!file.endsWith(".json")) continue;
-      const packet = JSON.parse(readFileSyncSafe(resolve("data/proof-packets", file)));
-      const createdAt = typeof packet.createdAt === "string" ? new Date(packet.createdAt).getTime() : NaN;
-      if (!Number.isFinite(createdAt) || createdAt < cutoff) continue;
-      const agentId = packet.targetAgent?.agentId;
-      const toolId = packet.targetAgent?.toolId;
-      if (typeof agentId === "string" && typeof toolId === "string") out.add(`${agentId}::${toolId}`);
-    }
-  } catch {
-    return out;
+  const packets = await store.readProofPackets();
+  for (const packet of packets) {
+    const createdAt = new Date(packet.createdAt).getTime();
+    if (!Number.isFinite(createdAt) || createdAt < cutoff) continue;
+    out.add(`${packet.targetAgent.agentId}::${packet.targetAgent.toolId}`);
   }
   return out;
 }
@@ -569,12 +545,6 @@ async function sleep(ms: number, shouldStop: () => boolean): Promise<void> {
   }
 }
 
-async function writeJson(path: string, value: unknown): Promise<void> {
-  const filePath = resolve(path);
-  await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-}
-
 function valueArg(argv: string[], name: string): string | undefined {
   const index = argv.indexOf(name);
   const value = index >= 0 ? argv[index + 1] : undefined;
@@ -592,16 +562,4 @@ function nullablePositiveIntArg(argv: string[], name: string): number | null {
   if (!value) return null;
   const parsed = Number(value);
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : null;
-}
-
-function readdirSyncSafe(path: string): string[] {
-  try {
-    return readdirSync(path);
-  } catch {
-    return [];
-  }
-}
-
-function readFileSyncSafe(path: string): string {
-  return readFileSync(path, "utf8");
 }

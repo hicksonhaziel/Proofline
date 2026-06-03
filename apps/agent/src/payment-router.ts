@@ -1,13 +1,13 @@
 import anchor from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
 import { randomUUID } from "node:crypto";
-import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
 import type { PaymentMethod, PaymentReceipt } from "../../../packages/core/src/index.js";
+import type { RuntimeStore } from "../../../packages/db/src/index.js";
 import { loadSapSdk } from "../../../packages/integrations/src/index.js";
 import type { ProoflineConfig } from "./config.js";
 import { loadKeypairFromFile } from "./keypair.js";
 import type { Logger } from "./logger.js";
+import { createProoflineStore } from "./storage.js";
 
 const { BN } = anchor;
 
@@ -64,6 +64,7 @@ export class PaymentRouter {
   private readonly maxCalls: number;
   private readonly escrowNonce: number;
   private readonly confirmSpend: boolean;
+  private readonly store: RuntimeStore;
 
   constructor(
     private readonly config: ProoflineConfig,
@@ -76,6 +77,7 @@ export class PaymentRouter {
     this.maxCalls = options.maxCalls ?? envNumber("PAYMENT_MAX_CALLS", 1);
     this.escrowNonce = options.escrowNonce ?? envNumber("PAYMENT_ESCROW_NONCE", 0);
     this.confirmSpend = options.confirmSpend ?? envBoolean("PAYMENT_CONFIRM_SPEND", false);
+    this.store = createProoflineStore(config);
 
     this.providers = [
       new SapEscrowPaymentProvider(),
@@ -175,14 +177,7 @@ export class PaymentRouter {
   }
 
   async persistReceipt(receipt: PaymentReceipt): Promise<PaymentReceipt> {
-    const ledgerPath = resolve("data/payments/receipts.jsonl");
-    const perAuditPath = resolve("data/payments/by-audit", `${receipt.auditJobId}.json`);
-    await mkdir(dirname(ledgerPath), { recursive: true });
-    await mkdir(dirname(perAuditPath), { recursive: true });
-    await appendFile(ledgerPath, `${JSON.stringify(receipt)}\n`, "utf8");
-    const auditReceipts = await readAuditReceipts(perAuditPath);
-    auditReceipts.push(receipt);
-    await writeFile(perAuditPath, `${JSON.stringify(auditReceipts, null, 2)}\n`, "utf8");
+    await this.store.savePaymentReceipt(receipt);
 
     this.logger.info("Payment receipt persisted", {
       paymentId: receipt.paymentId,
@@ -190,36 +185,11 @@ export class PaymentRouter {
       provider: receipt.provider,
       method: receipt.method,
       status: receipt.status,
-      ledgerPath,
-      perAuditPath,
+      storageMode: this.store.mode,
     });
 
     return receipt;
   }
-}
-
-async function readAuditReceipts(path: string): Promise<PaymentReceipt[]> {
-  try {
-    const raw = await readFile(path, "utf8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (Array.isArray(parsed)) return parsed.filter(isPaymentReceipt);
-    if (isPaymentReceipt(parsed)) return [parsed];
-    return [];
-  } catch (error) {
-    if (isNodeError(error) && error.code === "ENOENT") return [];
-    throw error;
-  }
-}
-
-function isPaymentReceipt(value: unknown): value is PaymentReceipt {
-  return (
-    isRecord(value) &&
-    typeof value.paymentId === "string" &&
-    typeof value.auditJobId === "string" &&
-    typeof value.provider === "string" &&
-    typeof value.method === "string" &&
-    typeof value.status === "string"
-  );
 }
 
 class SapEscrowPaymentProvider implements PaymentProvider {
@@ -600,10 +570,6 @@ function trimPayload(value: unknown): unknown {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function isNodeError(value: unknown): value is NodeJS.ErrnoException {
-  return value instanceof Error && "code" in value;
 }
 
 async function parseBody(response: Response): Promise<unknown> {

@@ -5,11 +5,14 @@ import {
   SeedDiscoveryProvider,
 } from "./discovery.js";
 import { createLogger } from "./logger.js";
+import { createProoflineStore } from "./storage.js";
 
 async function main(): Promise<void> {
   const runId = `sap_discover_${Date.now()}`;
   const logger = createLogger(runId);
   const config = loadConfig();
+  const store = createProoflineStore(config);
+  await store.ensureReady();
 
   logger.info("Starting SAP discovery", {
     explorerApi: "https://explorer.oobeprotocol.ai/api/sap/agents",
@@ -22,6 +25,7 @@ async function main(): Promise<void> {
       maxCostUsdc: config.limits.maxSpendPerAuditUsdc,
       minReauditIntervalHours: config.limits.minReauditIntervalHours,
     },
+    store,
     providers: [
       new SapDiscoveryProvider(),
       new SeedDiscoveryProvider([

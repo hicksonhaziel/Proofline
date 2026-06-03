@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import type { AgentTarget, AuditJob, PaymentMethod } from "../../../packages/core/src/index.js";
+import type { RuntimeStore } from "../../../packages/db/src/index.js";
 
 export interface DiscoveryContext {
   maxCostUsdc: number;
@@ -156,6 +157,7 @@ export class SeedDiscoveryProvider implements DiscoveryProvider {
 export async function runDiscovery(options: {
   context: DiscoveryContext;
   providers: DiscoveryProvider[];
+  store?: RuntimeStore;
   maxQueueSize?: number;
   outputPaths?: {
     discoveredPath?: string;
@@ -188,7 +190,7 @@ export async function runDiscovery(options: {
   }
 
   const dedupedTargets = dedupeByAgentAndTool(allCandidates);
-  const historyByTarget = await loadAuditHistory("data/proof-packets");
+  const historyByTarget = options.store ? await loadAuditHistoryFromStore(options.store) : await loadAuditHistory("data/proof-packets");
   const scoredTargets = dedupedTargets.map((target) => applyHistoryAndScore(target, historyByTarget, options.context));
 
   const prioritizedTargets = [...scoredTargets].sort(compareTargets);
@@ -221,9 +223,23 @@ export async function runDiscovery(options: {
     queuePath: outputPaths.queuePath,
   };
 
-  await writeJson(outputPaths.discoveredPath, discoveredPayload);
-  await writeJson(outputPaths.planPath, planPayload);
-  await writeJson(outputPaths.queuePath, queuePayload);
+  if (options.store) {
+    await options.store.saveDiscovery({
+      generatedAt: planPayload.generatedAt,
+      providerCounts,
+      providerErrors,
+      totalCandidates: allCandidates.length,
+      uniqueTargets: dedupedTargets.length,
+      counts: planPayload.counts,
+      targets: prioritizedTargets,
+      jobs,
+      payload: planPayload,
+    });
+  } else {
+    await writeJson(outputPaths.discoveredPath, discoveredPayload);
+    await writeJson(outputPaths.planPath, planPayload);
+    await writeJson(outputPaths.queuePath, queuePayload);
+  }
 
   return {
     generatedAt: planPayload.generatedAt,
@@ -238,6 +254,21 @@ export async function runDiscovery(options: {
       totalJobs: jobs.length,
     },
   };
+}
+
+async function loadAuditHistoryFromStore(store: RuntimeStore): Promise<Map<string, AuditHistory>> {
+  const output = new Map<string, AuditHistory>();
+  const packets = await store.readProofPackets();
+  for (const packet of packets) {
+    const key = `${packet.targetAgent.agentId}::${packet.targetAgent.toolId}`;
+    const existing = output.get(key) ?? { lastAuditedAt: null, failureCount: 0 };
+    const shouldCountFailure = packet.scores.verdict === "failed" || packet.scores.verdict === "re_audit_needed";
+    output.set(key, {
+      lastAuditedAt: latestIso(existing.lastAuditedAt, packet.createdAt),
+      failureCount: shouldCountFailure ? existing.failureCount + 1 : existing.failureCount,
+    });
+  }
+  return output;
 }
 
 function normalizeSapAgent(agent: SapAgentRecord, maxCostUsdc: number): DiscoveryTarget[] {

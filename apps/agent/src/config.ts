@@ -3,6 +3,9 @@ import { resolve } from "node:path";
 import { parse as parseDotenv } from "dotenv";
 
 export interface ProoflineConfig {
+  storageMode: "supabase" | "file";
+  supabaseUrl: string | undefined;
+  supabaseServiceRoleKey: string | undefined;
   solanaRpcUrl: string;
   synapseRpcUrl: string;
   sapKeypairPath: string;
@@ -42,6 +45,9 @@ export function loadConfig(): ProoflineConfig {
   }
 
   return {
+    storageMode: storageModeEnv(),
+    supabaseUrl: optionalEnv("SUPABASE_URL"),
+    supabaseServiceRoleKey: optionalEnv("SUPABASE_SERVICE_ROLE_KEY"),
     solanaRpcUrl: env("SOLANA_RPC_URL"),
     synapseRpcUrl: env("SYNAPSE_RPC_URL"),
     sapKeypairPath: env("SAP_KEYPAIR_PATH"),
@@ -79,6 +85,9 @@ export function safeConfigSummary(config: ProoflineConfig): Record<string, unkno
     aceApiKey: maskSecret(config.aceApiKey),
     aceX402WalletKey: maskSecret(config.aceX402WalletKey),
     aceX402FacilitatorUrl: config.aceX402FacilitatorUrl ? maskUrl(config.aceX402FacilitatorUrl) : undefined,
+    storageMode: config.storageMode,
+    supabaseUrl: config.supabaseUrl ? maskUrl(config.supabaseUrl) : undefined,
+    supabaseServiceRoleKey: maskSecret(config.supabaseServiceRoleKey),
     publicBaseUrl: config.publicBaseUrl,
     prooflineAgentUri: config.prooflineAgentUri,
     prooflineX402Endpoint: config.prooflineX402Endpoint ? maskUrl(config.prooflineX402Endpoint) : undefined,
@@ -103,7 +112,7 @@ function loadDotenvFile(fileName: string, protectedEnv: Set<string>): void {
 }
 
 function requiredEnvNames(): string[] {
-  return [
+  const names = [
     "SOLANA_RPC_URL",
     "SYNAPSE_RPC_URL",
     "SAP_KEYPAIR_PATH",
@@ -111,6 +120,10 @@ function requiredEnvNames(): string[] {
     "PROOFLINE_PUBLIC_BASE_URL",
     "TARGET_AGENT_LIST",
   ];
+  if (storageModeEnv() === "supabase") {
+    names.push("SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY");
+  }
+  return names;
 }
 
 function env(name: string): string {
@@ -152,6 +165,13 @@ function booleanEnv(name: string, fallback: boolean): boolean {
   }
 
   return value.toLowerCase() === "true";
+}
+
+function storageModeEnv(): ProoflineConfig["storageMode"] {
+  const value = process.env.STORAGE_MODE?.toLowerCase();
+  if (!value) return "supabase";
+  if (value === "supabase" || value === "file") return value;
+  throw new Error("Environment variable STORAGE_MODE must be either supabase or file");
 }
 
 function maskSecret(value: string | undefined): string {

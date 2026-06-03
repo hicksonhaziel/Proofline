@@ -1,30 +1,27 @@
 {
-  "schedulerRunId": "scheduler_cdee0620-2fe2-46aa-8541-9ee549715a7c",
+  "schedulerRunId": "scheduler_49572a10-b1b0-4927-9e5d-aacc5e59ff2b",
   "status": "idle",
   "mode": "demo",
-  "startedAt": "2026-06-02T13:22:40.197Z",
-  "updatedAt": "2026-06-02T13:22:40.226Z",
+  "updatedAt": "2026-06-03T06:41:49.304Z",
+  "startedAt": "2026-06-03T06:41:49.224Z",
+  "stoppedAt": "2026-06-03T06:41:49.303Z",
   "currentCycle": 1,
   "intervalMinutes": 15,
-  "queuePath": "data/sap/audit-job-queue.json",
-  "maxJobsPerCycle": 1,
-  "allowPaid": true,
-  "paymentMode": "dry-run",
+  "queue": {
+    "total": 3,
+    "eligible": 0,
+    "skipped": 3
+  },
   "budgets": {
     "maxSpendPerAuditUsdc": 0.35,
     "maxSpendPerHourUsdc": 2,
     "maxSpendPerDayUsdc": 10,
     "spentLastHourUsdc": 0,
-    "spentLastDayUsdc": 0.15994999999999998
+    "spentLastDayUsdc": 0
   },
   "retryPolicy": {
     "maxFailedPaymentRetries": 1,
     "failedPaymentRetryWindowHours": 24
-  },
-  "queue": {
-    "total": 3,
-    "eligible": 0,
-    "skipped": 3
   },
   "decisions": [
     {
@@ -49,6 +46,7 @@
       "auditJobId": "job_4d088a71-8184-406c-84b5-7a3844516934"
     }
   ],
-  "stoppedAt": "2026-06-02T13:22:40.226Z",
-  "shutdownReason": "once_completed"
+  "shutdownReason": "once_completed",
+  "paymentMode": "dry-run",
+  "allowPaid": true
 }

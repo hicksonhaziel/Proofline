@@ -7,13 +7,14 @@ import {
   scoreExecution,
   type AceAnalysisResult,
   type AgentTarget,
+  type AuditJob,
   type ExecutionProofPacket,
   type PaymentReceipt,
   type ProbeResult,
   type RiskFlag,
   type SentinelCheck,
 } from "../../../packages/core/src/index.js";
-import { LocalStore } from "../../../packages/db/src/index.js";
+import type { RuntimeStore } from "../../../packages/db/src/index.js";
 import {
   AceDataCloudClient,
   extractAceChatContent,
@@ -25,6 +26,7 @@ import { loadConfig, safeConfigSummary } from "./config.js";
 import { loadKeypairFromFile } from "./keypair.js";
 import { createLogger } from "./logger.js";
 import { PaymentRouter } from "./payment-router.js";
+import { createProoflineStore } from "./storage.js";
 
 interface AuditTargetPlan {
   generatedAt?: string;
@@ -129,15 +131,10 @@ async function main(): Promise<void> {
     return;
   }
 
-  const store = new LocalStore({
-    targetsFile: config.targetAgentList,
-    proofPacketsDir: "data/proof-packets",
-    artifactsDir: "data/artifacts",
-    runsDir: "data/runs",
-  });
-  await store.ensureDirectories();
+  const store = createProoflineStore(config);
+  await store.ensureReady();
 
-  const plannedTarget = await selectTarget(args.target);
+  const plannedTarget = await selectTarget(args.target, store);
   const target = toAgentTarget(plannedTarget);
   const startedAt = new Date().toISOString();
   const prooflineWallet = await readWalletAddress(config.sapKeypairPath);
@@ -240,12 +237,14 @@ async function main(): Promise<void> {
     ...packetWithoutId,
   };
   assertProofPacket(packet);
-  packet = await localizePacketProofCard(packet);
+  if (store.mode === "file") {
+    packet = await localizePacketProofCard(packet);
+  }
   packet = await finalizeProofPacket(packet, config.sapKeypairPath);
 
-  const proofPacketPath = await store.writeProofPacket(packet);
-  const publicProof = await publishPublicProofPacket(packet);
-  const runStatePath = await store.writeRunState(auditJobId, {
+  const proofPacketPath = await store.saveProofPacket(packet);
+  const publicProof = store.mode === "supabase" ? supabaseProofReference(packet) : await publishPublicProofPacket(packet);
+  const runStatePath = await store.saveAuditRun(auditJobId, {
     auditJobId,
     proofPacketId: packet.proofPacketId,
     auditStatus: finalAuditStatus,
@@ -286,6 +285,19 @@ async function main(): Promise<void> {
   });
 }
 
+function supabaseProofReference(packet: ExecutionProofPacket): Record<string, string | null> {
+  return {
+    ledger: "supabase:proof_packets",
+    ledgerJson: null,
+    latestJson: null,
+    proofJson: `supabase:proof_packets/${packet.proofPacketId}`,
+    latestHtml: "/live",
+    proofHtml: `/proofs/${packet.proofPacketId}`,
+    latestCard: packet.artifacts.proofCardPath ?? null,
+    proofCard: packet.artifacts.proofCardPath ?? null,
+  };
+}
+
 function parseArgs(argv: string[]): CliArgs {
   const targetIndex = argv.findIndex((arg) => arg === "--target");
   const target = targetIndex >= 0 ? argv[targetIndex + 1] : undefined;
@@ -299,7 +311,31 @@ function parseArgs(argv: string[]): CliArgs {
   };
 }
 
-async function selectTarget(targetQuery: string | undefined): Promise<PlannedTarget> {
+async function selectTarget(targetQuery: string | undefined, store: RuntimeStore): Promise<PlannedTarget> {
+  if (store.mode === "supabase") {
+    const jobs = await store.readAuditJobs();
+    const candidates = jobs.map((job) => plannedTargetFromAuditJob(job)).filter(isUsableTarget);
+    if (candidates.length === 0) {
+      throw new Error("No usable queued audit jobs found in Supabase. Run npm run sap:discover first.");
+    }
+
+    if (targetQuery) {
+      const normalized = targetQuery.toLowerCase();
+      const match = candidates.find(
+        (target) =>
+          target.name.toLowerCase() === normalized ||
+          target.name.toLowerCase().includes(normalized) ||
+          target.pda === targetQuery,
+      );
+      if (!match) {
+        throw new Error(`No queued Supabase target matched "${targetQuery}"`);
+      }
+      return match;
+    }
+
+    return candidates.find((target) => target.status === "free") ?? candidates[0]!;
+  }
+
   const raw = await readFile(resolve(PLAN_PATH), "utf8");
   const plan = JSON.parse(raw) as AuditTargetPlan;
   const targets = [...(plan.recommendedTargets ?? []), ...(plan.allTargets ?? [])].filter(isUsableTarget);
@@ -325,6 +361,25 @@ async function selectTarget(targetQuery: string | undefined): Promise<PlannedTar
   }
 
   return targets.find((target) => target.status === "free") ?? targets[0]!;
+}
+
+function plannedTargetFromAuditJob(job: AuditJob): PlannedTarget {
+  return {
+    name: job.target.name,
+    pda: job.target.agentId,
+    wallet: null,
+    endpoint: job.target.endpoint,
+    agentUri: null,
+    protocolIds: [],
+    capabilitiesCount: 0,
+    pricingTier: job.target.toolId,
+    route: job.target.paymentMethod === "sap_escrow" ? "sap_escrow" : job.target.paymentMethod === "x402" ? "x402" : "unknown",
+    token: job.target.currency,
+    pricePerCall: null,
+    pricePerCallDisplay: job.target.price,
+    status: "good_audit_target",
+    reasons: [job.target.description],
+  };
 }
 
 async function readWalletAddress(keypairPath: string): Promise<string> {
@@ -635,7 +690,7 @@ async function runAceAnalysis(
     timeoutMs: Number(process.env.ACE_TIMEOUT_MS ?? 180000),
   });
   const artifacts: AceArtifacts = {
-    directory: resolve("data/artifacts", auditJobId),
+    directory: config.storageMode === "supabase" ? `supabase:ace_artifacts/${auditJobId}` : resolve("data/artifacts", auditJobId),
   };
   const calls: AceServiceResult[] = [];
 
@@ -647,7 +702,7 @@ async function runAceAnalysis(
       language: "en",
     });
     calls.push(search);
-    artifacts.searchPath = await writeJson(`data/artifacts/${auditJobId}/ace-serp-search.json`, trimAcePayload(search));
+    artifacts.searchPath = await writeJsonArtifact(config, `data/artifacts/${auditJobId}/ace-serp-search.json`, trimAcePayload(search));
 
     const chat = await client.chatJson(
       [
@@ -666,7 +721,7 @@ async function runAceAnalysis(
     calls.push(chat);
     const content = extractAceChatContent(chat.data);
     const verdict = parseAceVerdict(content);
-    artifacts.summaryPath = await writeJson(`data/artifacts/${auditJobId}/ace-analysis.json`, {
+    artifacts.summaryPath = await writeJsonArtifact(config, `data/artifacts/${auditJobId}/ace-analysis.json`, {
       verdict,
       raw: trimAcePayload(chat),
     });
@@ -680,6 +735,7 @@ async function runAceAnalysis(
       });
       calls.push(translation);
       artifacts.translationPath = await writeTextOrJsonArtifact(
+        config,
         `data/artifacts/${auditJobId}/ace-translation-zh-CN.md`,
         translation,
       );
@@ -694,7 +750,7 @@ async function runAceAnalysis(
         size: "1024x1024",
       });
       calls.push(image);
-      const imageArtifacts = await writeImageArtifacts(auditJobId, image);
+      const imageArtifacts = await writeImageArtifacts(config, auditJobId, image);
       if (imageArtifacts.imagePath) {
         artifacts.imagePath = imageArtifacts.imagePath;
       }
@@ -742,8 +798,8 @@ async function runAceAnalysis(
       createdAt,
     };
   } catch (error) {
-    if (calls.length > 0) {
-      await writeJson(`data/artifacts/${auditJobId}/ace-partial-failure.json`, {
+    if (calls.length > 0 && config.storageMode === "file") {
+      await writeJsonArtifact(config, `data/artifacts/${auditJobId}/ace-partial-failure.json`, {
         error: error instanceof Error ? error.message : String(error),
         calls: calls.map(trimAcePayload),
         artifacts,
@@ -952,7 +1008,11 @@ function buildPacketArtifacts(aceAnalysis: AceAnalysisResult): ExecutionProofPac
   return packetArtifacts;
 }
 
-async function writeTextOrJsonArtifact(path: string, result: AceServiceResult): Promise<string> {
+async function writeTextOrJsonArtifact(config: ReturnType<typeof loadConfig>, path: string, result: AceServiceResult): Promise<string> {
+  if (config.storageMode === "supabase") {
+    return supabaseArtifactRef(path.replace(/\.md$/, result.ok && isRecord(result.data) && typeof result.data.data === "string" ? ".md" : ".json"));
+  }
+
   const outputPath = resolve(path);
   await mkdir(dirname(outputPath), { recursive: true });
 
@@ -966,10 +1026,11 @@ async function writeTextOrJsonArtifact(path: string, result: AceServiceResult): 
 }
 
 async function writeImageArtifacts(
+  config: ReturnType<typeof loadConfig>,
   auditJobId: string,
   result: AceServiceResult,
 ): Promise<{ imagePath?: string; imageUrl?: string; imageResponsePath: string }> {
-  const imageResponsePath = await writeJson(`data/artifacts/${auditJobId}/ace-proof-card-response.json`, trimAcePayload(result));
+  const imageResponsePath = await writeJsonArtifact(config, `data/artifacts/${auditJobId}/ace-proof-card-response.json`, trimAcePayload(result));
   const b64 = extractImageBase64(result.data);
 
   if (!result.ok) {
@@ -977,6 +1038,10 @@ async function writeImageArtifacts(
   }
 
   const imageUrl = extractImageUrl(result.data);
+  if (config.storageMode === "supabase") {
+    return imageUrl ? { imageUrl, imageResponsePath } : { imageResponsePath };
+  }
+
   const imagePath = resolve(`data/artifacts/${auditJobId}/proof-card.png`);
   await mkdir(dirname(imagePath), { recursive: true });
 
@@ -2156,6 +2221,18 @@ async function writeJson(path: string, value: unknown): Promise<string> {
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
   return outputPath;
+}
+
+async function writeJsonArtifact(config: ReturnType<typeof loadConfig>, path: string, value: unknown): Promise<string> {
+  if (config.storageMode === "supabase") {
+    void value;
+    return supabaseArtifactRef(path);
+  }
+  return writeJson(path, value);
+}
+
+function supabaseArtifactRef(path: string): string {
+  return `supabase:ace_artifacts/${path.replace(/^data\/artifacts\//, "")}`;
 }
 
 main().catch(async (error: unknown) => {
