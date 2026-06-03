@@ -18,10 +18,10 @@ interface CheckResult {
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const logger = createLogger(`phase13_${Date.now()}`);
+  const logger = createLogger(`online_validation_${Date.now()}`);
   const checks: CheckResult[] = [];
 
-  logger.info("Starting Phase 13 validation", {
+  logger.info("Starting online Proofline validation", {
     config: safeConfigSummary(config),
     note: "No x402 payment is sent and no on-chain spend is attempted by this validation script.",
   });
@@ -48,10 +48,10 @@ async function main(): Promise<void> {
     };
   });
   await runCheck(checks, "vercel dashboard routes", () => testVercelRoutes(config));
-  await runCheck(checks, "phase 12 buyer verdict route", () => testBuyerVerdictRoute(config, latestPacket?.proofPacketId));
+  await runCheck(checks, "buyer verdict route", () => testBuyerVerdictRoute(config, latestPacket?.proofPacketId));
 
   const failed = checks.filter((check) => !check.ok);
-  logger.info("Phase 13 validation complete", {
+  logger.info("Online Proofline validation complete", {
     ok: failed.length === 0,
     passed: checks.length - failed.length,
     failed: failed.length,
@@ -179,7 +179,7 @@ async function testBuyerVerdictRoute(config: ReturnType<typeof loadConfig>, proo
   url.searchParams.set("proofPacketId", proofPacketId);
   const response = await fetch(url, {
     headers: {
-      "x-buyer-wallet": "phase13_validator",
+      "x-buyer-wallet": "online_validator",
     },
     signal: AbortSignal.timeout(20000),
   });
@@ -255,7 +255,7 @@ main().catch((error: unknown) => {
   console.error(
     JSON.stringify({
       level: "error",
-      message: "Phase 13 validation failed",
+      message: "Online Proofline validation failed",
       error: error instanceof Error ? error.message : String(error),
       timestamp: new Date().toISOString(),
     }),

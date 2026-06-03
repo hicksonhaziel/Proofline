@@ -161,35 +161,61 @@ function Header({ route, navigate }: { route: Route; navigate: (href: string) =>
   ];
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-outline-variant bg-surface px-container-padding">
-      <div className="flex min-w-0 items-center gap-8">
-        <button className="flex items-center gap-3" onClick={() => navigate("/live")} type="button">
-          <img className="h-9 w-9 rounded-lg border border-outline-variant object-cover" src="/proofline.png" alt="Proofline" />
-          <span className="font-headline-md text-headline-md font-bold text-primary">Proofline</span>
-        </button>
-        <nav className="hidden h-full items-end gap-6 lg:flex">
-          {links.map((link) => (
-            <button
-              key={link.href}
-              className={`pb-[6px] font-body-md text-body-md transition-colors hover:text-primary ${
-                route === link.route || (route === "proof" && link.route === "ledger")
-                  ? "border-b-2 border-primary text-primary"
-                  : "text-on-surface-variant"
-              }`}
-              onClick={() => navigate(link.href)}
-              type="button"
-            >
-              {link.label}
-            </button>
-          ))}
-          <a className="pb-[6px] font-body-md text-body-md text-on-surface-variant transition-colors hover:text-primary" href="/agent.json">
+    <header className="sticky top-0 z-50 w-full border-b border-outline-variant bg-surface/95 px-container-padding backdrop-blur">
+      <div className="mx-auto flex min-h-16 w-full max-w-[1180px] items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-8">
+          <button className="flex min-w-0 items-center gap-3" onClick={() => navigate("/live")} type="button">
+            <img className="h-9 w-9 shrink-0 rounded-lg border border-outline-variant object-cover" src="/proofline.png" alt="Proofline" />
+            <span className="truncate font-headline-md text-headline-md font-bold text-primary">Proofline</span>
+          </button>
+          <nav className="hidden h-full items-end gap-6 lg:flex">
+            {links.map((link) => (
+              <button
+                key={link.href}
+                className={`pb-[6px] font-body-md text-body-md transition-colors hover:text-primary ${
+                  route === link.route || (route === "proof" && link.route === "ledger")
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-on-surface-variant"
+                }`}
+                onClick={() => navigate(link.href)}
+                type="button"
+              >
+                {link.label}
+              </button>
+            ))}
+            <a className="pb-[6px] font-body-md text-body-md text-on-surface-variant transition-colors hover:text-primary" href="/agent.json">
+              SAP Agent
+            </a>
+          </nav>
+        </div>
+        <div className="hidden items-center gap-2 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2 font-mono-label text-mono-label text-on-surface-variant md:flex">
+          <span className="material-symbols-outlined text-[16px] text-primary">radio_button_checked</span>
+          Proofline Live
+        </div>
+      </div>
+      <div className="-mx-container-padding border-t border-outline-variant/70 lg:hidden">
+        <nav className="flex gap-2 overflow-x-auto px-container-padding py-2" aria-label="Primary navigation">
+          {links.map((link) => {
+            const active = route === link.route || (route === "proof" && link.route === "ledger");
+            return (
+              <button
+                key={link.href}
+                className={`whitespace-nowrap rounded-lg border px-3 py-2 font-body-sm text-body-sm transition-colors ${
+                  active
+                    ? "border-primary bg-primary-container text-on-primary-container"
+                    : "border-outline-variant bg-surface-container-low text-on-surface-variant"
+                }`}
+                onClick={() => navigate(link.href)}
+                type="button"
+              >
+                {link.label}
+              </button>
+            );
+          })}
+          <a className="whitespace-nowrap rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2 font-body-sm text-body-sm text-on-surface-variant" href="/agent.json">
             SAP Agent
           </a>
         </nav>
-      </div>
-      <div className="hidden items-center gap-2 rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2 font-mono-label text-mono-label text-on-surface-variant md:flex">
-        <span className="material-symbols-outlined text-[16px] text-primary">radio_button_checked</span>
-        Proofline Live
       </div>
     </header>
   );
@@ -314,7 +340,7 @@ function LedgerView({
       </div>
       <section className="panel overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left">
+          <table className="w-full min-w-[1120px] border-collapse text-left">
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container">
                 {[
@@ -337,6 +363,13 @@ function LedgerView({
               </tr>
             </thead>
             <tbody className="font-mono-data text-mono-data">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={11}>
+                    <EmptyState icon="filter_alt" title="No proofs match this filter" detail="Change the status or category filter to show more evidence records." />
+                  </td>
+                </tr>
+              ) : null}
               {filtered.map((entry) => (
                 <tr key={entry.proofPacketId} className="border-b border-outline-variant transition-colors hover:bg-surface-container-high">
                   <td className="px-4 py-3">
@@ -507,7 +540,7 @@ function PaymentsView({
       </section>
       <section className="panel overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full min-w-[920px] text-left">
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container">
                 {["Proof", "Provider", "Service", "Method", "Amount", "Status", "Transaction", "Receipt"].map((heading) => (
@@ -518,6 +551,13 @@ function PaymentsView({
               </tr>
             </thead>
             <tbody className="font-mono-data text-mono-data">
+              {payments.length === 0 ? (
+                <tr>
+                  <td colSpan={8}>
+                    <EmptyState icon="receipt_long" title="No payment receipts yet" detail="Run an audit cycle or Ace x402 smoke test to publish receipts into the proof ledger." />
+                  </td>
+                </tr>
+              ) : null}
               {payments.map(({ proof, payment }) => (
                 <tr key={`${proof.proofPacketId}-${payment.paymentId}`} className="border-b border-outline-variant hover:bg-surface-container-high">
                   <td className="px-4 py-3">
@@ -587,6 +627,13 @@ function CommerceView({ sales, navigate }: { sales: CommerceSale[]; navigate: (h
               </tr>
             </thead>
             <tbody className="font-mono-data text-mono-data">
+              {sales.length === 0 ? (
+                <tr>
+                  <td colSpan={8}>
+                    <EmptyState icon="point_of_sale" title="No commerce calls yet" detail="Run the buyer demo to record a proof-query sale in Supabase." />
+                  </td>
+                </tr>
+              ) : null}
               {sales.map((sale) => (
                 <tr key={sale.sale_id} className="border-b border-outline-variant hover:bg-surface-container-high">
                   <td className="px-4 py-3 text-primary-container">{shortId(sale.sale_id)}</td>
@@ -676,7 +723,7 @@ function AceUsageView({
       </section>
       <section className="panel overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full min-w-[860px] text-left">
             <thead>
               <tr className="border-b border-outline-variant bg-surface-container">
                 {["Proof", "Service", "Amount", "Network", "Endpoint", "Status"].map((heading) => (
@@ -687,6 +734,13 @@ function AceUsageView({
               </tr>
             </thead>
             <tbody className="font-mono-data text-mono-data">
+              {acePayments.length === 0 ? (
+                <tr>
+                  <td colSpan={6}>
+                    <EmptyState icon="api" title="No Ace x402 usage recorded" detail="Run the Ace smoke test or an audit with Ace enabled to publish service receipts." />
+                  </td>
+                </tr>
+              ) : null}
               {acePayments.map(({ proof, payment, receipt }) => (
                 <tr key={`${proof.proofPacketId}-${payment.paymentId}`} className="border-b border-outline-variant hover:bg-surface-container-high">
                   <td className="px-4 py-3">
@@ -802,12 +856,12 @@ function ProofCard({ proof, ledgerEntry }: { proof: ProofPacket; ledgerEntry?: L
   const card = proofCardPath(proof, ledgerEntry);
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative flex min-h-[360px] items-center justify-center overflow-hidden rounded-xl border border-[#242629] bg-[#101215] p-4">
+      <div className="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-xl border border-[#242629] bg-[#101215] p-4 sm:min-h-[360px]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-container/10 via-background/0 to-transparent" />
         {card ? (
-          <img className="relative z-10 h-auto max-w-full drop-shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.02]" src={card} alt={`Proofline Execution Proof Packet ${proof.proofPacketId}`} />
+          <img className="relative z-10 h-auto max-h-[520px] max-w-full rounded-lg object-contain drop-shadow-2xl transition-transform duration-500 ease-out hover:scale-[1.02]" src={card} alt={`Proofline Execution Proof Packet ${proof.proofPacketId}`} />
         ) : (
-          <div className="label relative z-10">No proof card</div>
+          <EmptyState icon="branding_watermark" title="No proof card" detail="This proof still has JSON evidence and signature data." compact />
         )}
       </div>
       {card ? (
@@ -1013,10 +1067,11 @@ function StatCard({ icon, label, value, tone }: { icon: string; label: string; v
 }
 
 function Field({ label, value, tone }: { label: string; value?: string | number | null; tone?: string }): ReactElement {
+  const displayValue = value === undefined || value === null || value === "" ? "unknown" : String(value);
   return (
     <div className="flex min-w-0 flex-col gap-1 overflow-hidden">
       <span className="label">{label}</span>
-      <span className={`data truncate ${statusClass(tone, "text-on-surface")}`}>{value === undefined || value === null || value === "" ? "unknown" : String(value)}</span>
+      <span className={`data truncate ${statusClass(tone, "text-on-surface")}`} title={displayValue}>{displayValue}</span>
     </div>
   );
 }
@@ -1065,9 +1120,9 @@ function StatusBadge({ status }: { status?: string }): ReactElement {
           ? "bg-error-container/30 text-error"
           : "bg-surface-container-high text-on-surface-variant";
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 font-mono-label text-mono-label ${classes}`}>
+    <span className={`inline-flex max-w-[180px] items-center gap-1.5 rounded-full px-2 py-0.5 font-mono-label text-mono-label ${classes}`} title={status ?? "unknown"}>
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
-      {status ?? "unknown"}
+      <span className="truncate">{status ?? "unknown"}</span>
     </span>
   );
 }
@@ -1206,6 +1261,16 @@ function LoadingPanel(): ReactElement {
       <div className="mt-2 h-unit w-full overflow-hidden rounded-full bg-surface-variant">
         <div className="h-full w-1/3 animate-pulse bg-primary-container" />
       </div>
+    </div>
+  );
+}
+
+function EmptyState({ icon, title, detail, compact = false }: { icon: string; title: string; detail: string; compact?: boolean }): ReactElement {
+  return (
+    <div className={`flex flex-col items-center justify-center gap-2 text-center ${compact ? "p-4" : "p-8"}`}>
+      <span className="material-symbols-outlined text-[28px] text-primary-container">{icon}</span>
+      <div className="font-headline-sm text-headline-sm text-on-surface">{title}</div>
+      <p className="max-w-[520px] font-body-sm text-body-sm text-on-surface-variant">{detail}</p>
     </div>
   );
 }
