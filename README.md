@@ -16,9 +16,8 @@ Built for the OOBE Protocol x Ace Data Cloud bounty. Primary category: **Ace Dat
 ## Links
 
 - Live dashboard: `https://proofline-hq.vercel.app`
-- SAP agent page: `https://proofline-hq.vercel.app/agent.json`
-- Demo video: `TODO`
-- Presentation / walkthrough: `TODO`
+- SAP agent page: `https://explorer.oobeprotocol.ai/agents/E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM`
+
 
 
 ## Why Proofline Exists
