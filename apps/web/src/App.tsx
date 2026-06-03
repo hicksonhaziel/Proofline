@@ -218,12 +218,11 @@ function getRoute(pathname: string): { name: Route; proofId?: string } {
 
 function Header({ route, navigate }: { route: Route; navigate: (href: string) => void }): ReactElement {
   const links: Array<{ href: string; label: string; route: Route }> = [
-    { href: "/live", label: "Live Audit Feed", route: "live" },
-    { href: "/proofs", label: "Evidence Ledger", route: "ledger" },
-    { href: "/payments", label: "Payment Proof", route: "payments" },
+    { href: "/live", label: "Live", route: "live" },
+    { href: "/proofs", label: "Proofs", route: "ledger" },
+    { href: "/payments", label: "Payments", route: "payments" },
     { href: "/ace", label: "Ace Usage", route: "ace" },
-    { href: "/commerce", label: "Commerce", route: "commerce" },
-    { href: "/health", label: "System Health", route: "health" },
+    { href: "/health", label: "Health", route: "health" },
   ];
 
   return (
@@ -343,7 +342,7 @@ function LiveView({
             <div className="grid grid-cols-2 gap-stack-md">
               <Field label="Target" value={latest.targetAgent?.name ?? latestEntry?.targetName} />
               <Field label="Tool" value={latest.targetAgent?.toolName ?? latest.targetAgent?.toolId ?? latestEntry?.toolName} />
-              <Field label="Payment" value={latestEntry?.paymentIntegrity ?? "unknown"} tone={latestEntry?.paymentStatus} />
+              <Field label="Payment" value={paymentIntegrityLabel(latestEntry?.paymentIntegrity ?? latestEntry?.paymentStatus)} tone={latestEntry?.paymentStatus} />
               <Field label="Sentinel" value={latest.sentinelCheck?.status ?? "unknown"} tone={latest.sentinelCheck?.status} />
             </div>
           </div>
@@ -392,7 +391,7 @@ function LiveStatusStrip({
         <Field label="Last Activity" value={formatDateTime(lastActivity)} tone={status === "running" || status === "live" ? "settled" : undefined} />
       </div>
       <div className="mt-stack-md grid grid-cols-1 gap-stack-sm sm:grid-cols-3">
-        <Field label="Transport" value={signal.transport === "supabase_realtime" ? "Supabase Realtime + polling fallback" : "Polling fallback"} />
+        <Field label="Transport" value={signal.transport === "supabase_realtime" ? "Realtime + fallback" : "Polling"} />
         <Field label="Scheduler" value={schedulerHealth?.status ?? "not published"} tone={schedulerHealth?.status} />
         <Field label="Fallback View" value={`Last proof: ${shortId(latest.proofPacketId)}`} />
       </div>
@@ -470,7 +469,7 @@ function LedgerView({
                   "Status",
                   "Verdict",
                   "Score",
-                  "Payment Integrity",
+                  "Payment",
                   "Last Audit",
                   "Risk",
                   "Category",
@@ -490,12 +489,21 @@ function LedgerView({
                   </td>
                 </tr>
               ) : null}
-              {filtered.map((entry) => (
-                <tr key={entry.proofPacketId} className="border-b border-outline-variant transition-colors hover:bg-surface-container-high">
+              {filtered.map((entry, index) => (
+                <motion.tr
+                  key={entry.proofPacketId}
+                  className="border-b border-outline-variant transition-colors hover:bg-surface-container-high"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.035, 0.2), duration: 0.22 }}
+                >
                   <td className="px-4 py-3">
-                    <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${entry.proofPacketId}`)} type="button">
-                      {shortId(entry.proofPacketId)}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${entry.proofPacketId}`)} type="button">
+                        {shortId(entry.proofPacketId)}
+                      </button>
+                      <CopyButton value={entry.proofPacketId} label="Copy proof ID" />
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-on-surface">{entry.targetName}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{entry.toolName ?? "unknown"}</td>
@@ -507,7 +515,7 @@ function LedgerView({
                   </td>
                   <td className="px-4 py-3 text-on-surface">{entry.overallScore ?? 0}/100</td>
                   <td className="px-4 py-3">
-                    <div className={`max-w-[220px] truncate ${statusClass(entry.paymentStatus)}`}>{entry.paymentIntegrity ?? entry.paymentStatus ?? "unknown"}</div>
+                    <div className={`max-w-[220px] truncate ${statusClass(entry.paymentStatus)}`}>{paymentIntegrityLabel(entry.paymentIntegrity ?? entry.paymentStatus)}</div>
                   </td>
                   <td className="px-4 py-3 text-on-surface-variant">{formatDate(entry.createdAt)}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{entry.riskLevel ?? "unknown"}</td>
@@ -527,7 +535,7 @@ function LedgerView({
                       ) : null}
                     </div>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
@@ -602,9 +610,9 @@ function ProofDetailView({
           <div className="panel-inner bg-[#101215]">
             <h2 className="mb-stack-md border-b border-[#242629] pb-stack-sm font-headline-sm text-headline-sm">Cryptographic Integrity</h2>
             <div className="grid grid-cols-1 gap-stack-md md:grid-cols-3">
-              <Field label="Packet Hash" value={proof.signature?.packetHash ?? ledgerEntry?.packetHash} />
-              <Field label="Signature" value={proof.signature?.signature} />
-              <Field label="Signing Wallet" value={proof.signature?.publicKey ?? proof.auditorAgent?.publicKey} />
+              <Field label="Packet Hash" value={proof.signature?.packetHash ?? ledgerEntry?.packetHash} copyValue={proof.signature?.packetHash ?? ledgerEntry?.packetHash} />
+              <Field label="Signature" value={proof.signature?.signature} copyValue={proof.signature?.signature} />
+              <Field label="Signing Wallet" value={proof.signature?.publicKey ?? proof.auditorAgent?.publicKey} copyValue={proof.signature?.publicKey ?? proof.auditorAgent?.publicKey} />
             </div>
           </div>
         </div>
@@ -678,28 +686,41 @@ function PaymentsView({
                   </td>
                 </tr>
               ) : null}
-              {payments.map(({ proof, payment }) => (
-                <tr key={`${proof.proofPacketId}-${payment.paymentId}`} className="border-b border-outline-variant hover:bg-surface-container-high">
+              {payments.map(({ proof, payment }, index) => (
+                <motion.tr
+                  key={`${proof.proofPacketId}-${payment.paymentId}`}
+                  className="border-b border-outline-variant hover:bg-surface-container-high"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.035, 0.2), duration: 0.22 }}
+                >
                   <td className="px-4 py-3">
-                    <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${proof.proofPacketId}`)} type="button">
-                      {shortId(proof.proofPacketId)}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${proof.proofPacketId}`)} type="button">
+                        {shortId(proof.proofPacketId)}
+                      </button>
+                      <CopyButton value={proof.proofPacketId} label="Copy proof ID" />
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-on-surface">{payment.provider ?? "unknown"}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{payment.service ?? "unknown"}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{payment.method ?? "unknown"}</td>
                   <td className="px-4 py-3 text-on-surface">{payment.amount ?? "0"} {payment.currency ?? ""}</td>
                   <td className={`px-4 py-3 ${statusClass(payment.status)}`}>{payment.status ?? "unknown"}</td>
-                  <td className="max-w-[220px] truncate px-4 py-3 text-primary-container">{transactionHash(payment) ?? "none"}</td>
-                  <td className="max-w-[320px] truncate px-4 py-3 text-primary-container">{receiptLabel(payment)}</td>
-                </tr>
+                  <td className="px-4 py-3">
+                    <CopyValue value={transactionHash(payment)} empty="none" />
+                  </td>
+                  <td className="px-4 py-3">
+                    <CopyValue value={receiptLabel(payment)} maxWidth="max-w-[320px]" />
+                  </td>
+                </motion.tr>
               ))}
             </tbody>
           </table>
         </div>
       </section>
       <section className="panel p-stack-md">
-        <h2 className="mb-stack-sm font-headline-sm text-headline-sm">Ledger Payment Integrity</h2>
+        <h2 className="mb-stack-sm font-headline-sm text-headline-sm">Payment Checks</h2>
         <div className="grid grid-cols-1 gap-stack-sm md:grid-cols-2">
           {ledger.slice(0, 8).map((entry) => (
             <div key={entry.proofPacketId} className="rounded border border-outline-variant bg-surface p-3">
@@ -707,7 +728,7 @@ function PaymentsView({
                 <span className="data truncate">{entry.targetName}</span>
                 <StatusBadge status={entry.paymentStatus} />
               </div>
-              <div className="mt-2 font-mono-data text-mono-data text-on-surface-variant">{entry.paymentIntegrity ?? "unknown"}</div>
+              <div className="mt-2 font-mono-data text-mono-data text-on-surface-variant">{paymentIntegrityLabel(entry.paymentIntegrity ?? entry.paymentStatus)}</div>
             </div>
           ))}
         </div>
@@ -827,7 +848,7 @@ function AceUsageView({
       </section>
       <section className="grid grid-cols-1 gap-gutter lg:grid-cols-2">
         {[...services.entries()].map(([service, stats]) => (
-          <div key={service} className="panel p-stack-md">
+          <motion.div key={service} className="panel p-stack-md" whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
             <div className="mb-stack-sm flex items-center justify-between gap-3 border-b border-outline-variant pb-stack-sm">
               <h2 className="truncate font-headline-sm text-headline-sm">{service}</h2>
               <StatusBadge status={stats.status} />
@@ -838,7 +859,7 @@ function AceUsageView({
               <Field label="Latest" value={stats.status} tone={stats.status} />
               <Field label="Why" value={aceServicePurpose(service)} />
             </div>
-          </div>
+          </motion.div>
         ))}
       </section>
       <section className="panel overflow-hidden">
@@ -861,19 +882,30 @@ function AceUsageView({
                   </td>
                 </tr>
               ) : null}
-              {acePayments.map(({ proof, payment, receipt }) => (
-                <tr key={`${proof.proofPacketId}-${payment.paymentId}`} className="border-b border-outline-variant hover:bg-surface-container-high">
+              {acePayments.map(({ proof, payment, receipt }, index) => (
+                <motion.tr
+                  key={`${proof.proofPacketId}-${payment.paymentId}`}
+                  className="border-b border-outline-variant hover:bg-surface-container-high"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(index * 0.035, 0.2), duration: 0.22 }}
+                >
                   <td className="px-4 py-3">
-                    <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${proof.proofPacketId}`)} type="button">
-                      {shortId(proof.proofPacketId)}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="text-primary hover:underline" onClick={() => navigate(`/proofs/${proof.proofPacketId}`)} type="button">
+                        {shortId(proof.proofPacketId)}
+                      </button>
+                      <CopyButton value={proof.proofPacketId} label="Copy proof ID" />
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-on-surface">{payment.service}</td>
                   <td className="px-4 py-3 text-on-surface">{payment.amount} {payment.currency}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{String(receipt?.network ?? "unknown")}</td>
-                  <td className="max-w-[360px] truncate px-4 py-3 text-primary-container">{String(receipt?.endpoint ?? "unknown")}</td>
+                  <td className="px-4 py-3">
+                    <CopyValue value={typeof receipt?.endpoint === "string" ? receipt.endpoint : null} empty="unknown" maxWidth="max-w-[360px]" />
+                  </td>
                   <td className={`px-4 py-3 ${statusClass(payment.status)}`}>{payment.status}</td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
@@ -919,8 +951,8 @@ function HealthView({
         <div className="panel p-stack-md">
           <h2 className="mb-stack-md border-b border-outline-variant pb-stack-sm font-headline-sm text-headline-sm">Latest Run</h2>
           <div className="grid grid-cols-1 gap-stack-md sm:grid-cols-2">
-            <Field label="Proof ID" value={latest.proofPacketId} />
-            <Field label="Audit Job" value={latest.auditJob?.auditJobId} />
+            <Field label="Proof ID" value={latest.proofPacketId} copyValue={latest.proofPacketId} />
+            <Field label="Audit Job" value={latest.auditJob?.auditJobId} copyValue={latest.auditJob?.auditJobId} />
             <Field label="Sentinel" value={latest.sentinelCheck?.status} tone={latest.sentinelCheck?.status} />
             <Field label="Ace Settled" value={`${latestPayments.aceTotal.toFixed(6)} USDC`} tone="settled" />
             <Field label="Payment Mode" value={schedulerHealth?.paymentMode ?? "not published"} />
@@ -956,12 +988,20 @@ function HealthView({
               </thead>
               <tbody>
                 {decisions.map((decision, index) => (
-                  <tr key={`${decision.auditJobId ?? decision.targetAgentId ?? "decision"}-${index}`} className="border-b border-outline-variant">
+                  <motion.tr
+                    key={`${decision.auditJobId ?? decision.targetAgentId ?? "decision"}-${index}`}
+                    className="border-b border-outline-variant"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(index * 0.035, 0.2), duration: 0.22 }}
+                  >
                     <td className="px-4 py-3 text-on-surface">{decision.targetName ?? "unknown"}</td>
                     <td className={`px-4 py-3 ${statusClass(decision.status)}`}>{decision.status ?? "unknown"}</td>
-                    <td className="px-4 py-3 text-on-surface-variant">{decision.reason ?? "unknown"}</td>
-                    <td className="px-4 py-3 font-mono-label text-mono-label text-primary-container">{shortId(decision.auditJobId)}</td>
-                  </tr>
+                    <td className="px-4 py-3 text-on-surface-variant" title={decision.reason ?? "unknown"}>{shortReason(decision.reason)}</td>
+                    <td className="px-4 py-3 font-mono-label text-mono-label text-primary-container">
+                      <CopyValue value={decision.auditJobId} empty="unknown" />
+                    </td>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
@@ -985,9 +1025,12 @@ function ProofCard({ proof, ledgerEntry }: { proof: ProofPacket; ledgerEntry?: L
         )}
       </div>
       {card ? (
-        <a className="flex w-full items-center justify-center gap-2 rounded bg-primary-container px-4 py-3 font-mono-label text-mono-label uppercase text-on-primary-container transition-all hover:bg-primary" href={card}>
-          <span className="material-symbols-outlined text-[18px]">download</span> Download Card
-        </a>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <a className="flex w-full items-center justify-center gap-2 rounded bg-primary-container px-4 py-3 font-mono-label text-mono-label uppercase text-on-primary-container transition-all hover:bg-primary" href={card}>
+            <span className="material-symbols-outlined text-[18px]">download</span> Card
+          </a>
+          <ShareXButton proof={proof} cardUrl={card} />
+        </div>
       ) : null}
     </div>
   );
@@ -999,8 +1042,14 @@ function PaymentPanel({ payments, compact = false }: { payments: PaymentReceipt[
       <h2 className="mb-stack-sm border-b border-surface-variant pb-stack-sm font-headline-sm text-headline-sm">Payment Ledger</h2>
       <div className="flex max-h-[520px] flex-col gap-2 overflow-auto pr-1">
         {payments.length === 0 ? <div className="data text-on-surface-variant">No payment receipts.</div> : null}
-        {payments.map((payment) => (
-          <div key={payment.paymentId} className="flex flex-col gap-2 rounded border border-outline-variant bg-surface-container-low p-3">
+        {payments.map((payment, index) => (
+          <motion.div
+            key={payment.paymentId}
+            className="flex flex-col gap-2 rounded border border-outline-variant bg-surface-container-low p-3"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: Math.min(index * 0.04, 0.2), duration: 0.2 }}
+          >
             <div className="flex items-center justify-between gap-3">
               <span className="label truncate">{payment.provider ?? "unknown"}</span>
               <span className={`font-mono-label text-mono-label ${statusClass(payment.status)}`}>{payment.status ?? "unknown"}</span>
@@ -1009,9 +1058,9 @@ function PaymentPanel({ payments, compact = false }: { payments: PaymentReceipt[
               <span className="label">{payment.method ?? "unknown"}</span>
               <span className="data">{payment.amount ?? "0"} {payment.currency ?? ""}</span>
             </div>
-            {!compact ? <div className="data truncate text-primary-container">{receiptLabel(payment)}</div> : null}
-            {compact ? <div className="data truncate text-primary-container">{payment.service ?? receiptLabel(payment)}</div> : null}
-          </div>
+            {!compact ? <CopyValue value={receiptLabel(payment)} maxWidth="max-w-full" /> : null}
+            {compact ? <CopyValue value={transactionHash(payment) ?? payment.service ?? receiptLabel(payment)} maxWidth="max-w-full" /> : null}
+          </motion.div>
         ))}
       </div>
     </div>
@@ -1083,7 +1132,7 @@ function ProbePanel({ proof }: { proof: ProofPacket }): ReactElement {
         <Field label="Completed" value={formatDateTime(proof.probeResult?.completedAt)} />
       </div>
       <div className="mt-stack-md">
-        <Field label="Request URL" value={request?.url} />
+        <Field label="Request URL" value={request?.url} copyValue={request?.url} />
       </div>
       {request?.probeTypes?.length ? <EvidenceList title="Probe Types" items={request.probeTypes} empty="No probe types recorded." /> : null}
       <PreviewBlock title="Output Preview" value={outputPreview ?? proof.probeResult?.error ?? "No output preview recorded."} />
@@ -1176,24 +1225,77 @@ function FilterBar({ filter, setFilter }: { filter: Filter; setFilter: (filter: 
 
 function StatCard({ icon, label, value, tone }: { icon: string; label: string; value: string; tone?: string }): ReactElement {
   return (
-    <div className="panel flex h-24 flex-col justify-between p-4">
+    <motion.div className="panel flex h-24 flex-col justify-between p-4" whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
       <div className="flex items-center gap-2 font-mono-label text-mono-label uppercase text-on-surface-variant">
         <span className="material-symbols-outlined text-[16px]">{icon}</span>
         {label}
       </div>
       <div className={`font-headline-md text-headline-md ${statusClass(tone, "text-on-surface")}`}>{value}</div>
-    </div>
+    </motion.div>
   );
 }
 
-function Field({ label, value, tone }: { label: string; value?: string | number | null; tone?: string }): ReactElement {
+function Field({ label, value, tone, copyValue }: { label: string; value?: string | number | null; tone?: string; copyValue?: string | null }): ReactElement {
   const displayValue = value === undefined || value === null || value === "" ? "unknown" : String(value);
   return (
     <div className="flex min-w-0 flex-col gap-1 overflow-hidden">
       <span className="label">{label}</span>
-      <span className={`data truncate ${statusClass(tone, "text-on-surface")}`} title={displayValue}>{displayValue}</span>
+      <span className="flex min-w-0 items-center gap-2">
+        <span className={`data truncate ${statusClass(tone, "text-on-surface")}`} title={displayValue}>{displayValue}</span>
+        {copyValue ? <CopyButton value={copyValue} label={`Copy ${label}`} /> : null}
+      </span>
     </div>
   );
+}
+
+function CopyButton({ value, label = "Copy" }: { value?: string | null; label?: string }): ReactElement | null {
+  const [copied, setCopied] = useState(false);
+  if (!value) return null;
+  return (
+    <button
+      className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-outline-variant text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+      onClick={async () => {
+        await navigator.clipboard.writeText(value);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1200);
+      }}
+      title={copied ? "Copied" : label}
+      type="button"
+    >
+      <span className="material-symbols-outlined text-[15px]">{copied ? "done" : "content_copy"}</span>
+    </button>
+  );
+}
+
+function CopyValue({ value, empty = "none", maxWidth = "max-w-[220px]" }: { value?: string | null; empty?: string; maxWidth?: string }): ReactElement {
+  if (!value) return <span className="text-on-surface-variant">{empty}</span>;
+  return (
+    <span className="flex min-w-0 items-center gap-2">
+      <span className={`${maxWidth} truncate text-primary-container`} title={value}>{shortId(value, 14, 8)}</span>
+      <CopyButton value={value} />
+    </span>
+  );
+}
+
+function ShareXButton({ proof, cardUrl }: { proof: ProofPacket; cardUrl?: string | null }): ReactElement {
+  const shareUrl = absoluteUrl(`/proofs/${proof.proofPacketId}`);
+  const text = `Proofline audited ${proof.targetAgent?.name ?? "an SAP agent"}: ${proof.scores?.verdict ?? "verdict"} (${proof.scores?.overall ?? 0}/100). ${cardUrl ? "Proof card included." : "Signed proof packet included."}`;
+  const href = `https://twitter.com/intent/tweet?${new URLSearchParams({ text, url: shareUrl }).toString()}`;
+  return (
+    <a
+      className="flex w-full items-center justify-center gap-2 rounded border border-outline-variant px-4 py-3 font-mono-label text-mono-label uppercase text-on-surface transition-all hover:border-primary hover:text-primary"
+      href={href}
+      rel="noreferrer"
+      target="_blank"
+    >
+      <span className="material-symbols-outlined text-[18px]">ios_share</span> Share on X
+    </a>
+  );
+}
+
+function absoluteUrl(path: string): string {
+  if (typeof window === "undefined") return path;
+  return new URL(path, window.location.origin).toString();
 }
 
 function EvidenceList({ title, items, empty }: { title: string; items: string[]; empty: string }): ReactElement {
@@ -1340,6 +1442,30 @@ function liveEventLabel(event: LiveChangeEvent): string {
   if (event.table === "audit_runs") return `Audit run ${action}`;
   if (event.table === "realtime") return "Supabase Realtime connected";
   return `Live event received from ${event.table}`;
+}
+
+function paymentIntegrityLabel(value?: string | null): string {
+  if (!value) return "unknown";
+  const normalized = value.toLowerCase();
+  if (normalized.includes("transaction_hash_present")) return "tx hash present";
+  if (normalized.includes("no_transaction_hash")) return "no tx hash";
+  if (normalized.includes("ace_x402_settled_target_skipped")) return "Ace settled; target skipped";
+  if (normalized.includes("ace_settled_target_skipped")) return "Ace settled; target skipped";
+  if (normalized.includes("skipped_no_spend")) return "skipped, no spend";
+  return value.replaceAll("_", " ");
+}
+
+function shortReason(value?: string | null): string {
+  if (!value) return "unknown";
+  if (value.includes("generic non-Ace x402")) return "non-Ace x402 guarded";
+  if (value.includes("SAP escrow automation")) return "escrow route guarded";
+  if (value.includes("re-audit window")) return "recently audited";
+  if (value.includes("per-audit budget")) return "over audit budget";
+  if (value.includes("hourly spend")) return "over hourly budget";
+  if (value.includes("daily spend")) return "over daily budget";
+  if (value.includes("max jobs per cycle")) return "cycle limit reached";
+  if (value.length > 56) return `${value.slice(0, 53)}...`;
+  return value;
 }
 
 function aceServicePurpose(service: string): string {
