@@ -18,7 +18,12 @@ Built for the OOBE Protocol x Ace Data Cloud bounty. Primary category: **Ace Dat
 - Live dashboard: `https://proofline-hq.vercel.app`
 - SAP agent page: `https://explorer.oobeprotocol.ai/agents/E9o29VeYpaU49niLo6ynZtQpA6uNepMvo5i5vGizVvRM`
 
+## Real Ace x402 Payments
 
+Ace Data Cloud x402 payments settle on Base USDC, so these are Base explorer links, not Solana explorer links.
+
+- Ace SERP search x402 settlement: `https://basescan.org/tx/0x2da8a5a8ab86b3933d07443fb6788885a2c064a9f91cb0fb4362a9c4fcc8e3b3`
+- Ace chat completions x402 settlement: `https://basescan.org/tx/0xcec0b7c9a800b9617d82fd39e9d4ee60645f328ca1c0d7b793361a16ccc980c9`
 
 ## Why Proofline Exists
 
@@ -151,14 +156,17 @@ npm run sap:discover
 npm run agent:once
 ```
 
-The workflow is intentionally controlled by GitHub variables:
+The scheduled workflow runs every 30 minutes in paid Ace x402 mode with strict spend caps:
 
 ```env
-PAYMENT_MODE=dry-run
-PAYMENT_CONFIRM_SPEND=false
+PAYMENT_MODE=send
+PAYMENT_CONFIRM_SPEND=true
+MAX_SPEND_PER_AUDIT_USDC=0.25
+MAX_SPEND_PER_HOUR_USDC=0.50
+MAX_SPEND_PER_DAY_USDC=1.00
 ```
 
-Paid mode must be enabled explicitly.
+Manual workflow runs can still use the normal agent mode or the explicit real-demo mode.
 
 ## Quick Start
 
@@ -208,6 +216,7 @@ npm run sap:discover
 npm run agent:once
 npm run audit:once -- --allow-paid --target "chainbard"
 npm run ace:x402:smoke
+npm run agent:real-once
 npm run commerce:buyer-demo -- --tool get_execution_verdict
 npm run commerce:buyer-demo -- --tool get_execution_proof
 npm run test:online

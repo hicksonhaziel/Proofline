@@ -299,7 +299,7 @@ function selectJobs(
   for (const job of jobs) {
     const targetKey = `${job.target.agentId}::${job.target.toolId}`;
     const targetName = job.target.name;
-    const amountUsdc = estimateJobCostUsdc(job);
+    const amountUsdc = paymentMode() === "send" && options.useAce ? config.limits.maxSpendPerAuditUsdc : estimateJobCostUsdc(job);
 
     if (selected.length >= options.maxJobsPerCycle) {
       decisions.push({ targetName, targetAgentId: job.target.agentId, status: "skipped", reason: "max jobs per cycle reached", auditJobId: job.auditJobId });
@@ -308,16 +308,6 @@ function selectJobs(
 
     if (auditedTargets.has(targetKey)) {
       decisions.push({ targetName, targetAgentId: job.target.agentId, status: "skipped", reason: "target audited inside configured re-audit window", auditJobId: job.auditJobId });
-      continue;
-    }
-
-    if (job.target.paymentMethod === "sap_escrow" && job.target.currency !== "SOL") {
-      decisions.push({ targetName, targetAgentId: job.target.agentId, status: "skipped", reason: "SAP escrow automation currently supports SOL targets only", auditJobId: job.auditJobId });
-      continue;
-    }
-
-    if (paymentMode() === "send" && job.target.paymentMethod === "x402" && !isAceDataCloudTarget(job)) {
-      decisions.push({ targetName, targetAgentId: job.target.agentId, status: "skipped", reason: "generic non-Ace x402 send mode is not implemented", auditJobId: job.auditJobId });
       continue;
     }
 

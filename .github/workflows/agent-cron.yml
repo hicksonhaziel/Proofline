@@ -46,17 +46,17 @@ jobs:
       PROOFLINE_X402_ENDPOINT: https://proofline-hq.vercel.app/x402
       AUDIT_INTERVAL_MINUTES: "30"
       TARGET_AGENT_LIST: ./data/targets.seed.json
-      MAX_SPEND_PER_AUDIT_USDC: "0.35"
-      MAX_SPEND_PER_HOUR_USDC: "2.00"
-      MAX_SPEND_PER_DAY_USDC: "10.00"
-      MIN_REAUDIT_INTERVAL_HOURS: "24"
+      MAX_SPEND_PER_AUDIT_USDC: "0.25"
+      MAX_SPEND_PER_HOUR_USDC: "0.50"
+      MAX_SPEND_PER_DAY_USDC: "1.00"
+      MIN_REAUDIT_INTERVAL_HOURS: "0"
       ENABLE_SAP_DISCOVERY: "true"
       ENABLE_SAP_ESCROW: "false"
       ENABLE_ACE_IMAGE: "true"
       ENABLE_ACE_TRANSLATION: "true"
       ENABLE_ACE_AUDIO: "false"
-      PAYMENT_MODE: ${{ vars.PAYMENT_MODE || 'dry-run' }}
-      PAYMENT_CONFIRM_SPEND: ${{ vars.PAYMENT_CONFIRM_SPEND || 'false' }}
+      PAYMENT_MODE: send
+      PAYMENT_CONFIRM_SPEND: "true"
       DEMO_TARGET: ${{ github.event.inputs.demo_target || 'Hatch' }}
       DEMO_MAX_SPEND_USDC: ${{ github.event.inputs.demo_max_spend_usdc || '2.00' }}
     steps:
@@ -68,9 +68,12 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run sap:discover
+      - name: Run scheduled paid audit
+        if: ${{ github.event_name == 'schedule' }}
+        run: npm run agent:once
       - name: Run Proofline agent
-        if: ${{ github.event.inputs.run_mode != 'real-demo' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode != 'real-demo' }}
         run: npm run agent:once
       - name: Run paid Ace x402 demo audit
-        if: ${{ github.event.inputs.run_mode == 'real-demo' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'real-demo' }}
         run: npm run demo:real

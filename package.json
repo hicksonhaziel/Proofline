@@ -22,6 +22,7 @@
     "demo:dry-run": "PAYMENT_MODE=dry-run PAYMENT_CONFIRM_SPEND=false npm run sap:discover && PAYMENT_MODE=dry-run PAYMENT_CONFIRM_SPEND=false npm run agent:once && npm run test:online",
     "demo:ace-paid": "PAYMENT_MODE=send PAYMENT_CONFIRM_SPEND=true npm run ace:x402:smoke",
     "demo:real": "MIN_REAUDIT_INTERVAL_HOURS=0 PAYMENT_MODE=send PAYMENT_CONFIRM_SPEND=true ENABLE_ACE_IMAGE=true ENABLE_ACE_TRANSLATION=true ENABLE_ACE_AUDIO=false MAX_SPEND_PER_AUDIT_USDC=${DEMO_MAX_SPEND_USDC:-2.00} npm run audit:once -- --allow-paid --target \"${DEMO_TARGET:-Hatch}\"",
+    "agent:real-once": "MIN_REAUDIT_INTERVAL_HOURS=0 PAYMENT_MODE=send PAYMENT_CONFIRM_SPEND=true ENABLE_ACE_IMAGE=true ENABLE_ACE_TRANSLATION=true ENABLE_ACE_AUDIO=false MAX_SPEND_PER_AUDIT_USDC=0.25 MAX_SPEND_PER_HOUR_USDC=0.50 MAX_SPEND_PER_DAY_USDC=1.00 npm run audit:once -- --allow-paid",
     "audit:once": "tsx apps/agent/src/audit-once.ts",
     "proofs:rebuild": "tsx apps/agent/src/audit-once.ts --rebuild-ledger",
     "proofs:verify": "tsx apps/agent/src/verify-proof-signature.ts",
