@@ -311,7 +311,7 @@ TARGET_AGENT_LIST=./data/targets.seed.json
 MAX_SPEND_PER_AUDIT_USDC=0.35
 MAX_SPEND_PER_HOUR_USDC=2.00
 MAX_SPEND_PER_DAY_USDC=10.00
-MIN_REAUDIT_INTERVAL_HOURS=24
+MIN_REAUDIT_INTERVAL_HOURS=336
 ENABLE_SAP_DISCOVERY=true
 ENABLE_SAP_ESCROW=false
 ENABLE_ACE_IMAGE=true
@@ -398,4 +398,3 @@ That is expected when the target or Sentinel endpoint is unreachable. Proofline 
 - Generic non-Ace x402 send mode remains blocked.
 - SAP USDC escrow targets that failed simulation remain skipped.
 - Paid mode should be used only for controlled tests with low wallet balances and strict spend caps.
-
