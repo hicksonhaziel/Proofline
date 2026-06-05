@@ -141,6 +141,7 @@ async function removeLiveChannel(supabase: SupabaseClient, channel: RealtimeChan
 
 function ledgerEntryFromPacket(packet: ProofPacket, proofCard?: string): LedgerEntry {
   const paymentSummary = summarizePayments(packet.payments ?? []);
+  const proofCardUrl = publicProofCardPath(packet, proofCard ?? packet.artifacts?.proofCardPath);
   return {
     proofPacketId: packet.proofPacketId,
     targetName: packet.targetAgent?.name ?? "unknown",
@@ -160,8 +161,8 @@ function ledgerEntryFromPacket(packet: ProofPacket, proofCard?: string): LedgerE
     createdAt: packet.createdAt,
     packetHash: packet.signature?.packetHash,
     proofHtml: `/proofs/${packet.proofPacketId}`,
-    proofJson: `supabase:proof_packets/${packet.proofPacketId}`,
-    proofCard: proofCard ?? packet.artifacts?.proofCardPath,
+    proofJson: publicProofJsonPath(packet.proofPacketId),
+    proofCard: proofCardUrl,
   };
 }
 
@@ -182,9 +183,24 @@ export function parseReceipt(receipt?: string): Record<string, unknown> | null {
 }
 
 export function proofCardPath(proof: ProofPacket, ledgerEntry?: LedgerEntry): string | null {
-  const fromPacket = proof.artifacts?.proofCardPath;
-  const fromLedger = ledgerEntry?.proofCard;
-  return typeof fromPacket === "string" ? fromPacket : fromLedger ?? null;
+  const fromPacket = renderableImagePath(proof.artifacts?.proofCardPath);
+  const fromLedger = renderableImagePath(ledgerEntry?.proofCard);
+  return fromPacket ?? fromLedger ?? publicProofCardPath(proof, null);
+}
+
+export function publicProofJsonPath(proofPacketId: string): string {
+  return `/proofs/${encodeURIComponent(proofPacketId)}.json`;
+}
+
+function publicProofCardPath(proof: ProofPacket, fallback?: string | null): string {
+  return renderableImagePath(fallback) ?? `/proofs/${encodeURIComponent(proof.proofPacketId)}-card.svg`;
+}
+
+function renderableImagePath(value?: string | null): string | null {
+  if (!value || value.startsWith("supabase:")) return null;
+  if (/\.json(?:[?#].*)?$/i.test(value)) return null;
+  if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/") || value.startsWith("data:image/")) return value;
+  return null;
 }
 
 export function summarizePayments(payments: PaymentReceipt[] = []): {

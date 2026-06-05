@@ -12,6 +12,7 @@ import {
   loadSchedulerHealth,
   parseReceipt,
   proofCardPath,
+  publicProofJsonPath,
   shortId,
   statusTone,
   subscribeToLiveChanges,
@@ -316,7 +317,7 @@ function LiveView({
       <section className="grid grid-cols-1 gap-gutter md:grid-cols-4">
         <StatCard icon="account_tree" label="Total Proofs" value={String(ledger.length)} />
         <StatCard icon="shield" label="Latest Score" value={`${latest.scores?.overall ?? latestEntry?.overallScore ?? 0}/100`} />
-        <StatCard icon="payments" label="Ace Settled" value={`$${payments.aceTotal.toFixed(6)}`} />
+        <StatCard icon="payments" label="Ace Settled" value={`$${payments.aceTotal.toFixed(6)}`} tone={payments.aceTotal > 0 ? "settled" : undefined} />
         <StatCard icon="search_activity" label="Latest Verdict" value={latest.scores?.verdict ?? latestEntry?.verdict ?? "unknown"} tone={latest.scores?.verdict} />
       </section>
 
@@ -525,7 +526,7 @@ function LedgerView({
                       <button className="icon-link" onClick={() => navigate(`/proofs/${entry.proofPacketId}`)} title="View Proof" type="button">
                         <span className="material-symbols-outlined text-[18px]">visibility</span>
                       </button>
-                      <a className="icon-link" href={entry.proofJson ?? `/proofs/${entry.proofPacketId}.json`} title="JSON">
+                      <a className="icon-link" href={entry.proofJson ?? publicProofJsonPath(entry.proofPacketId)} title="JSON">
                         <span className="material-symbols-outlined text-[18px]">data_object</span>
                       </a>
                       {entry.proofCard ? (
@@ -556,6 +557,7 @@ function ProofDetailView({
 }): ReactElement {
   const payments = proof.payments ?? [];
   const summary = summarizePayments(payments);
+  const signatureValue = proofSignatureValue(proof);
 
   return (
     <>
@@ -580,7 +582,7 @@ function ProofDetailView({
               <Field label="Target" value={proof.targetAgent?.name ?? ledgerEntry?.targetName} />
               <Field label="Score" value={`${proof.scores?.overall ?? ledgerEntry?.overallScore ?? 0} / 100`} tone="good" />
               <Field label="Created" value={formatDate(proof.createdAt)} />
-              <Field label="Status" value={proof.signature?.signature ? "Cryptographically Signed" : "Unsigned"} />
+              <Field label="Status" value={signatureValue ? "Cryptographically Signed" : "Unsigned"} />
             </div>
           </div>
 
@@ -611,7 +613,7 @@ function ProofDetailView({
             <h2 className="mb-stack-md border-b border-[#242629] pb-stack-sm font-headline-sm text-headline-sm">Cryptographic Integrity</h2>
             <div className="grid grid-cols-1 gap-stack-md md:grid-cols-3">
               <Field label="Packet Hash" value={proof.signature?.packetHash ?? ledgerEntry?.packetHash} copyValue={proof.signature?.packetHash ?? ledgerEntry?.packetHash} />
-              <Field label="Signature" value={proof.signature?.signature} copyValue={proof.signature?.signature} />
+              <Field label="Signature" value={signatureValue} copyValue={signatureValue} />
               <Field label="Signing Wallet" value={proof.signature?.publicKey ?? proof.auditorAgent?.publicKey} copyValue={proof.signature?.publicKey ?? proof.auditorAgent?.publicKey} />
             </div>
           </div>
@@ -620,7 +622,7 @@ function ProofDetailView({
         <div className="relative flex flex-col gap-stack-md md:col-span-5 lg:col-span-4">
           <ProofCard proof={proof} ledgerEntry={ledgerEntry} />
           <div className="grid grid-cols-2 gap-3">
-            <a className="flex items-center justify-center gap-2 rounded border border-outline-variant px-4 py-3 font-mono-label text-mono-label uppercase text-on-surface transition-all hover:bg-surface-variant" href={`/proofs/${proof.proofPacketId}.json`}>
+            <a className="flex items-center justify-center gap-2 rounded border border-outline-variant px-4 py-3 font-mono-label text-mono-label uppercase text-on-surface transition-all hover:bg-surface-variant" href={publicProofJsonPath(proof.proofPacketId)}>
               <span className="material-symbols-outlined text-[18px]">data_object</span> View JSON
             </a>
             <button className="flex items-center justify-center gap-2 rounded border border-outline-variant px-4 py-3 font-mono-label text-mono-label uppercase text-on-surface transition-all hover:bg-surface-variant" onClick={() => navigate("/proofs")} type="button">
@@ -633,7 +635,7 @@ function ProofDetailView({
               <Field label="Total Receipts" value={String(summary.total)} />
               <Field label="Settled" value={String(summary.settled)} tone="settled" />
               <Field label="Failed" value={String(summary.failed)} tone={summary.failed > 0 ? "failed" : "settled"} />
-              <Field label="Ace Total" value={`${summary.aceTotal.toFixed(6)} USDC`} tone="settled" />
+              <Field label="Ace Settled" value={`${summary.aceTotal.toFixed(6)} USDC`} tone="settled" />
             </div>
           </div>
         </div>
@@ -664,7 +666,7 @@ function PaymentsView({
         <StatCard icon="receipt_long" label="Receipts" value={String(summary.total)} />
         <StatCard icon="task_alt" label="Settled" value={String(summary.settled)} tone="settled" />
         <StatCard icon="error" label="Failed" value={String(summary.failed)} tone={summary.failed > 0 ? "failed" : "settled"} />
-        <StatCard icon="payments" label="Ace USDC" value={summary.aceTotal.toFixed(6)} />
+        <StatCard icon="payments" label="Ace Settled" value={summary.aceTotal.toFixed(6)} />
       </section>
       <section className="panel overflow-hidden">
         <div className="overflow-x-auto">
@@ -817,22 +819,40 @@ function AceUsageView({
       .filter((payment) => payment.provider === "ace_data_cloud")
       .map((payment) => ({ proof, payment, receipt: parseReceipt(payment.receipt) })),
   );
-  const services = new Map<string, { count: number; total: number; status: string; latestAt?: string }>();
+  const services = new Map<
+    string,
+    {
+      count: number;
+      settledTotal: number;
+      quotedTotal: number;
+      failedTotal: number;
+      status: string;
+      latestAt?: string;
+    }
+  >();
   for (const item of acePayments) {
     const key = item.payment.service ?? "unknown";
-    const current = services.get(key) ?? { count: 0, total: 0, status: "unknown" };
+    const current = services.get(key) ?? { count: 0, settledTotal: 0, quotedTotal: 0, failedTotal: 0, status: "unknown" };
     const latestAt =
       current.latestAt && item.payment.createdAt && new Date(current.latestAt).getTime() > new Date(item.payment.createdAt).getTime()
         ? current.latestAt
         : item.payment.createdAt ?? current.latestAt;
+    const amount = Number(item.payment.amount ?? 0);
+    const safeAmount = Number.isFinite(amount) ? amount : 0;
+    const status = item.payment.status ?? current.status;
+    const isSettled = status === "settled" || status === "confirmed";
+    const isFailed = status === "failed";
     services.set(key, {
       count: current.count + 1,
-      total: current.total + Number(item.payment.amount ?? 0),
-      status: item.payment.status ?? current.status,
+      settledTotal: current.settledTotal + (isSettled ? safeAmount : 0),
+      quotedTotal: current.quotedTotal + (!isSettled && !isFailed ? safeAmount : 0),
+      failedTotal: current.failedTotal + (isFailed ? safeAmount : 0),
+      status,
       latestAt,
     });
   }
-  const total = [...services.values()].reduce((sum, service) => sum + service.total, 0);
+  const settledTotal = [...services.values()].reduce((sum, service) => sum + service.settledTotal, 0);
+  const quotedTotal = [...services.values()].reduce((sum, service) => sum + service.quotedTotal, 0);
 
   return (
     <>
@@ -840,10 +860,11 @@ function AceUsageView({
         <h1 className="mb-2 font-display-lg text-display-lg">Ace Usage</h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant">Ace Data Cloud services paid through per-request x402 and used as audit evidence.</p>
       </section>
-      <section className="grid grid-cols-1 gap-gutter md:grid-cols-4">
+      <section className="grid grid-cols-1 gap-gutter md:grid-cols-5">
         <StatCard icon="api" label="Distinct Services" value={String(services.size)} />
         <StatCard icon="receipt_long" label="Ace Calls" value={String(acePayments.length)} />
-        <StatCard icon="payments" label="Settled USDC" value={total.toFixed(6)} />
+        <StatCard icon="payments" label="Settled USDC" value={settledTotal.toFixed(6)} tone={settledTotal > 0 ? "settled" : undefined} />
+        <StatCard icon="pending_actions" label="Quoted USDC" value={quotedTotal.toFixed(6)} tone={quotedTotal > 0 ? "pending" : undefined} />
         <StatCard icon="assignment_turned_in" label="Proofs With Ace" value={String(ledger.filter((entry) => (entry.aceServicesUsed?.length ?? 0) > 0).length)} />
       </section>
       <section className="grid grid-cols-1 gap-gutter lg:grid-cols-2">
@@ -853,9 +874,10 @@ function AceUsageView({
               <h2 className="truncate font-headline-sm text-headline-sm">{service}</h2>
               <StatusBadge status={stats.status} />
             </div>
-            <div className="grid grid-cols-2 gap-stack-md md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-stack-md md:grid-cols-5">
               <Field label="Calls" value={String(stats.count)} />
-              <Field label="Cost" value={`${stats.total.toFixed(6)} USDC`} tone="settled" />
+              <Field label="Settled" value={`${stats.settledTotal.toFixed(6)} USDC`} tone={stats.settledTotal > 0 ? "settled" : undefined} />
+              <Field label="Quoted" value={`${stats.quotedTotal.toFixed(6)} USDC`} tone={stats.quotedTotal > 0 ? "pending" : undefined} />
               <Field label="Latest" value={stats.status} tone={stats.status} />
               <Field label="Why" value={aceServicePurpose(service)} />
             </div>
@@ -1373,6 +1395,8 @@ function TimelineItem({ icon, label, detail, status, timestamp, href }: Timeline
 function buildTimeline(proof: ProofPacket): TimelineEvent[] {
   const targetPayment = (proof.payments ?? []).find((payment) => payment.provider !== "ace_data_cloud");
   const firstAcePayment = (proof.payments ?? []).find((payment) => payment.provider === "ace_data_cloud");
+  const signatureValue = proofSignatureValue(proof);
+  const card = proofCardPath(proof);
   return [
     {
       icon: "travel_explore",
@@ -1418,19 +1442,23 @@ function buildTimeline(proof: ProofPacket): TimelineEvent[] {
       icon: "signature",
       label: "Proof Packet signed",
       detail: shortId(proof.signature?.packetHash),
-      status: proof.signature?.signature ? "settled" : "warning",
+      status: signatureValue ? "settled" : "warning",
       timestamp: proof.signature?.signedAt,
-      href: `/proofs/${proof.proofPacketId}.json`,
+      href: publicProofJsonPath(proof.proofPacketId),
     },
     {
       icon: "published_with_changes",
       label: "Public artifact published",
-      detail: proof.artifacts?.proofCardPath,
+      detail: card ?? publicProofJsonPath(proof.proofPacketId),
       status: "settled",
       timestamp: proof.createdAt,
-      href: proof.artifacts?.proofCardPath ?? `/proofs/${proof.proofPacketId}.json`,
+      href: card ?? publicProofJsonPath(proof.proofPacketId),
     },
   ];
+}
+
+function proofSignatureValue(proof: ProofPacket): string | undefined {
+  return proof.signature?.signatureBase64 ?? proof.signature?.signature;
 }
 
 function liveEventLabel(event: LiveChangeEvent): string {

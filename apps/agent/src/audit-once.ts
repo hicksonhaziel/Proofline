@@ -237,7 +237,9 @@ async function main(): Promise<void> {
     ...packetWithoutId,
   };
   assertProofPacket(packet);
-  if (store.mode === "file") {
+  if (store.mode === "supabase") {
+    packet = normalizeSupabaseProofCard(packet);
+  } else {
     packet = await localizePacketProofCard(packet);
   }
   packet = await finalizeProofPacket(packet, config.sapKeypairPath);
@@ -290,7 +292,7 @@ function supabaseProofReference(packet: ExecutionProofPacket): Record<string, st
     ledger: "supabase:proof_packets",
     ledgerJson: null,
     latestJson: null,
-    proofJson: `supabase:proof_packets/${packet.proofPacketId}`,
+    proofJson: `/proofs/${packet.proofPacketId}.json`,
     latestHtml: "/live",
     proofHtml: `/proofs/${packet.proofPacketId}`,
     latestCard: packet.artifacts.proofCardPath ?? null,
@@ -1006,6 +1008,27 @@ function buildPacketArtifacts(aceAnalysis: AceAnalysisResult): ExecutionProofPac
   }
 
   return packetArtifacts;
+}
+
+function normalizeSupabaseProofCard(packet: ExecutionProofPacket): ExecutionProofPacket {
+  const current = packet.artifacts.proofCardPath;
+  if (isPublicProofCardAsset(current)) {
+    return packet;
+  }
+
+  return {
+    ...packet,
+    artifacts: {
+      ...packet.artifacts,
+      proofCardPath: `/proofs/${packet.proofPacketId}-card.svg`,
+    },
+  };
+}
+
+function isPublicProofCardAsset(value?: string): boolean {
+  if (!value || value.startsWith("supabase:")) return false;
+  if (/\.json(?:[?#].*)?$/i.test(value)) return false;
+  return value.startsWith("https://") || value.startsWith("http://") || value.startsWith("/proofs/") || value.startsWith("data:image/");
 }
 
 async function writeTextOrJsonArtifact(config: ReturnType<typeof loadConfig>, path: string, result: AceServiceResult): Promise<string> {

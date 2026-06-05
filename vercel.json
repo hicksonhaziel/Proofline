@@ -31,6 +31,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/proofs/:proofId-card.svg",
+      "destination": "/api/proofs/proof_card?proofPacketId=:proofId"
+    },
+    {
+      "source": "/proofs/:proofId.json",
+      "destination": "/api/proofs/proof_json?proofPacketId=:proofId"
+    },
+    {
       "source": "/proofs/:proofId(proof_[^\\.]+)",
       "destination": "/index.html"
     },

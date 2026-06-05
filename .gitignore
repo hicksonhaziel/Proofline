@@ -32,6 +32,7 @@ data/runs/*.json
 data/proof-packets/*.json
 data/artifacts/*
 data/sentinel/*.json
+data/backups
 data/sap/payment-plan.json
 !data/runs/.gitkeep
 !data/proof-packets/.gitkeep

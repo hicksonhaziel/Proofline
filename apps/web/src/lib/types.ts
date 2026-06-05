@@ -117,8 +117,11 @@ export interface ProofPacket {
     publicKey?: string;
   };
   signature?: {
+    algorithm?: string;
     packetHash?: string;
     signature?: string;
+    signatureBase64?: string;
+    signedPayload?: string;
     publicKey?: string;
     signedAt?: string;
   };
