@@ -17,7 +17,7 @@ concurrency:
 jobs:
   agent-once:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     env:
       STORAGE_MODE: supabase
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -43,6 +43,7 @@ jobs:
       ENABLE_ACE_IMAGE: "true"
       ENABLE_ACE_TRANSLATION: "true"
       ENABLE_ACE_AUDIO: "false"
+      ACE_TIMEOUT_MS: "420000"
       PAYMENT_MODE: send
       PAYMENT_CONFIRM_SPEND: "true"
       MANUAL_MAX_JOBS: ${{ github.event.inputs.max_jobs || '1' }}

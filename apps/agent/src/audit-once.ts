@@ -765,21 +765,26 @@ async function runAceAnalysis(
 
     if (config.flags.enableAceImage) {
       const template = await readFile(resolve(CARD_TEMPLATE_PATH));
+      const proofCardPrompt = buildProofCardPrompt(target, plannedTarget, verdict, payment, probeResult);
       const image = await client.editImage({
         image: new Blob([template], { type: "image/png" }),
         fileName: "card-temp1.png",
-        prompt: buildProofCardPrompt(target, plannedTarget, verdict, payment, probeResult),
+        prompt: proofCardPrompt,
         size: "1024x1024",
       });
       calls.push(image);
-      const imageArtifacts = await writeImageArtifacts(config, auditJobId, image);
-      if (imageArtifacts.imagePath) {
-        artifacts.imagePath = imageArtifacts.imagePath;
+      let imageArtifacts = await writeImageArtifacts(config, auditJobId, image, "ace-proof-card-edit-response.json");
+      applyImageArtifacts(artifacts, imageArtifacts);
+
+      if (!artifacts.imagePath && !artifacts.imageUrl) {
+        const generatedImage = await client.generateImage({
+          prompt: proofCardPrompt,
+          size: "1024x1024",
+        });
+        calls.push(generatedImage);
+        imageArtifacts = await writeImageArtifacts(config, auditJobId, generatedImage, "ace-proof-card-generation-response.json");
+        applyImageArtifacts(artifacts, imageArtifacts);
       }
-      if (imageArtifacts.imageUrl) {
-        artifacts.imageUrl = imageArtifacts.imageUrl;
-      }
-      artifacts.imageResponsePath = imageArtifacts.imageResponsePath;
     }
 
     const servicesUsed = calls.filter((call) => call.ok).map((call) => call.service);
@@ -852,6 +857,19 @@ async function runAceAnalysis(
       createdAt,
     };
   }
+}
+
+function applyImageArtifacts(
+  artifacts: AceArtifacts,
+  imageArtifacts: { imagePath?: string; imageUrl?: string; imageResponsePath: string },
+): void {
+  if (imageArtifacts.imagePath) {
+    artifacts.imagePath = imageArtifacts.imagePath;
+  }
+  if (imageArtifacts.imageUrl) {
+    artifacts.imageUrl = imageArtifacts.imageUrl;
+  }
+  artifacts.imageResponsePath = imageArtifacts.imageResponsePath;
 }
 
 function buildAceAuditPrompt(
@@ -1072,8 +1090,9 @@ async function writeImageArtifacts(
   config: ReturnType<typeof loadConfig>,
   auditJobId: string,
   result: AceServiceResult,
+  responseFileName = "ace-proof-card-response.json",
 ): Promise<{ imagePath?: string; imageUrl?: string; imageResponsePath: string }> {
-  const imageResponsePath = await writeJsonArtifact(config, `data/artifacts/${auditJobId}/ace-proof-card-response.json`, trimAcePayload(result));
+  const imageResponsePath = await writeJsonArtifact(config, `data/artifacts/${auditJobId}/${responseFileName}`, trimAcePayload(result));
   const b64 = extractImageBase64(result.data);
 
   if (!result.ok) {
