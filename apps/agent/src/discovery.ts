@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -107,15 +107,7 @@ export class SapDiscoveryProvider implements DiscoveryProvider {
   constructor(private readonly explorerUrl: string = "https://explorer.oobeprotocol.ai/api/sap/agents") {}
 
   async discover(context: DiscoveryContext): Promise<DiscoveryTarget[]> {
-    const response = await fetch(this.explorerUrl, {
-      signal: AbortSignal.timeout(20000),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Synapse Explorer API returned ${response.status}: ${await response.text()}`);
-    }
-
-    const data = (await response.json()) as SapAgentResponse;
+    const data = (await fetchExplorerJson(this.explorerUrl)) as SapAgentResponse;
     const agents = data.agents ?? [];
 
     return agents.flatMap((agent) => normalizeSapAgent(agent, context.maxCostUsdc));
@@ -734,7 +726,7 @@ function buildAuditJobs(targets: DiscoveryTarget[], maxSpendUsdc: number, maxJob
     };
 
     queued.push({
-      auditJobId: `job_${randomUUID()}`,
+      auditJobId: stableAuditJobId(target.agentId, target.toolId),
       target: agentTarget,
       status: "queued",
       createdAt: new Date().toISOString(),
@@ -743,6 +735,42 @@ function buildAuditJobs(targets: DiscoveryTarget[], maxSpendUsdc: number, maxJob
   }
 
   return queued;
+}
+
+async function fetchExplorerJson(url: string): Promise<unknown> {
+  const maxAttempts = 3;
+  let lastError: unknown = null;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          accept: "application/json",
+          "user-agent": "Proofline/0.1 sap-discovery",
+        },
+        signal: AbortSignal.timeout(60000),
+      });
+
+      if (!response.ok) {
+        const body = await response.text();
+        throw new Error(`Synapse Explorer API returned ${response.status}: ${body.slice(0, 500)}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxAttempts) {
+        await sleep(1000 * attempt);
+      }
+    }
+  }
+
+  throw new Error(`Synapse Explorer API fetch failed after ${maxAttempts} attempts: ${errorMessage(lastError)}`);
+}
+
+function stableAuditJobId(agentId: string, toolId: string): string {
+  const hash = createHash("sha256").update(`${agentId}::${toolId}`).digest("hex").slice(0, 24);
+  return `job_${hash}`;
 }
 
 function countStatuses(targets: DiscoveryTarget[]): Record<string, number> {
@@ -877,6 +905,18 @@ function stringField(value: Record<string, unknown>, key: string): string | null
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function errorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = error.cause instanceof Error ? `; cause: ${error.cause.message}` : "";
+    return `${error.message}${cause}`;
+  }
+  return String(error);
+}
+
+async function sleep(ms: number): Promise<void> {
+  await new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
 }
 
 async function writeJson(path: string, value: unknown): Promise<void> {

@@ -242,12 +242,15 @@ async function runCycle(
       price: job.target.price,
     });
 
-    const auditArgs = ["run", "audit:once", "--", "--target", targetName];
+    const auditArgs = ["run", "audit:once", "--", "--audit-job-id", job.auditJobId, "--target", targetName];
     if (options.allowPaid) auditArgs.push("--allow-paid");
     if (!options.useAce) auditArgs.push("--no-ace");
 
     const audit = await runCommand("npm", auditArgs, schedulerEnv(), logger);
     const completedAt = new Date().toISOString();
+    if (!audit.ok) {
+      await store.updateAuditJobStatus(job.auditJobId, "failed", { completedAt });
+    }
     decisions.push({
       targetName,
       targetAgentId: job.target.agentId,

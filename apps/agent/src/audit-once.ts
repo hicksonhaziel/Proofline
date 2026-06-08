@@ -35,6 +35,7 @@ interface AuditTargetPlan {
 }
 
 interface PlannedTarget {
+  auditJobId?: string;
   name: string;
   pda: string;
   wallet: string | null;
@@ -53,6 +54,7 @@ interface PlannedTarget {
 
 interface CliArgs {
   target?: string | undefined;
+  auditJobId?: string | undefined;
   allowPaid: boolean;
   useAce: boolean;
   republishLatest: boolean;
@@ -99,7 +101,7 @@ const CARD_TEMPLATE_PATH = "public/card-temp1.png";
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv);
-  const auditJobId = `audit_${randomUUID()}`;
+  const auditJobId = args.auditJobId ?? `audit_${randomUUID()}`;
   const logger = createLogger(auditJobId);
   const config = loadConfig();
 
@@ -134,9 +136,12 @@ async function main(): Promise<void> {
   const store = createProoflineStore(config);
   await store.ensureReady();
 
-  const plannedTarget = await selectTarget(args.target, store);
+  const plannedTarget = await selectTarget(args.target, args.auditJobId, store);
   const target = toAgentTarget(plannedTarget);
   const startedAt = new Date().toISOString();
+  if (plannedTarget.auditJobId) {
+    await store.updateAuditJobStatus(plannedTarget.auditJobId, "running", { startedAt });
+  }
   const prooflineWallet = await readWalletAddress(config.sapKeypairPath);
   const sentinelClient = new SentinelClient({
     ...(process.env.SENTINEL_BASE_URL ? { baseUrl: process.env.SENTINEL_BASE_URL } : {}),
@@ -245,6 +250,9 @@ async function main(): Promise<void> {
   packet = await finalizeProofPacket(packet, config.sapKeypairPath);
 
   const proofPacketPath = await store.saveProofPacket(packet);
+  if (plannedTarget.auditJobId) {
+    await store.updateAuditJobStatus(plannedTarget.auditJobId, finalAuditStatus, { startedAt, completedAt });
+  }
   const publicProof = store.mode === "supabase" ? supabaseProofReference(packet) : await publishPublicProofPacket(packet);
   const runStatePath = await store.saveAuditRun(auditJobId, {
     auditJobId,
@@ -303,9 +311,12 @@ function supabaseProofReference(packet: ExecutionProofPacket): Record<string, st
 function parseArgs(argv: string[]): CliArgs {
   const targetIndex = argv.findIndex((arg) => arg === "--target");
   const target = targetIndex >= 0 ? argv[targetIndex + 1] : undefined;
+  const auditJobIdIndex = argv.findIndex((arg) => arg === "--audit-job-id");
+  const auditJobId = auditJobIdIndex >= 0 ? argv[auditJobIdIndex + 1] : undefined;
 
   return {
     target: target && !target.startsWith("--") ? target : undefined,
+    auditJobId: auditJobId && !auditJobId.startsWith("--") ? auditJobId : undefined,
     allowPaid: argv.includes("--allow-paid"),
     useAce: !argv.includes("--no-ace"),
     republishLatest: argv.includes("--republish-latest"),
@@ -313,12 +324,20 @@ function parseArgs(argv: string[]): CliArgs {
   };
 }
 
-async function selectTarget(targetQuery: string | undefined, store: RuntimeStore): Promise<PlannedTarget> {
+async function selectTarget(targetQuery: string | undefined, auditJobId: string | undefined, store: RuntimeStore): Promise<PlannedTarget> {
   if (store.mode === "supabase") {
     const jobs = await store.readAuditJobs();
     const candidates = jobs.map((job) => plannedTargetFromAuditJob(job)).filter(isUsableTarget);
     if (candidates.length === 0) {
       throw new Error("No usable queued audit jobs found in Supabase. Run npm run sap:discover first.");
+    }
+
+    if (auditJobId) {
+      const match = candidates.find((target) => target.auditJobId === auditJobId);
+      if (!match) {
+        throw new Error(`No queued Supabase audit job matched "${auditJobId}"`);
+      }
+      return match;
     }
 
     if (targetQuery) {
@@ -367,6 +386,7 @@ async function selectTarget(targetQuery: string | undefined, store: RuntimeStore
 
 function plannedTargetFromAuditJob(job: AuditJob): PlannedTarget {
   return {
+    auditJobId: job.auditJobId,
     name: job.target.name,
     pda: job.target.agentId,
     wallet: null,

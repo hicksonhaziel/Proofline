@@ -49,6 +49,7 @@ export interface RuntimeStore {
   readAuditJobs(): Promise<AuditJob[]>;
   readPaymentReceipts(): Promise<PaymentReceipt[]>;
   readProofPackets(): Promise<ExecutionProofPacket[]>;
+  updateAuditJobStatus(auditJobId: string, status: AuditJob["status"], timestamps?: { startedAt?: string; completedAt?: string }): Promise<void>;
   savePaymentReceipt(receipt: PaymentReceipt): Promise<void>;
   saveProofPacket(packet: ExecutionProofPacket): Promise<string>;
   saveAuditRun(runId: string, state: unknown): Promise<string>;
@@ -157,6 +158,34 @@ export class FileRuntimeStore implements RuntimeStore {
     }
   }
 
+  async updateAuditJobStatus(auditJobId: string, status: AuditJob["status"], timestamps: { startedAt?: string; completedAt?: string } = {}): Promise<void> {
+    try {
+      const path = resolve("data/sap/audit-job-queue.json");
+      const raw = await readFile(path, "utf8");
+      const parsed = JSON.parse(raw) as { jobs?: AuditJob[] };
+      const jobs = Array.isArray(parsed.jobs) ? parsed.jobs : [];
+      let changed = false;
+      const nextJobs = jobs.map((job) => {
+        if (job.auditJobId !== auditJobId) return job;
+        changed = true;
+        return {
+          ...job,
+          status,
+          ...(timestamps.startedAt ? { startedAt: timestamps.startedAt } : {}),
+          ...(timestamps.completedAt ? { completedAt: timestamps.completedAt } : {}),
+        };
+      });
+      if (changed) {
+        await writeJson(path, {
+          ...parsed,
+          jobs: nextJobs,
+        });
+      }
+    } catch {
+      return;
+    }
+  }
+
   async savePaymentReceipt(receipt: PaymentReceipt): Promise<void> {
     const ledgerPath = resolve("data/payments/receipts.jsonl");
     const perAuditPath = resolve("data/payments/by-audit", `${receipt.auditJobId}.json`);
@@ -260,12 +289,22 @@ class SupabaseRuntimeStore implements RuntimeStore {
   async readAuditJobs(): Promise<AuditJob[]> {
     const { data, error } = await this.client
       .from("audit_jobs")
-      .select("payload")
+      .select("target_key,payload")
       .eq("status", "queued")
-      .order("created_at", { ascending: true })
-      .limit(50);
+      .order("updated_at", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(200);
     if (error) throw new Error(`Failed to read audit jobs: ${error.message}`);
-    return (data ?? []).flatMap((row) => (isRecord(row.payload) ? [row.payload as unknown as AuditJob] : []));
+    const byTarget = new Map<string, AuditJob>();
+    for (const row of data ?? []) {
+      if (!isRecord(row.payload)) continue;
+      const job = row.payload as unknown as AuditJob;
+      const key = typeof row.target_key === "string" && row.target_key.length > 0 ? row.target_key : targetKey(job.target.agentId, job.target.toolId);
+      if (!byTarget.has(key)) {
+        byTarget.set(key, job);
+      }
+    }
+    return [...byTarget.values()];
   }
 
   async readPaymentReceipts(): Promise<PaymentReceipt[]> {
@@ -286,6 +325,31 @@ class SupabaseRuntimeStore implements RuntimeStore {
       .limit(500);
     if (error) throw new Error(`Failed to read proof packets: ${error.message}`);
     return (data ?? []).flatMap((row) => (isRecord(row.payload) ? [row.payload as unknown as ExecutionProofPacket] : []));
+  }
+
+  async updateAuditJobStatus(auditJobId: string, status: AuditJob["status"], timestamps: { startedAt?: string; completedAt?: string } = {}): Promise<void> {
+    const { data, error: readError } = await this.client.from("audit_jobs").select("payload").eq("audit_job_id", auditJobId).maybeSingle();
+    if (readError) throw new Error(`Failed to read audit job before status update: ${readError.message}`);
+    if (!data) return;
+
+    const existingPayload = isRecord(data.payload) ? (data.payload as unknown as AuditJob) : null;
+    const payload = existingPayload
+      ? {
+          ...existingPayload,
+          status,
+          ...(timestamps.startedAt ? { startedAt: timestamps.startedAt } : {}),
+          ...(timestamps.completedAt ? { completedAt: timestamps.completedAt } : {}),
+        }
+      : data.payload;
+    const { error } = await this.client
+      .from("audit_jobs")
+      .update({
+        status,
+        updated_at: new Date().toISOString(),
+        payload,
+      })
+      .eq("audit_job_id", auditJobId);
+    if (error) throw new Error(`Failed to update audit job status: ${error.message}`);
   }
 
   async savePaymentReceipt(receipt: PaymentReceipt): Promise<void> {
